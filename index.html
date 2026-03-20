@@ -150,32 +150,18 @@
     .pill-pick { border-style: dashed; }
     .pill.tag-active   { background: var(--sienna); border-color: var(--sienna); color: #fff; }
 
-    /* ── TIME SLIDER ─────────────────────────────────────────
-       Default time filter — visible on load.
-       Hidden when a named time pill is active.
-       Breathing room above separates it from time pills.     */
+    /* ── TIME SLIDER ─────────────────────────────────────── */
     .slider-row { max-width: 1100px; margin: 0 auto; padding: .55rem 1.5rem .7rem; }
     .slider-outer { padding: 0 10px; }
-    /* top padding: room for time label above thumb
-       bottom padding: room for hour labels below track       */
     .track-container { position: relative; padding: 26px 0 26px; }
     .track-line { position: relative; height: 4px; background: var(--cream-dk); border-radius: 2px; }
-
-    /* Tick marks */
     .tick { position: absolute; top: 50%; transform: translate(-50%,-50%); border-radius: 1px; pointer-events: none; }
-    .tick-even { width: 1.5px; height: 9px;  background: var(--ink-lt); opacity: .28; }
-    .tick-odd  { width: 1px;   height: 5px;  background: var(--ink-lt); opacity: .16; }
-    /* Labels: pushed below so dot doesn't overlap */
+    .tick-even { width: 1.5px; height: 9px; background: var(--ink-lt); opacity: .28; }
+    .tick-odd  { width: 1px;   height: 5px; background: var(--ink-lt); opacity: .16; }
     .tick-label { position: absolute; top: calc(100% + 9px); transform: translateX(-50%); font-size: .63rem; font-weight: 500; color: var(--ink-lt); opacity: .5; white-space: nowrap; pointer-events: none; }
-
-    /* Thumb: centered on track line. Label above, dot on track */
     .thumb-wrap { position: absolute; top: 50%; transform: translate(-50%,-50%); pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 3px; }
     .thumb-label-above { font-size: .7rem; font-weight: 700; color: var(--green); white-space: nowrap; background: var(--cream); padding: .08rem .32rem; border-radius: 4px; border: 1px solid var(--cream-dk); box-shadow: 0 1px 4px rgba(36,61,26,.08); }
     .thumb-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--green); border: 2.5px solid #fff; box-shadow: 0 1px 6px rgba(36,61,26,.3); }
-
-    /* Native range — invisible overlay, tall enough to cover
-       the thumb dot so dragging from the dot works.
-       Uses addEventListener in JS (no inline oninput).       */
     input[type=range].slider-input {
       position: absolute; left: 0; right: 0;
       top: 50%; transform: translateY(-50%);
@@ -197,15 +183,12 @@
     .collapsible + .collapsible .collapsible-toggle::before { content: ''; position: absolute; left: 0; top: 28%; bottom: 28%; width: 1px; background: var(--cream-dk); }
 
     /* ── COLLAPSIBLE PANELS ──────────────────────────────────
-       Fixed-position outside sticky container — never clipped.
+       Fixed-position, outside sticky container — never clipped.
        `top` set by positionPanels() on load, resize, and
-       throttled scroll (prevents jumpiness at page bottom).
-       Closes on outside-click only — NOT on scroll.         */
+       throttled scroll. Closes on outside-click only.        */
     .collapsible-panel { display: none; position: fixed; left: 0; right: 0; background: var(--cream); border-bottom: 1.5px solid var(--cream-dk); box-shadow: 0 6px 18px rgba(36,61,26,.10); z-index: 99; }
     .collapsible-panel.open { display: block; }
     .collapsible-panel-inner { max-width: 1100px; margin: 0 auto; padding: .75rem 1.5rem .85rem; display: flex; flex-wrap: wrap; gap: .42rem; align-items: flex-start; }
-
-    /* City sub-sections inside Area panel — expanded by default */
     .city-toggle { display: inline-flex; align-items: center; gap: .3rem; padding: .25rem .7rem .25rem .5rem; background: none; border: none; cursor: pointer; font-size: .65rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-lt); font-family: 'DM Sans', sans-serif; margin-left: .25rem; transition: color .15s; }
     .city-toggle:first-child { margin-left: 0; }
     .city-toggle:hover { color: var(--ink); }
@@ -217,21 +200,14 @@
     /* ── RESULTS META ────────────────────────────────────── */
     .results-meta { max-width: 1100px; margin: 1.35rem auto .2rem; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .5rem; }
     .results-count { font-size: .8rem; font-weight: 500; color: var(--ink-lt); }
-
-    /* Two-tone heading:
-       "Happy Hours"  = Playfair ink
-       "on Thursday"  = Playfair italic sienna
-       "at 5 PM"      = DM Sans muted              */
     #results-heading { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 600; display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; line-height: 1.4; }
     .h-label { font-family: 'Playfair Display', serif; font-weight: 600; color: var(--ink); }
     .h-day   { font-family: 'Playfair Display', serif; font-style: italic; color: var(--sienna); margin-left: .28em; }
     .h-time  { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 400; color: var(--ink-lt); margin-left: .3em; }
 
-    /* Combo warning */
     .combo-warning { max-width: 1100px; margin: .35rem auto .1rem; padding: 0 1.5rem; }
     .combo-inner { display: inline-flex; align-items: center; gap: .4rem; background: #FEF3E2; border: 1px solid #F5C97A; border-radius: 8px; padding: .32rem .75rem; font-size: .78rem; color: #7A4F10; }
 
-    /* Active filter chips */
     .active-chips { max-width: 1100px; margin: .45rem auto .65rem; padding: 0 1.5rem; display: flex; flex-wrap: wrap; gap: .3rem; min-height: .5rem; }
     .chip { display: inline-flex; align-items: center; gap: .28rem; padding: .18rem .6rem; border-radius: 99px; background: var(--green); color: var(--cream); font-size: .7rem; font-weight: 600; }
     .chip-x { cursor: pointer; opacity: .6; font-size: .85rem; line-height: 1; }
@@ -247,9 +223,31 @@
     .card-body { padding: 1.2rem 1.3rem; flex: 1; }
     .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
     .venue-name { font-family: 'Playfair Display', serif; font-size: 1.12rem; font-weight: 600; color: var(--ink); line-height: 1.25; }
-    /* Open Now badge — only shown when currently open */
-    .open-badge { flex-shrink: 0; font-size: .63rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 99px; background: #D6EDD0; color: #2A6020; }
-    /* First neighborhood only on card; all used for filtering */
+
+    /* ── STATUS BADGE ────────────────────────────────────────
+       Three states:
+       1. Ends in X mins  — green→amber→red based on time left
+          > 25 min: green  (#2A6020 bg, #D6EDD0 bg)
+          25→15:   green fading to amber
+          15→5:    amber fading to red
+          < 5:     red (#8B1A1A text, #FFDDDD bg)
+          0:       hidden
+       2. Starts in X mins — amber (opens within 30 mins)
+       3. Hidden — when neither open nor opening soon         */
+    .status-badge {
+      flex-shrink: 0;
+      font-size: .63rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: .22rem .65rem; border-radius: 99px;
+      white-space: nowrap;
+      transition: background-color 1s ease, color 1s ease;
+    }
+    /* "Starts in X mins" — static amber */
+    .status-badge.soon {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
     .neighborhood { margin-top: .3rem; font-size: .74rem; font-weight: 500; color: var(--ink-lt); }
     .neighborhood::before { content: '📍 '; }
     .hours-row { margin-top: .8rem; display: flex; align-items: baseline; gap: .45rem; flex-wrap: wrap; }
@@ -258,18 +256,15 @@
     .deals { margin-top: .85rem; display: flex; flex-direction: column; gap: .38rem; }
     .deal-item { display: flex; align-items: flex-start; gap: .5rem; font-size: .81rem; line-height: 1.35; }
     .deal-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--sienna); margin-top: .37em; }
-    /* Card footer: tags top, links bottom left-aligned */
     .card-footer { padding: .75rem 1.3rem; border-top: 1px solid var(--cream-dk); display: flex; flex-direction: column; align-items: flex-start; gap: .45rem; }
     .tags { display: flex; flex-wrap: wrap; gap: .3rem; }
     .card-links { display: flex; align-items: center; }
     .card-link { font-size: .75rem; font-weight: 600; color: var(--green-lt); text-decoration: none; transition: color .15s; padding: .1rem .3rem; white-space: nowrap; }
     .card-link:hover { color: var(--sienna); }
     .card-link + .card-link { border-left: 1px solid var(--cream-dk); margin-left: .1rem; }
-    /* Deal tags — warm sienna tint, square corners */
     .tag-deal { font-size: .63rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .16rem .48rem; border-radius: 4px; cursor: pointer; background: var(--deal-tag-bg); border: 1px solid var(--deal-tag-border); color: var(--deal-tag-text); transition: background .14s, color .14s, border-color .14s; }
     .tag-deal:hover { background: #F5D8BE; }
     .tag-deal.tag-active { background: var(--sienna); border-color: var(--sienna); color: #fff; }
-    /* Vibe tags — sage green tint, rounder corners */
     .tag-vibe { font-size: .63rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .16rem .48rem; border-radius: 8px; cursor: pointer; background: var(--vibe-tag-bg); border: 1px solid var(--vibe-tag-border); color: var(--vibe-tag-text); transition: background .14s, color .14s, border-color .14s; }
     .tag-vibe:hover { background: #D4E8C8; }
     .tag-vibe.tag-active { background: var(--green-lt); border-color: var(--green-lt); color: #fff; }
@@ -286,7 +281,6 @@
     footer { background: var(--green); color: rgba(250,246,239,.6); text-align: center; padding: 2rem 1.5rem; font-size: .8rem; letter-spacing: .03em; line-height: 1.9; }
     footer a { color: var(--blush); text-decoration: none; font-weight: 500; }
     footer a:hover { color: var(--amber); text-decoration: underline; }
-    /* "Golden Hour" reset link — plain amber bold DM Sans, no italic Playfair */
     #footer-reset { color: var(--amber); font-weight: 700; font-family: 'DM Sans', sans-serif; font-style: normal; cursor: pointer; text-decoration: none; }
     #footer-reset:hover { text-decoration: underline; }
 
@@ -300,10 +294,7 @@
 </head>
 <body>
 
-<!-- ── HEADER ──────────────────────────────────────────────── -->
 <header id="top">
-  <!-- Time-of-day gradient layers. JS sets opacity on page load.
-       DOM order: evening (bottom) → standard → morning (top).  -->
   <div class="hbg" id="hbg-evening"></div>
   <div class="hbg" id="hbg-standard"></div>
   <div class="hbg" id="hbg-morning"></div>
@@ -328,9 +319,7 @@
   <span class="dev-dismiss" id="dev-dismiss">✕ dismiss</span>
 </div>
 
-<!-- ── STICKY FILTER PANEL ────────────────────────────────── -->
 <div class="filters-wrap" id="filters-wrap">
-
   <div class="search-row">
     <div class="search-wrap">
       <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -340,8 +329,6 @@
     </div>
   </div>
 
-  <!-- Day row: multi-select. Today = shortcut that clears multi.
-       No "All Days" pill — nothing selected = show all days.   -->
   <div class="filter-row" id="day-filters">
     <span class="filter-row-label">Day</span>
     <button class="pill today-active" data-day="today">Today</button>
@@ -354,8 +341,6 @@
     <button class="pill" data-day="Sun">Sun</button>
   </div>
 
-  <!-- Time row: named pills + slider toggle.
-       "← Pick a time →" is active by default.               -->
   <div class="filter-row" id="time-pills">
     <span class="filter-row-label">Time</span>
     <button class="pill" id="tpill-any"     data-time="any">Any Time</button>
@@ -366,12 +351,10 @@
     <button class="pill" id="tpill-late"    data-time="late">Late Night</button>
   </div>
 
-  <!-- Slider row: visible by default, hidden when named pill active -->
   <div class="slider-row" id="slider-row">
     <div class="slider-outer">
       <div class="track-container">
         <div class="track-line" id="slider-track">
-          <!-- Even-hour labels (2, 4, 6, 8, 9 PM) + odd ticks -->
           <div class="tick tick-even" style="left:0%">     <span class="tick-label">2 PM</span></div>
           <div class="tick tick-odd"  style="left:14.29%"></div>
           <div class="tick tick-even" style="left:28.57%"> <span class="tick-label">4 PM</span></div>
@@ -380,20 +363,16 @@
           <div class="tick tick-odd"  style="left:71.43%"></div>
           <div class="tick tick-even" style="left:85.71%"> <span class="tick-label">8 PM</span></div>
           <div class="tick tick-even" style="left:100%">   <span class="tick-label">9 PM</span></div>
-          <!-- Thumb: label above, dot on track -->
           <div class="thumb-wrap" id="slider-thumb">
             <div class="thumb-label-above" id="slider-label">5 PM</div>
             <div class="thumb-dot"></div>
           </div>
-          <!-- Native range input (no inline handler — wired in JS) -->
-          <input type="range" class="slider-input" id="time-slider"
-            min="14" max="21" step="0.5" value="17" />
+          <input type="range" class="slider-input" id="time-slider" min="14" max="21" step="0.5" value="17" />
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Collapsible section toggles -->
   <div class="collapsibles-bar">
     <div class="collapsible">
       <button class="collapsible-toggle" data-panel="panel-area">
@@ -414,10 +393,8 @@
       </button>
     </div>
   </div>
+</div>
 
-</div><!-- end .filters-wrap -->
-
-<!-- Collapsible panels — outside sticky container, never clipped -->
 <div class="collapsible-panel" id="panel-area">
   <div class="collapsible-panel-inner" id="area-pills"></div>
 </div>
@@ -428,7 +405,6 @@
   <div class="collapsible-panel-inner" id="vibe-pills"></div>
 </div>
 
-<!-- ── RESULTS ────────────────────────────────────────────── -->
 <div class="results-meta">
   <h2 id="results-heading">
     <span class="h-label">Happy Hours</span>
@@ -446,7 +422,6 @@
   <div class="empty"><div class="empty-icon">🌇</div><h3>Loading spots…</h3></div>
 </div>
 
-<!-- ── FOOTER ─────────────────────────────────────────────── -->
 <footer>
   <p>Made with 🥂 in the Twin Cities &nbsp;·&nbsp; <a href="#top" id="footer-reset">Golden Hour</a></p>
   <p>Know a spot? <a href="mailto:YOUREMAIL@example.com">Send us a tip</a></p>
@@ -488,15 +463,15 @@ const TIME_DEFS = {
   late:    { label:', Late Night',      test:(s,e)=>overlapsLateNight(s,e)  },
   now:     { label:', Happening Now',   test:(s,e)=>isOpenNowRange(s,e)     },
 };
-const SLIDER_MIN = 14, SLIDER_MAX = 21; // 2 PM to 9 PM
+const SLIDER_MIN = 14, SLIDER_MAX = 21;
 
 // ── STATE ─────────────────────────────────────────────────────
 const DAY_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const DAY_FULL  = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 let VENUES              = [];
-let activeDays          = 'today'; // 'today' | Set of day abbreviations
-let activeTime          = 'pick';  // 'any'|'pick'|'morning'|'lunch'|'late'|'now'
-let sliderValue         = 17;      // default 5 PM
+let activeDays          = 'today';
+let activeTime          = 'pick';
+let sliderValue         = 17;
 let activeNeighborhoods = new Set();
 let activeDealTags      = new Set();
 let activeVibeTags      = new Set();
@@ -551,11 +526,116 @@ function init() {
   setupFooterReset();
   positionPanels();
   window.addEventListener('resize', positionPanels);
-  // Scroll: reposition panels (throttled) WITHOUT closing them.
-  // Throttling prevents jumpiness near bottom of page.
   window.addEventListener('scroll', throttle(positionPanels, 16), { passive: true });
   new ResizeObserver(positionPanels).observe(document.getElementById('filters-wrap'));
   render();
+  // ── COUNTDOWN TICKER ──────────────────────────────────────
+  // Updates all status badges every 60 seconds so countdowns
+  // stay accurate while someone has the page open.
+  setInterval(updateAllBadges, 60000);
+}
+
+// ── STATUS BADGE LOGIC ────────────────────────────────────────
+// Returns an object describing the badge state for a venue:
+//   { type: 'ending', minsLeft: N }   — currently open
+//   { type: 'soon',   minsLeft: N }   — opens within 30 mins
+//   { type: 'none' }                  — closed, not soon
+function getBadgeState(v) {
+  const now = nowMinutes();
+  const today = todayAbbr();
+  if (!v.days.includes(today)) return { type:'none' };
+
+  // Convert 24hr int times to minutes-since-midnight for math
+  function toMins(t) {
+    return Math.floor(t / 100) * 60 + (t % 100);
+  }
+
+  const startMins = toMins(v.startTime);
+  const endMins   = toMins(v.endTime < v.startTime ? v.endTime + 2400 : v.endTime); // handle midnight wrap
+  const nowMins   = new Date().getHours() * 60 + new Date().getMinutes();
+
+  // Check if currently open
+  let minsLeft;
+  if (v.endTime < v.startTime) {
+    // crosses midnight
+    const adjustedNow = nowMins < startMins ? nowMins + 1440 : nowMins;
+    const adjustedEnd = endMins + (v.endTime < v.startTime ? 1440 : 0);
+    if (adjustedNow >= startMins) {
+      minsLeft = adjustedEnd - adjustedNow;
+      if (minsLeft > 0) return { type:'ending', minsLeft };
+    }
+  } else {
+    if (nowMins >= startMins && nowMins < toMins(v.endTime)) {
+      minsLeft = toMins(v.endTime) - nowMins;
+      if (minsLeft > 0) return { type:'ending', minsLeft };
+    }
+  }
+
+  // Check if opening soon (within 30 mins)
+  let minsUntilStart = startMins - nowMins;
+  if (minsUntilStart < 0) minsUntilStart += 1440; // tomorrow
+  if (minsUntilStart <= 30 && minsUntilStart > 0) {
+    return { type:'soon', minsLeft: minsUntilStart };
+  }
+
+  return { type:'none' };
+}
+
+// Given minsLeft for an "ending" badge, compute background and text colors.
+// Green → amber → red based on time remaining:
+//   > 25 min: pure green
+//   25 → 15: green fading to amber
+//   15 → 5:  amber fading to red
+//   < 5 min: pure red
+function badgeColors(minsLeft) {
+  // Color stops
+  const GREEN_BG='#D6EDD0', GREEN_TXT='#2A6020';
+  const AMBER_BG='#FEF3C7', AMBER_TXT='#92400E';
+  const RED_BG  ='#FECACA', RED_TXT  ='#7F1D1D';
+
+  function lerpColor(c1, c2, t) {
+    const h = s => [parseInt(s.slice(1,3),16),parseInt(s.slice(3,5),16),parseInt(s.slice(5,7),16)];
+    const [r1,g1,b1]=h(c1), [r2,g2,b2]=h(c2);
+    return `rgb(${Math.round(r1+(r2-r1)*t)},${Math.round(g1+(g2-g1)*t)},${Math.round(b1+(b2-b1)*t)})`;
+  }
+
+  if (minsLeft > 25) {
+    return { bg: GREEN_BG, color: GREEN_TXT };
+  } else if (minsLeft > 15) {
+    const t = (25 - minsLeft) / 10; // 0 at 25min, 1 at 15min
+    return { bg: lerpColor(GREEN_BG, AMBER_BG, t), color: lerpColor(GREEN_TXT, AMBER_TXT, t) };
+  } else if (minsLeft > 5) {
+    const t = (15 - minsLeft) / 10; // 0 at 15min, 1 at 5min
+    return { bg: lerpColor(AMBER_BG, RED_BG, t), color: lerpColor(AMBER_TXT, RED_TXT, t) };
+  } else {
+    return { bg: RED_BG, color: RED_TXT };
+  }
+}
+
+function fmtMins(n) {
+  return `${n} ${n === 1 ? 'min' : 'mins'}`;
+}
+
+function buildBadgeHTML(v) {
+  const state = getBadgeState(v);
+  if (state.type === 'none') return '';
+  if (state.type === 'soon') {
+    return `<span class="status-badge soon">Starts in ${fmtMins(state.minsLeft)}</span>`;
+  }
+  // ending — compute gradient color
+  const { bg, color } = badgeColors(state.minsLeft);
+  return `<span class="status-badge" style="background:${bg};color:${color}">Ends in ${fmtMins(state.minsLeft)}</span>`;
+}
+
+// Update all visible badges without re-rendering the whole grid
+function updateAllBadges() {
+  document.querySelectorAll('.card').forEach(card => {
+    const name = card.querySelector('.venue-name')?.textContent;
+    const venue = VENUES.find(v => v.name === name);
+    if (!venue) return;
+    const badgeSlot = card.querySelector('.badge-slot');
+    if (badgeSlot) badgeSlot.innerHTML = buildBadgeHTML(venue);
+  });
 }
 
 // ── THROTTLE ──────────────────────────────────────────────────
@@ -576,8 +656,6 @@ function positionPanels() {
 }
 
 // ── DAY FILTERS ───────────────────────────────────────────────
-// "Today" clears multi-select. Individual days toggle on/off.
-// Nothing selected snaps back to today.
 function setupDayFilters() {
   document.getElementById('day-filters').addEventListener('click', e => {
     const btn = e.target.closest('[data-day]');
@@ -623,7 +701,7 @@ function setTimeMode(mode) {
   );
   const pill = document.getElementById('tpill-' + mode);
   if (!pill) return;
-  if (mode === 'now')  pill.classList.add('time-active-now');
+  if (mode === 'now') pill.classList.add('time-active-now');
   else if (mode === 'pick') pill.classList.add('pick-active');
   else pill.classList.add('time-active');
 }
@@ -637,7 +715,6 @@ function setupSlider() {
     if (activeTime !== 'pick') setTimeMode('pick');
     render();
   });
-  // Delay initial thumb position until layout is ready
   requestAnimationFrame(() => moveThumb(sliderValue));
 }
 
@@ -662,14 +739,7 @@ function sliderTo24hr(val) {
   return h * 100 + m;
 }
 
-// ── TIME-OF-DAY HEADER THEME ──────────────────────────────────
-// Checked once on page load. Blends between three gradient layers.
-// Transition windows:
-//   Morning pure:       6 AM – 11 AM
-//   Morning → Standard: 11 AM – 12 PM
-//   Standard pure:      12 PM – 8 PM
-//   Standard → Evening:  8 PM – 9 PM
-//   Evening pure:        9 PM – 6 AM
+// ── HEADER THEME ──────────────────────────────────────────────
 function getTimeBlend() {
   const d = new Date(), mins = d.getHours()*60 + d.getMinutes();
   const MS=6*60, ME=11*60, SS=12*60, SE=20*60, ES=21*60;
@@ -921,26 +991,11 @@ function filteredVenues() {
 }
 
 // ── HEADING ───────────────────────────────────────────────────
-// "Happy Hours" [Playfair ink]
-// "on Thursday" or "on Mon · Wed" [Playfair italic sienna]
-// "at 5 PM" / "in the Morning" etc [DM Sans muted]
-// "Any Time" selected = no time text
 function buildHeading() {
-  let dayText = '';
-  if (activeDays==='today') {
-    dayText = `on ${todayFull()}`;
-  } else {
-    dayText = 'on ' + [...activeDays].join(' · ');
-  }
-
+  const dayText = activeDays==='today' ? `on ${todayFull()}` : 'on ' + [...activeDays].join(' · ');
   let timeText = '';
-  if (activeTime==='pick') {
-    timeText = ` at ${fmtSlider(sliderValue)}`;
-  } else if (activeTime!=='any') {
-    const def = TIME_DEFS[activeTime];
-    if (def) timeText = def.label;
-  }
-
+  if (activeTime==='pick') timeText = ` at ${fmtSlider(sliderValue)}`;
+  else if (activeTime!=='any') { const def=TIME_DEFS[activeTime]; if (def) timeText=def.label; }
   document.getElementById('results-heading').innerHTML =
     `<span class="h-label">Happy Hours</span>` +
     `<span class="h-day"> ${dayText}</span>` +
@@ -994,11 +1049,16 @@ function render() {
     return;
   }
 
-  const sorted=[...venues].sort((a,b)=>{ const ao=isOpenNow(a),bo=isOpenNow(b); return ao===bo?0:ao?-1:1; });
+  // Sort: "Starts soon" first, then "Ending" (sorted by time left desc), then closed
+  const sorted=[...venues].sort((a,b) => {
+    const sa=getBadgeState(a), sb=getBadgeState(b);
+    const rank = s => s.type==='ending' ? 0 : s.type==='soon' ? 1 : 2;
+    if (rank(sa) !== rank(sb)) return rank(sa) - rank(sb);
+    if (sa.type==='ending' && sb.type==='ending') return sb.minsLeft - sa.minsLeft;
+    return 0;
+  });
 
   grid.innerHTML=sorted.map((v,i) => {
-    const open=isOpenNow(v);
-    const badge=open?`<span class="open-badge">Open Now</span>`:'';
     const deals=v.deals.map(d=>`<div class="deal-item"><span class="deal-dot"></span><span>${d}</span></div>`).join('');
     const dealTagHTML=v.dealTags.map(t=>`<span class="tag-deal${activeDealTags.has(t)?' tag-active':''}" data-click-deal="${t}">${t}</span>`).join('');
     const vibeTagHTML=v.vibe.map(t=>`<span class="tag-vibe${activeVibeTags.has(t)?' tag-active':''}" data-click-vibe="${t}">${t}</span>`).join('');
@@ -1008,7 +1068,10 @@ function render() {
       <div class="card" style="animation-delay:${i*.04}s">
         <div class="card-accent" style="height:5px;background:${v.accentColor}"></div>
         <div class="card-body">
-          <div class="card-header"><div class="venue-name">${v.name}</div>${badge}</div>
+          <div class="card-header">
+            <div class="venue-name">${v.name}</div>
+            <div class="badge-slot">${buildBadgeHTML(v)}</div>
+          </div>
           <div class="neighborhood">${v.neighborhoods[0]}, ${v.city}</div>
           <div class="hours-row">
             <span class="hours-text">🕐 ${formatTime(v.startTime)} – ${formatTime(v.endTime)}</span>
