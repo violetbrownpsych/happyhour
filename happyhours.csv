@@ -1,0 +1,32 @@
+# Golden Hour — happyhours.csv
+# ─────────────────────────────────────────────────────────────────
+# neighborhood : use | to separate multiples  →  Northeast|Arts District
+# days         : Mon|Tue|Wed|Thu|Fri|Sat|Sun
+# startTime    : 24-hr integer  →  1530 = 3:30 PM,  900 = 9:00 AM,  100 = 1:00 AM (past midnight)
+# endTime      : same format
+# deals        : pipe-separated descriptions — each one becomes an orange bullet on the card
+#                e.g.  $6 wines by the glass|$5 draft beers|Half-off bar snacks
+# dealTags     : pipe-separated drink/food filter tags
+#                good values: Beer|Wine|Rail Cocktails|Craft Cocktails|Spirits|Margaritas|Bar Bites|Happy Hour Menu|Natural Wine
+#                add anything you like — new tags appear automatically as filter pills
+# vibe         : pipe-separated atmosphere/cuisine tags
+#                good values: Cocktail Bar|Wine Bar|Brewery/Taproom|Pub/Dive|Restaurant|Hotel Bar|Rooftop|Patio|Mexican|Italian|French|Japanese|Mediterranean|American
+#                add anything you like — new tags appear automatically as filter pills
+# website      : URL to venue's website or happy hour menu page (leave blank if unknown)
+# accentColor  : any CSS color — hex (#C4622D), named (tomato), rgb(100,80,60), hsl(20,60%,40%)
+# ─────────────────────────────────────────────────────────────────
+name,neighborhood,city,days,startTime,endTime,deals,dealTags,vibe,website,mapsUrl,accentColor
+Bar La Grassa,North Loop,Minneapolis,Mon|Tue|Wed|Thu|Fri,1500,1800,$6 wines by the glass|$5 draft beers|$8 select cocktails|Half-off bar snacks & bruschette,Wine|Rail Cocktails|Bar Bites,Restaurant|Italian,https://www.barlagrassa.com,https://maps.google.com/?q=Bar+La+Grassa+Minneapolis,#C4622D
+Young Joni,Northeast,Minneapolis,Mon|Tue|Wed|Thu,1600,1800,$5 select beers on draft|$6 natural wines|$7 cocktail of the week|Half-off select small plates,Beer|Wine|Natural Wine|Craft Cocktails,Restaurant,,https://maps.google.com/?q=Young+Joni+Minneapolis,#3A5C28
+Burch Steak & Pizza Bar,Lowry Hill,Minneapolis,Mon|Tue|Wed|Thu|Fri,1500,1700,$5 house wines|$5 draft beers|$9 cocktails|$5 bar snacks (wood-fired bread & olives),Wine|Beer|Rail Cocktails|Bar Bites,Restaurant|American,,https://maps.google.com/?q=Burch+Steak+Minneapolis,#D4953A
+Parlour Bar,North Loop,Minneapolis,Mon|Tue|Wed|Thu|Fri,1600,1800,$5 well drinks|$4 Grain Belt & PBR|$6 house wines|$5 burger at the bar,Beer|Rail Cocktails|Bar Bites,Pub/Dive|American,,https://maps.google.com/?q=Parlour+Bar+Minneapolis,#7A3050
+Constantine,Downtown,Minneapolis,Mon|Tue|Wed|Thu|Fri,1500,1800,$6 wines|$6 draft beers|$9 cocktails|Half-off sharable plates,Wine|Beer|Craft Cocktails|Happy Hour Menu,Cocktail Bar|Restaurant,,https://maps.google.com/?q=Constantine+Minneapolis,#C4622D
+Tattersall Distilling,Northeast|Arts District,Minneapolis,Mon|Tue|Wed|Thu|Fri|Sat,1500,1800,$2 off all cocktails|$5 house pour spirits|Free distillery tours at 4 PM,Craft Cocktails|Spirits,Brewery/Taproom,https://www.tattersalldistilling.com,https://maps.google.com/?q=Tattersall+Distilling+Minneapolis,#3A5C28
+Eat Street Social,Whittier,Minneapolis,Mon|Tue|Wed|Thu|Fri,1600,1900,$5 tap beers|$6 house wines|$8 cocktails|$5 bar bites,Beer|Rail Cocktails|Bar Bites,Restaurant|American,,https://maps.google.com/?q=Eat+Street+Social+Minneapolis,#D4953A
+Mara,Downtown,Minneapolis,Mon|Tue|Wed|Thu|Fri,1600,1800,$8 select cocktails|$7 wines by the glass|$6 local drafts|Half-off oysters & caviar bites,Craft Cocktails|Wine|Bar Bites,Hotel Bar|Cocktail Bar,,https://maps.google.com/?q=Mara+Restaurant+Minneapolis,#7A3050
+Meritage,Downtown,Saint Paul,Mon|Tue|Wed|Thu|Fri,1530,1800,$6 wines|$6 draft beers|$9 house cocktails|Half-off mussels & charcuterie,Wine|Beer|Rail Cocktails|Happy Hour Menu,Restaurant|French,,https://maps.google.com/?q=Meritage+Saint+Paul,#C4622D
+The Bulldog NE,Northeast,Minneapolis,Mon|Tue|Wed|Thu|Fri|Sat|Sun,1400,1800,$4 domestic drafts|$5 import/craft drafts|$5 well drinks|$6 appetizers,Beer|Rail Cocktails|Bar Bites,Pub/Dive|American,,https://maps.google.com/?q=Bulldog+NE+Minneapolis,#3A5C28
+Socca,Lowry Hill East,Minneapolis,Tue|Wed|Thu|Fri,1700,1830,$7 wines|$7 cocktails|$5 draft beers|Half-off socca flatbreads,Wine|Rail Cocktails|Bar Bites,Restaurant|Mediterranean,,https://maps.google.com/?q=Socca+Minneapolis,#D4953A
+Nixta Taqueria,Northeast,Minneapolis,Mon|Tue|Wed|Thu|Fri,1530,1800,$5 Modelo & Pacifico|$7 margaritas|$6 mezcal shots|$3 tacos (select),Beer|Margaritas|Bar Bites,Restaurant|Mexican,,https://maps.google.com/?q=Nixta+Taqueria+Minneapolis,#C4622D
+Hen House Eatery,Whittier,Minneapolis,Mon|Tue|Wed|Thu|Fri|Sat|Sun,900,1130,$5 Bloody Marys|$4 mimosas|$3 coffee cocktails|Half-off egg bites before 10 AM,Beer|Spirits|Bar Bites,Restaurant|American,,https://maps.google.com/?q=Hen+House+Eatery+Minneapolis,#D4953A
+The Pourhouse,Warehouse District,Minneapolis,Mon|Tue|Wed|Thu|Fri|Sat|Sun,2200,100,$3 well shots|$4 PBR tall boys|$5 late night snacks|$6 cocktails,Beer|Rail Cocktails|Bar Bites,Pub/Dive,,https://maps.google.com/?q=Pourhouse+Minneapolis,#243D1A

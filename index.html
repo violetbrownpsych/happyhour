@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Golden Hour — Twin Cities Happy Hours</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+  <style>
+    /* ── DESIGN TOKENS ───────────────────────────────────────
+       Forest & Sienna palette. To switch palettes, update
+       these variables only — everything else inherits them.
+       --header-accent and --timebar-bg are overridden at
+       runtime by applyHeaderTheme() based on time of day.   */
+    :root {
+      --cream:         #FAF6EF;
+      --cream-dk:      #F0E9DC;
+      --green:         #243D1A;
+      --green-lt:      #3A5C28;
+      --sienna:        #C4622D;
+      --amber:         #D4953A;
+      --berry:         #7A3050;
+      --blush:         #E8C4B0;
+      --ink:           #1A1410;
+      --ink-lt:        #5A4A3A;
+      --card:          #FFFFFF;
+      --shadow:        rgba(36,61,26,.10);
+      --radius:        14px;
+      --header-accent: #D4953A;
+      --timebar-bg:    #3A5C28;
+      --deal-tag-bg:    #FDF0E8;
+      --deal-tag-border:#E8C4A0;
+      --deal-tag-text:  #7A3A18;
+      --vibe-tag-bg:    #EAF0E4;
+      --vibe-tag-border:#B8CCA8;
+      --vibe-tag-text:  #2E4A22;
+    }
+
+    /* ── RESET ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    /* ── HEADER ──────────────────────────────────────────────
+       Three gradient layers blended by applyHeaderTheme():
+         Morning  (before 11 AM)  — cerulean sky, coral-gold
+         Standard (12 PM – 8 PM)  — Forest & Sienna
+         Evening  (after 9 PM)    — Indigo, city-light dots  */
+    header { position: relative; background: #1A1428; padding: 3.5rem 2rem 2.8rem; text-align: center; overflow: hidden; }
+    .hbg, .hstars { position: absolute; inset: 0; opacity: 0; }
+    .hstars { pointer-events: none; z-index: 1; }
+
+    #hbg-morning {
+      background-color: #2A5A7A;
+      background-image:
+        radial-gradient(ellipse 140% 55% at 50% -5%,   #4A90B8, transparent),
+        radial-gradient(ellipse 120% 70% at 50%  30%,  rgba(70,140,185,.55), transparent),
+        radial-gradient(ellipse 110% 50% at 50%  78%,  rgba(210,75,55,.70), transparent),
+        radial-gradient(ellipse 100% 50% at 50%  125%, rgba(220,130,20,.95), transparent),
+        radial-gradient(ellipse  55% 45% at  6%  85%,  rgba(200,80,55,.50), transparent),
+        radial-gradient(ellipse  50% 38% at 96%  88%,  rgba(210,140,20,.55), transparent);
+    }
+    #hstars-morning {
+      background-image:
+        radial-gradient(1px 1px at 12% 12%, rgba(255,245,210,.50), transparent),
+        radial-gradient(1.5px 1.5px at 45% 8%, rgba(255,245,210,.55), transparent),
+        radial-gradient(1px 1px at 72% 15%, rgba(255,245,210,.40), transparent),
+        radial-gradient(1px 1px at 28% 20%, rgba(255,245,210,.30), transparent),
+        radial-gradient(1px 1px at 86% 10%, rgba(255,245,210,.35), transparent),
+        radial-gradient(1px 1px at 58% 22%, rgba(255,245,210,.25), transparent);
+    }
+    #hbg-standard {
+      background-color: #243D1A;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% 110%, #3A5C28, transparent),
+        radial-gradient(ellipse 40% 40% at 20%  20%, rgba(212,149,58,.18), transparent),
+        radial-gradient(ellipse 30% 30% at 80%  10%, rgba(122,48,80,.22), transparent);
+    }
+    #hbg-evening {
+      background-color: #1A1428;
+      background-image:
+        radial-gradient(ellipse 100% 80% at 50% 110%, #2A1E3E, transparent),
+        radial-gradient(ellipse  60% 35% at 50% 115%, rgba(200,130,40,.50), transparent),
+        radial-gradient(ellipse  45% 45% at  5%  10%, rgba(122,48,80,.40), transparent),
+        radial-gradient(ellipse  30% 30% at 95%  15%, rgba(180,100,40,.30), transparent);
+    }
+    #hstars-evening {
+      background-image:
+        radial-gradient(1.5px 1.5px at 15% 20%, rgba(255,255,200,.70), transparent),
+        radial-gradient(1px   1px   at 35% 12%, rgba(255,255,200,.50), transparent),
+        radial-gradient(1.5px 1.5px at 55% 18%, rgba(255,255,200,.80), transparent),
+        radial-gradient(1px   1px   at 72%  8%, rgba(255,255,200,.60), transparent),
+        radial-gradient(1px   1px   at 88% 22%, rgba(255,255,200,.50), transparent),
+        radial-gradient(1px   1px   at 25% 35%, rgba(255,255,200,.40), transparent),
+        radial-gradient(1.5px 1.5px at 78% 30%, rgba(255,255,200,.60), transparent),
+        radial-gradient(1px   1px   at 45% 28%, rgba(255,255,200,.30), transparent),
+        radial-gradient(1px   1px   at 92% 40%, rgba(255,255,200,.50), transparent),
+        radial-gradient(2px   2px   at  8% 42%, rgba(255,240,180,.40), transparent);
+    }
+
+    .deco { position: absolute; border-radius: 50%; }
+    .deco-1 { width: 260px; height: 260px; top: -80px; left: -60px; }
+    .deco-2 { width: 180px; height: 180px; bottom: -50px; right: -30px; }
+    .header-inner { position: relative; z-index: 2; }
+    .logo-eyebrow { font-size: .72rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--header-accent); margin-bottom: .6rem; }
+    header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.6rem, 7vw, 4.4rem); font-weight: 700; color: var(--cream); line-height: 1.05; }
+    header h1 em { font-style: italic; color: var(--header-accent); }
+    header p.tagline { margin-top: .9rem; font-size: 1rem; font-weight: 300; color: rgba(250,246,239,.65); }
+
+    /* ── CLOCK BAR ───────────────────────────────────────── */
+    .time-bar { background: var(--timebar-bg); text-align: center; padding: .55rem 1rem; font-size: .78rem; font-weight: 500; color: rgba(250,246,239,.7); letter-spacing: .06em; }
+    #live-time { color: var(--header-accent); font-weight: 600; }
+
+    /* ── DEV BANNER ──────────────────────────────────────────
+       Remove this entire block (and its JS section below)
+       once you're live on GitHub + Netlify.                  */
+    .dev-banner { background: #FFF8E6; border-bottom: 1.5px solid #F5C97A; text-align: center; padding: .45rem 1rem; font-size: .75rem; color: #7A4F10; }
+    .dev-banner strong { font-weight: 600; }
+    .dev-dismiss { margin-left: .75rem; cursor: pointer; opacity: .5; font-size: .85rem; }
+    .dev-dismiss:hover { opacity: 1; }
+
+    /* ── STICKY FILTER PANEL ─────────────────────────────── */
+    .filters-wrap { position: sticky; top: 0; z-index: 100; background: var(--cream); border-bottom: 1.5px solid var(--cream-dk); box-shadow: 0 2px 12px var(--shadow); }
+
+    /* ── SEARCH ROW ──────────────────────────────────────── */
+    .search-row { max-width: 1100px; margin: 0 auto; padding: .85rem 1.5rem .45rem; }
+    .search-wrap { position: relative; max-width: 420px; }
+    .search-wrap svg { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); opacity: .4; pointer-events: none; }
+    #search { width: 100%; padding: .52rem .9rem .52rem 2.5rem; border-radius: 99px; border: 1.5px solid var(--cream-dk); background: #fff; font-family: 'DM Sans', sans-serif; font-size: .85rem; color: var(--ink); outline: none; transition: border-color .18s; }
+    #search:focus { border-color: var(--green); }
+    #search::placeholder { color: var(--ink-lt); opacity: .7; }
+
+    /* ── FILTER ROWS ─────────────────────────────────────── */
+    .filter-row { max-width: 1100px; margin: 0 auto; padding: .3rem 1.5rem; display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+    .filter-row-label { font-size: .62rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-lt); opacity: .5; margin-right: .2rem; white-space: nowrap; min-width: 2.8rem; }
+
+    /* ── PILLS ───────────────────────────────────────────── */
+    .pill { display: inline-flex; align-items: center; padding: .27rem .76rem; border-radius: 99px; border: 1.5px solid var(--cream-dk); background: var(--cream); font-size: .78rem; font-weight: 500; color: var(--ink-lt); cursor: pointer; transition: all .15s ease; user-select: none; white-space: nowrap; }
+    .pill:hover { border-color: var(--green); color: var(--green); }
+    .pill.day-active   { background: var(--amber);  border-color: var(--amber);  color: #fff; }
+    .pill.today-active { background: var(--amber);  border-color: var(--amber);  color: #fff; }
+    .pill.time-active  { background: var(--green);  border-color: var(--green);  color: var(--cream); }
+    .pill.time-active-now { background: var(--sienna); border-color: var(--sienna); color: #fff; }
+    .pill.pick-active  { background: var(--amber);  border-color: var(--amber);  color: #fff; }
+    .pill-pick { border-style: dashed; }
+    .pill.tag-active   { background: var(--sienna); border-color: var(--sienna); color: #fff; }
+
+    /* ── TIME SLIDER ─────────────────────────────────────────
+       Default time filter — visible on load.
+       Hidden when a named time pill is active.
+       Breathing room above separates it from time pills.     */
+    .slider-row { max-width: 1100px; margin: 0 auto; padding: .55rem 1.5rem .7rem; }
+    .slider-outer { padding: 0 10px; }
+    /* top padding: room for time label above thumb
+       bottom padding: room for hour labels below track       */
+    .track-container { position: relative; padding: 26px 0 26px; }
+    .track-line { position: relative; height: 4px; background: var(--cream-dk); border-radius: 2px; }
+
+    /* Tick marks */
+    .tick { position: absolute; top: 50%; transform: translate(-50%,-50%); border-radius: 1px; pointer-events: none; }
+    .tick-even { width: 1.5px; height: 9px;  background: var(--ink-lt); opacity: .28; }
+    .tick-odd  { width: 1px;   height: 5px;  background: var(--ink-lt); opacity: .16; }
+    /* Labels: pushed below so dot doesn't overlap */
+    .tick-label { position: absolute; top: calc(100% + 9px); transform: translateX(-50%); font-size: .63rem; font-weight: 500; color: var(--ink-lt); opacity: .5; white-space: nowrap; pointer-events: none; }
+
+    /* Thumb: centered on track line. Label above, dot on track */
+    .thumb-wrap { position: absolute; top: 50%; transform: translate(-50%,-50%); pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .thumb-label-above { font-size: .7rem; font-weight: 700; color: var(--green); white-space: nowrap; background: var(--cream); padding: .08rem .32rem; border-radius: 4px; border: 1px solid var(--cream-dk); box-shadow: 0 1px 4px rgba(36,61,26,.08); }
+    .thumb-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--green); border: 2.5px solid #fff; box-shadow: 0 1px 6px rgba(36,61,26,.3); }
+
+    /* Native range — invisible overlay, tall enough to cover
+       the thumb dot so dragging from the dot works.
+       Uses addEventListener in JS (no inline oninput).       */
+    input[type=range].slider-input {
+      position: absolute; left: 0; right: 0;
+      top: 50%; transform: translateY(-50%);
+      width: 100%; height: 44px;
+      opacity: 0; cursor: grab; margin: 0;
+      -webkit-appearance: none; z-index: 2;
+    }
+    input[type=range].slider-input:active { cursor: grabbing; }
+
+    /* ── COLLAPSIBLE TOGGLE BAR ──────────────────────────── */
+    .collapsibles-bar { max-width: 1100px; margin: 0 auto; padding: .3rem 0 0; display: flex; flex-wrap: wrap; gap: 0; border-top: 1px solid var(--cream-dk); margin-top: .15rem; }
+    .collapsible { position: relative; flex: 0 0 auto; }
+    .collapsible-toggle { display: inline-flex; align-items: center; gap: .45rem; padding: .45rem 1.3rem .55rem 1.5rem; background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-lt); transition: color .15s; }
+    .collapsible-toggle:hover { color: var(--ink); }
+    .collapsible-toggle.has-active { color: var(--sienna); }
+    .toggle-chevron { font-size: .58rem; transition: transform .2s; display: inline-block; opacity: .55; }
+    .collapsible-toggle.open .toggle-chevron { transform: rotate(180deg); }
+    .active-badge { background: var(--sienna); color: #fff; border-radius: 99px; padding: .07rem .42rem; font-size: .62rem; font-weight: 700; letter-spacing: 0; }
+    .collapsible + .collapsible .collapsible-toggle::before { content: ''; position: absolute; left: 0; top: 28%; bottom: 28%; width: 1px; background: var(--cream-dk); }
+
+    /* ── COLLAPSIBLE PANELS ──────────────────────────────────
+       Fixed-position outside sticky container — never clipped.
+       `top` set by positionPanels() on load, resize, and
+       throttled scroll (prevents jumpiness at page bottom).
+       Closes on outside-click only — NOT on scroll.         */
+    .collapsible-panel { display: none; position: fixed; left: 0; right: 0; background: var(--cream); border-bottom: 1.5px solid var(--cream-dk); box-shadow: 0 6px 18px rgba(36,61,26,.10); z-index: 99; }
+    .collapsible-panel.open { display: block; }
+    .collapsible-panel-inner { max-width: 1100px; margin: 0 auto; padding: .75rem 1.5rem .85rem; display: flex; flex-wrap: wrap; gap: .42rem; align-items: flex-start; }
+
+    /* City sub-sections inside Area panel — expanded by default */
+    .city-toggle { display: inline-flex; align-items: center; gap: .3rem; padding: .25rem .7rem .25rem .5rem; background: none; border: none; cursor: pointer; font-size: .65rem; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; color: var(--ink-lt); font-family: 'DM Sans', sans-serif; margin-left: .25rem; transition: color .15s; }
+    .city-toggle:first-child { margin-left: 0; }
+    .city-toggle:hover { color: var(--ink); }
+    .city-chevron { font-size: .52rem; transition: transform .2s; opacity: .5; }
+    .city-toggle.open .city-chevron { transform: rotate(180deg); }
+    .city-pills { display: flex; flex-wrap: wrap; gap: .4rem; flex-basis: 100%; padding-left: .5rem; margin-bottom: .2rem; }
+    .city-pills.collapsed { display: none; }
+
+    /* ── RESULTS META ────────────────────────────────────── */
+    .results-meta { max-width: 1100px; margin: 1.35rem auto .2rem; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .5rem; }
+    .results-count { font-size: .8rem; font-weight: 500; color: var(--ink-lt); }
+
+    /* Two-tone heading:
+       "Happy Hours"  = Playfair ink
+       "on Thursday"  = Playfair italic sienna
+       "at 5 PM"      = DM Sans muted              */
+    #results-heading { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 600; display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; line-height: 1.4; }
+    .h-label { font-family: 'Playfair Display', serif; font-weight: 600; color: var(--ink); }
+    .h-day   { font-family: 'Playfair Display', serif; font-style: italic; color: var(--sienna); margin-left: .28em; }
+    .h-time  { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 400; color: var(--ink-lt); margin-left: .3em; }
+
+    /* Combo warning */
+    .combo-warning { max-width: 1100px; margin: .35rem auto .1rem; padding: 0 1.5rem; }
+    .combo-inner { display: inline-flex; align-items: center; gap: .4rem; background: #FEF3E2; border: 1px solid #F5C97A; border-radius: 8px; padding: .32rem .75rem; font-size: .78rem; color: #7A4F10; }
+
+    /* Active filter chips */
+    .active-chips { max-width: 1100px; margin: .45rem auto .65rem; padding: 0 1.5rem; display: flex; flex-wrap: wrap; gap: .3rem; min-height: .5rem; }
+    .chip { display: inline-flex; align-items: center; gap: .28rem; padding: .18rem .6rem; border-radius: 99px; background: var(--green); color: var(--cream); font-size: .7rem; font-weight: 600; }
+    .chip-x { cursor: pointer; opacity: .6; font-size: .85rem; line-height: 1; }
+    .chip-x:hover { opacity: 1; }
+
+    /* ── CARD GRID ───────────────────────────────────────── */
+    .grid { max-width: 1100px; margin: 0 auto 4rem; padding: 0 1.5rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; }
+
+    /* ── VENUE CARD ──────────────────────────────────────── */
+    .card { background: var(--card); border-radius: var(--radius); border: 1.5px solid var(--cream-dk); overflow: hidden; box-shadow: 0 2px 14px var(--shadow); transition: transform .2s ease, box-shadow .2s ease; display: flex; flex-direction: column; animation: fadeUp .35s ease both; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px var(--shadow); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .card-body { padding: 1.2rem 1.3rem; flex: 1; }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: .5rem; }
+    .venue-name { font-family: 'Playfair Display', serif; font-size: 1.12rem; font-weight: 600; color: var(--ink); line-height: 1.25; }
+    /* Open Now badge — only shown when currently open */
+    .open-badge { flex-shrink: 0; font-size: .63rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 99px; background: #D6EDD0; color: #2A6020; }
+    /* First neighborhood only on card; all used for filtering */
+    .neighborhood { margin-top: .3rem; font-size: .74rem; font-weight: 500; color: var(--ink-lt); }
+    .neighborhood::before { content: '📍 '; }
+    .hours-row { margin-top: .8rem; display: flex; align-items: baseline; gap: .45rem; flex-wrap: wrap; }
+    .hours-text { font-size: .8rem; font-weight: 500; }
+    .days-text  { font-size: .73rem; color: var(--ink-lt); }
+    .deals { margin-top: .85rem; display: flex; flex-direction: column; gap: .38rem; }
+    .deal-item { display: flex; align-items: flex-start; gap: .5rem; font-size: .81rem; line-height: 1.35; }
+    .deal-dot { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--sienna); margin-top: .37em; }
+    /* Card footer: tags top, links bottom left-aligned */
+    .card-footer { padding: .75rem 1.3rem; border-top: 1px solid var(--cream-dk); display: flex; flex-direction: column; align-items: flex-start; gap: .45rem; }
+    .tags { display: flex; flex-wrap: wrap; gap: .3rem; }
+    .card-links { display: flex; align-items: center; }
+    .card-link { font-size: .75rem; font-weight: 600; color: var(--green-lt); text-decoration: none; transition: color .15s; padding: .1rem .3rem; white-space: nowrap; }
+    .card-link:hover { color: var(--sienna); }
+    .card-link + .card-link { border-left: 1px solid var(--cream-dk); margin-left: .1rem; }
+    /* Deal tags — warm sienna tint, square corners */
+    .tag-deal { font-size: .63rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .16rem .48rem; border-radius: 4px; cursor: pointer; background: var(--deal-tag-bg); border: 1px solid var(--deal-tag-border); color: var(--deal-tag-text); transition: background .14s, color .14s, border-color .14s; }
+    .tag-deal:hover { background: #F5D8BE; }
+    .tag-deal.tag-active { background: var(--sienna); border-color: var(--sienna); color: #fff; }
+    /* Vibe tags — sage green tint, rounder corners */
+    .tag-vibe { font-size: .63rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: .16rem .48rem; border-radius: 8px; cursor: pointer; background: var(--vibe-tag-bg); border: 1px solid var(--vibe-tag-border); color: var(--vibe-tag-text); transition: background .14s, color .14s, border-color .14s; }
+    .tag-vibe:hover { background: #D4E8C8; }
+    .tag-vibe.tag-active { background: var(--green-lt); border-color: var(--green-lt); color: #fff; }
+
+    /* ── EMPTY STATE ─────────────────────────────────────── */
+    .empty { grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: var(--ink-lt); }
+    .empty-icon { font-size: 2.8rem; margin-bottom: 1rem; }
+    .empty h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: .6rem; color: var(--ink); }
+    .empty p { font-size: .9rem; line-height: 1.7; }
+    .tip-link { color: var(--sienna); font-weight: 600; text-decoration: none; }
+    .tip-link:hover { text-decoration: underline; }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer { background: var(--green); color: rgba(250,246,239,.6); text-align: center; padding: 2rem 1.5rem; font-size: .8rem; letter-spacing: .03em; line-height: 1.9; }
+    footer a { color: var(--blush); text-decoration: none; font-weight: 500; }
+    footer a:hover { color: var(--amber); text-decoration: underline; }
+    /* "Golden Hour" reset link — plain amber bold DM Sans, no italic Playfair */
+    #footer-reset { color: var(--amber); font-weight: 700; font-family: 'DM Sans', sans-serif; font-style: normal; cursor: pointer; text-decoration: none; }
+    #footer-reset:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr; }
+      .filter-row { padding-left: 1rem; padding-right: 1rem; }
+      .slider-row { padding-left: 1rem; padding-right: 1rem; }
+      .collapsible-panel-inner { padding: .65rem 1rem .75rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ──────────────────────────────────────────────── -->
+<header id="top">
+  <!-- Time-of-day gradient layers. JS sets opacity on page load.
+       DOM order: evening (bottom) → standard → morning (top).  -->
+  <div class="hbg" id="hbg-evening"></div>
+  <div class="hbg" id="hbg-standard"></div>
+  <div class="hbg" id="hbg-morning"></div>
+  <div class="hstars" id="hstars-morning"></div>
+  <div class="hstars" id="hstars-evening"></div>
+  <div class="deco deco-1" id="deco-1"></div>
+  <div class="deco deco-2" id="deco-2"></div>
+  <div class="header-inner">
+    <p class="logo-eyebrow">Twin Cities</p>
+    <h1><em>Golden</em> Hour</h1>
+    <p class="tagline">The best happy hours in Minneapolis &amp; St. Paul, curated.</p>
+  </div>
+</header>
+
+<div class="time-bar">
+  It's currently <span id="live-time"></span> — <span id="live-day"></span>
+</div>
+
+<!-- DEV BANNER — delete this element and its JS block below when going live -->
+<div class="dev-banner" id="dev-banner" style="display:none">
+  <strong>Dev mode:</strong> previewing sample data — CSV not loaded.
+  <span class="dev-dismiss" id="dev-dismiss">✕ dismiss</span>
+</div>
+
+<!-- ── STICKY FILTER PANEL ────────────────────────────────── -->
+<div class="filters-wrap" id="filters-wrap">
+
+  <div class="search-row">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <path d="M6 1a5 5 0 100 10A5 5 0 006 1zM0 6a6 6 0 1110.89 3.477l3.817 3.816a.5.5 0 01-.708.708l-3.816-3.817A6 6 0 010 6z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/>
+      </svg>
+      <input type="text" id="search" placeholder="Search venues, neighborhoods, deals…" autocomplete="off" />
+    </div>
+  </div>
+
+  <!-- Day row: multi-select. Today = shortcut that clears multi.
+       No "All Days" pill — nothing selected = show all days.   -->
+  <div class="filter-row" id="day-filters">
+    <span class="filter-row-label">Day</span>
+    <button class="pill today-active" data-day="today">Today</button>
+    <button class="pill" data-day="Mon">Mon</button>
+    <button class="pill" data-day="Tue">Tue</button>
+    <button class="pill" data-day="Wed">Wed</button>
+    <button class="pill" data-day="Thu">Thu</button>
+    <button class="pill" data-day="Fri">Fri</button>
+    <button class="pill" data-day="Sat">Sat</button>
+    <button class="pill" data-day="Sun">Sun</button>
+  </div>
+
+  <!-- Time row: named pills + slider toggle.
+       "← Pick a time →" is active by default.               -->
+  <div class="filter-row" id="time-pills">
+    <span class="filter-row-label">Time</span>
+    <button class="pill" id="tpill-any"     data-time="any">Any Time</button>
+    <button class="pill" id="tpill-now"     data-time="now">Happening Now</button>
+    <button class="pill" id="tpill-morning" data-time="morning">Morning</button>
+    <button class="pill" id="tpill-lunch"   data-time="lunch">Lunch</button>
+    <button class="pill pill-pick pick-active" id="tpill-pick" data-time="pick">← Pick a time →</button>
+    <button class="pill" id="tpill-late"    data-time="late">Late Night</button>
+  </div>
+
+  <!-- Slider row: visible by default, hidden when named pill active -->
+  <div class="slider-row" id="slider-row">
+    <div class="slider-outer">
+      <div class="track-container">
+        <div class="track-line" id="slider-track">
+          <!-- Even-hour labels (2, 4, 6, 8, 9 PM) + odd ticks -->
+          <div class="tick tick-even" style="left:0%">     <span class="tick-label">2 PM</span></div>
+          <div class="tick tick-odd"  style="left:14.29%"></div>
+          <div class="tick tick-even" style="left:28.57%"> <span class="tick-label">4 PM</span></div>
+          <div class="tick tick-odd"  style="left:42.86%"></div>
+          <div class="tick tick-even" style="left:57.14%"> <span class="tick-label">6 PM</span></div>
+          <div class="tick tick-odd"  style="left:71.43%"></div>
+          <div class="tick tick-even" style="left:85.71%"> <span class="tick-label">8 PM</span></div>
+          <div class="tick tick-even" style="left:100%">   <span class="tick-label">9 PM</span></div>
+          <!-- Thumb: label above, dot on track -->
+          <div class="thumb-wrap" id="slider-thumb">
+            <div class="thumb-label-above" id="slider-label">5 PM</div>
+            <div class="thumb-dot"></div>
+          </div>
+          <!-- Native range input (no inline handler — wired in JS) -->
+          <input type="range" class="slider-input" id="time-slider"
+            min="14" max="21" step="0.5" value="17" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Collapsible section toggles -->
+  <div class="collapsibles-bar">
+    <div class="collapsible">
+      <button class="collapsible-toggle" data-panel="panel-area">
+        Area <span class="toggle-chevron">▾</span>
+        <span class="active-badge" id="badge-area" style="display:none"></span>
+      </button>
+    </div>
+    <div class="collapsible">
+      <button class="collapsible-toggle" data-panel="panel-deals">
+        Deals <span class="toggle-chevron">▾</span>
+        <span class="active-badge" id="badge-deals" style="display:none"></span>
+      </button>
+    </div>
+    <div class="collapsible">
+      <button class="collapsible-toggle" data-panel="panel-vibe">
+        Vibe <span class="toggle-chevron">▾</span>
+        <span class="active-badge" id="badge-vibe" style="display:none"></span>
+      </button>
+    </div>
+  </div>
+
+</div><!-- end .filters-wrap -->
+
+<!-- Collapsible panels — outside sticky container, never clipped -->
+<div class="collapsible-panel" id="panel-area">
+  <div class="collapsible-panel-inner" id="area-pills"></div>
+</div>
+<div class="collapsible-panel" id="panel-deals">
+  <div class="collapsible-panel-inner" id="deal-pills"></div>
+</div>
+<div class="collapsible-panel" id="panel-vibe">
+  <div class="collapsible-panel-inner" id="vibe-pills"></div>
+</div>
+
+<!-- ── RESULTS ────────────────────────────────────────────── -->
+<div class="results-meta">
+  <h2 id="results-heading">
+    <span class="h-label">Happy Hours</span>
+    <span class="h-day"> on Thursday</span>
+    <span class="h-time"> at 5 PM</span>
+  </h2>
+  <span class="results-count" id="results-count"></span>
+</div>
+<div class="combo-warning" id="combo-warning" style="display:none">
+  <div class="combo-inner">⚠️ <span id="combo-text"></span></div>
+</div>
+<div class="active-chips" id="active-chips"></div>
+
+<div class="grid" id="grid">
+  <div class="empty"><div class="empty-icon">🌇</div><h3>Loading spots…</h3></div>
+</div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────── -->
+<footer>
+  <p>Made with 🥂 in the Twin Cities &nbsp;·&nbsp; <a href="#top" id="footer-reset">Golden Hour</a></p>
+  <p>Know a spot? <a href="mailto:YOUREMAIL@example.com">Send us a tip</a></p>
+</footer>
+
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+// Local dev:  'happyhours.csv'
+// On GitHub:  'https://raw.githubusercontent.com/YOU/REPO/main/happyhours.csv'
+const CSV_URL = 'happyhours.csv';
+
+// ── FALLBACK DATA ─────────────────────────────────────────────
+// Mirrors happyhours.csv exactly. Used automatically when the
+// CSV can't load locally (browser security restriction).
+// DELETE this array and the fallback branch in loadData()
+// once you are live on GitHub + Netlify.
+const FALLBACK = [
+  { name:"Bar La Grassa",          neighborhoods:["North Loop"],                city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri"],             startTime:1500, endTime:1800, deals:["$6 wines by the glass","$5 draft beers","$8 select cocktails","Half-off bar snacks & bruschette"],  dealTags:["Wine","Rail Cocktails","Bar Bites"],               vibe:["Restaurant","Italian"],       website:"https://www.barlagrassa.com",          mapsUrl:"https://maps.google.com/?q=Bar+La+Grassa+Minneapolis",        accentColor:"#C4622D" },
+  { name:"Young Joni",             neighborhoods:["Northeast"],                 city:"Minneapolis", days:["Mon","Tue","Wed","Thu"],                  startTime:1600, endTime:1800, deals:["$5 select beers on draft","$6 natural wines","$7 cocktail of the week","Half-off select small plates"], dealTags:["Beer","Wine","Natural Wine","Craft Cocktails"],     vibe:["Restaurant"],                 website:"",                                     mapsUrl:"https://maps.google.com/?q=Young+Joni+Minneapolis",           accentColor:"#3A5C28" },
+  { name:"Burch Steak & Pizza Bar", neighborhoods:["Lowry Hill"],               city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri"],             startTime:1500, endTime:1700, deals:["$5 house wines","$5 draft beers","$9 cocktails","$5 bar snacks (wood-fired bread & olives)"],        dealTags:["Wine","Beer","Rail Cocktails","Bar Bites"],         vibe:["Restaurant","American"],      website:"",                                     mapsUrl:"https://maps.google.com/?q=Burch+Steak+Minneapolis",          accentColor:"#D4953A" },
+  { name:"Parlour Bar",            neighborhoods:["North Loop"],                city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri"],             startTime:1600, endTime:1800, deals:["$5 well drinks","$4 Grain Belt & PBR","$6 house wines","$5 burger at the bar"],                      dealTags:["Beer","Rail Cocktails","Bar Bites"],                vibe:["Pub/Dive","American"],        website:"",                                     mapsUrl:"https://maps.google.com/?q=Parlour+Bar+Minneapolis",          accentColor:"#7A3050" },
+  { name:"Constantine",            neighborhoods:["Downtown"],                  city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri"],             startTime:1500, endTime:1800, deals:["$6 wines","$6 draft beers","$9 cocktails","Half-off sharable plates"],                              dealTags:["Wine","Beer","Craft Cocktails","Happy Hour Menu"],  vibe:["Cocktail Bar","Restaurant"],  website:"",                                     mapsUrl:"https://maps.google.com/?q=Constantine+Minneapolis",          accentColor:"#C4622D" },
+  { name:"Tattersall Distilling",  neighborhoods:["Northeast","Arts District"], city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri","Sat"],       startTime:1500, endTime:1800, deals:["$2 off all cocktails","$5 house pour spirits","Free distillery tours at 4 PM"],                    dealTags:["Craft Cocktails","Spirits"],                        vibe:["Brewery/Taproom"],            website:"https://www.tattersalldistilling.com", mapsUrl:"https://maps.google.com/?q=Tattersall+Distilling+Minneapolis", accentColor:"#3A5C28" },
+  { name:"Eat Street Social",      neighborhoods:["Whittier"],                  city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri"],             startTime:1600, endTime:1900, deals:["$5 tap beers","$6 house wines","$8 cocktails","$5 bar bites"],                                      dealTags:["Beer","Rail Cocktails","Bar Bites"],                vibe:["Restaurant","American"],      website:"",                                     mapsUrl:"https://maps.google.com/?q=Eat+Street+Social+Minneapolis",    accentColor:"#D4953A" },
+  { name:"Mara",                   neighborhoods:["Downtown"],                  city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri"],             startTime:1600, endTime:1800, deals:["$8 select cocktails","$7 wines by the glass","$6 local drafts","Half-off oysters & caviar bites"],  dealTags:["Craft Cocktails","Wine","Bar Bites"],               vibe:["Hotel Bar","Cocktail Bar"],   website:"",                                     mapsUrl:"https://maps.google.com/?q=Mara+Restaurant+Minneapolis",      accentColor:"#7A3050" },
+  { name:"Meritage",               neighborhoods:["Downtown"],                  city:"Saint Paul",  days:["Mon","Tue","Wed","Thu","Fri"],             startTime:1530, endTime:1800, deals:["$6 wines","$6 draft beers","$9 house cocktails","Half-off mussels & charcuterie"],                  dealTags:["Wine","Beer","Rail Cocktails","Happy Hour Menu"],   vibe:["Restaurant","French"],        website:"",                                     mapsUrl:"https://maps.google.com/?q=Meritage+Saint+Paul",              accentColor:"#C4622D" },
+  { name:"The Bulldog NE",         neighborhoods:["Northeast"],                 city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], startTime:1400, endTime:1800, deals:["$4 domestic drafts","$5 import/craft drafts","$5 well drinks","$6 appetizers"],                    dealTags:["Beer","Rail Cocktails","Bar Bites"],                vibe:["Pub/Dive","American"],        website:"",                                     mapsUrl:"https://maps.google.com/?q=Bulldog+NE+Minneapolis",           accentColor:"#3A5C28" },
+  { name:"Socca",                  neighborhoods:["Lowry Hill East"],           city:"Minneapolis", days:["Tue","Wed","Thu","Fri"],                  startTime:1700, endTime:1830, deals:["$7 wines","$7 cocktails","$5 draft beers","Half-off socca flatbreads"],                             dealTags:["Wine","Rail Cocktails","Bar Bites"],                vibe:["Restaurant","Mediterranean"], website:"",                                     mapsUrl:"https://maps.google.com/?q=Socca+Minneapolis",                accentColor:"#D4953A" },
+  { name:"Nixta Taqueria",         neighborhoods:["Northeast"],                 city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri"],             startTime:1530, endTime:1800, deals:["$5 Modelo & Pacifico","$7 margaritas","$6 mezcal shots","$3 tacos (select)"],                       dealTags:["Beer","Margaritas","Bar Bites"],                    vibe:["Restaurant","Mexican"],       website:"",                                     mapsUrl:"https://maps.google.com/?q=Nixta+Taqueria+Minneapolis",       accentColor:"#C4622D" },
+  { name:"Hen House Eatery",       neighborhoods:["Whittier"],                  city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], startTime:900,  endTime:1130, deals:["$5 Bloody Marys","$4 mimosas","$3 coffee cocktails","Half-off egg bites before 10 AM"],            dealTags:["Beer","Spirits","Bar Bites"],                       vibe:["Restaurant","American"],      website:"",                                     mapsUrl:"https://maps.google.com/?q=Hen+House+Eatery+Minneapolis",     accentColor:"#D4953A" },
+  { name:"The Pourhouse",          neighborhoods:["Warehouse District"],        city:"Minneapolis", days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"], startTime:2200, endTime:100,  deals:["$3 well shots","$4 PBR tall boys","$5 late night snacks","$6 cocktails"],                        dealTags:["Beer","Rail Cocktails","Bar Bites"],                vibe:["Pub/Dive"],                   website:"",                                     mapsUrl:"https://maps.google.com/?q=Pourhouse+Minneapolis",            accentColor:"#243D1A" },
+];
+
+// ── TIME FILTER DEFINITIONS ───────────────────────────────────
+const TIME_DEFS = {
+  morning: { label:'in the Morning',    test:(s,e)=>overlaps(s,e,700,1059)  },
+  lunch:   { label:'over Lunch',        test:(s,e)=>overlaps(s,e,1100,1400) },
+  late:    { label:', Late Night',      test:(s,e)=>overlapsLateNight(s,e)  },
+  now:     { label:', Happening Now',   test:(s,e)=>isOpenNowRange(s,e)     },
+};
+const SLIDER_MIN = 14, SLIDER_MAX = 21; // 2 PM to 9 PM
+
+// ── STATE ─────────────────────────────────────────────────────
+const DAY_NAMES = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DAY_FULL  = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+let VENUES              = [];
+let activeDays          = 'today'; // 'today' | Set of day abbreviations
+let activeTime          = 'pick';  // 'any'|'pick'|'morning'|'lunch'|'late'|'now'
+let sliderValue         = 17;      // default 5 PM
+let activeNeighborhoods = new Set();
+let activeDealTags      = new Set();
+let activeVibeTags      = new Set();
+let searchQuery         = '';
+
+// ── LOAD DATA ─────────────────────────────────────────────────
+function loadData() {
+  Papa.parse(CSV_URL, {
+    download: true, header: true, skipEmptyLines: true, comments: '#',
+    complete({ data }) { VENUES = parseRows(data); init(); },
+    error() {
+      // ── DEV FALLBACK — delete this block when going live ──
+      VENUES = FALLBACK;
+      const banner = document.getElementById('dev-banner');
+      if (banner) {
+        banner.style.display = 'block';
+        document.getElementById('dev-dismiss')
+          .addEventListener('click', () => banner.style.display = 'none');
+      }
+      // ── END DEV FALLBACK ─────────────────────────────────
+      init();
+    }
+  });
+}
+
+function parseRows(data) {
+  return data.map(row => ({
+    name:          row.name?.trim(),
+    neighborhoods: row.neighborhood?.split('|').map(n=>n.trim()).filter(Boolean) || [],
+    city:          row.city?.trim(),
+    days:          row.days?.split('|').map(d=>d.trim()).filter(Boolean) || [],
+    startTime:     parseInt(row.startTime, 10),
+    endTime:       parseInt(row.endTime, 10),
+    deals:         row.deals?.split('|').map(d=>d.trim()).filter(Boolean) || [],
+    dealTags:      row.dealTags?.split('|').map(t=>t.trim()).filter(Boolean) || [],
+    vibe:          row.vibe?.split('|').map(t=>t.trim()).filter(Boolean) || [],
+    website:       row.website?.trim() || '',
+    mapsUrl:       row.mapsUrl?.trim(),
+    accentColor:   row.accentColor?.trim() || '#3A5C28'
+  })).filter(v => v.name && !isNaN(v.startTime));
+}
+
+function init() {
+  applyHeaderTheme();
+  buildAreaPanel();
+  buildDealPanel();
+  buildVibePanel();
+  setupCollapsibles();
+  setupDayFilters();
+  setupTimePills();
+  setupSlider();
+  setupFooterReset();
+  positionPanels();
+  window.addEventListener('resize', positionPanels);
+  // Scroll: reposition panels (throttled) WITHOUT closing them.
+  // Throttling prevents jumpiness near bottom of page.
+  window.addEventListener('scroll', throttle(positionPanels, 16), { passive: true });
+  new ResizeObserver(positionPanels).observe(document.getElementById('filters-wrap'));
+  render();
+}
+
+// ── THROTTLE ──────────────────────────────────────────────────
+function throttle(fn, ms) {
+  let last = 0;
+  return function(...args) {
+    const now = Date.now();
+    if (now - last >= ms) { last = now; fn.apply(this, args); }
+  };
+}
+
+// ── PANEL POSITIONING ─────────────────────────────────────────
+function positionPanels() {
+  const bar = document.getElementById('filters-wrap');
+  if (!bar) return;
+  const bottom = bar.getBoundingClientRect().bottom;
+  document.querySelectorAll('.collapsible-panel').forEach(p => p.style.top = bottom + 'px');
+}
+
+// ── DAY FILTERS ───────────────────────────────────────────────
+// "Today" clears multi-select. Individual days toggle on/off.
+// Nothing selected snaps back to today.
+function setupDayFilters() {
+  document.getElementById('day-filters').addEventListener('click', e => {
+    const btn = e.target.closest('[data-day]');
+    if (!btn) return;
+    const day = btn.dataset.day;
+    if (day === 'today') {
+      activeDays = 'today';
+    } else {
+      if (activeDays === 'today') activeDays = new Set();
+      if (activeDays.has(day)) activeDays.delete(day);
+      else activeDays.add(day);
+      if (activeDays.size === 0) activeDays = 'today';
+    }
+    syncDayPills();
+    render();
+  });
+}
+
+function syncDayPills() {
+  document.querySelectorAll('[data-day]').forEach(btn => {
+    const day = btn.dataset.day;
+    btn.classList.remove('today-active','day-active');
+    if (day === 'today' && activeDays === 'today') btn.classList.add('today-active');
+    else if (day !== 'today' && activeDays !== 'today' && activeDays.has(day)) btn.classList.add('day-active');
+  });
+}
+
+// ── TIME PILLS ────────────────────────────────────────────────
+function setupTimePills() {
+  document.getElementById('time-pills').addEventListener('click', e => {
+    const btn = e.target.closest('[data-time]');
+    if (!btn) return;
+    setTimeMode(btn.dataset.time);
+    render();
+  });
+}
+
+function setTimeMode(mode) {
+  activeTime = mode;
+  document.getElementById('slider-row').style.display = (mode === 'pick') ? 'block' : 'none';
+  document.querySelectorAll('[data-time]').forEach(btn =>
+    btn.classList.remove('time-active','time-active-now','pick-active')
+  );
+  const pill = document.getElementById('tpill-' + mode);
+  if (!pill) return;
+  if (mode === 'now')  pill.classList.add('time-active-now');
+  else if (mode === 'pick') pill.classList.add('pick-active');
+  else pill.classList.add('time-active');
+}
+
+// ── SLIDER ────────────────────────────────────────────────────
+function setupSlider() {
+  const slider = document.getElementById('time-slider');
+  slider.addEventListener('input', () => {
+    sliderValue = parseFloat(slider.value);
+    moveThumb(sliderValue);
+    if (activeTime !== 'pick') setTimeMode('pick');
+    render();
+  });
+  // Delay initial thumb position until layout is ready
+  requestAnimationFrame(() => moveThumb(sliderValue));
+}
+
+function moveThumb(val) {
+  const pct = ((val - SLIDER_MIN) / (SLIDER_MAX - SLIDER_MIN)) * 100;
+  const thumb = document.getElementById('slider-thumb');
+  const label = document.getElementById('slider-label');
+  if (thumb) thumb.style.left = pct + '%';
+  if (label) label.textContent = fmtSlider(val);
+}
+
+function fmtSlider(val) {
+  const h = Math.floor(val);
+  const m = (val % 1 === 0.5) ? ':30' : '';
+  const h12 = h > 12 ? h - 12 : h;
+  return `${h12}${m} PM`;
+}
+
+function sliderTo24hr(val) {
+  const h = Math.floor(val);
+  const m = (val % 1 === 0.5) ? 30 : 0;
+  return h * 100 + m;
+}
+
+// ── TIME-OF-DAY HEADER THEME ──────────────────────────────────
+// Checked once on page load. Blends between three gradient layers.
+// Transition windows:
+//   Morning pure:       6 AM – 11 AM
+//   Morning → Standard: 11 AM – 12 PM
+//   Standard pure:      12 PM – 8 PM
+//   Standard → Evening:  8 PM – 9 PM
+//   Evening pure:        9 PM – 6 AM
+function getTimeBlend() {
+  const d = new Date(), mins = d.getHours()*60 + d.getMinutes();
+  const MS=6*60, ME=11*60, SS=12*60, SE=20*60, ES=21*60;
+  if      (mins < MS)  return { morning:0, standard:0, evening:1 };
+  else if (mins < ME)  return { morning:1, standard:0, evening:0 };
+  else if (mins < SS)  { const t=(mins-ME)/(SS-ME); return { morning:1-t, standard:t, evening:0 }; }
+  else if (mins < SE)  return { morning:0, standard:1, evening:0 };
+  else if (mins < ES)  { const t=(mins-SE)/(ES-SE); return { morning:0, standard:1-t, evening:t }; }
+  else                 return { morning:0, standard:0, evening:1 };
+}
+
+const HT = {
+  morning:  { accent:'#FFE070', tbar:'#1E4A6A', d1:'#D05030', d1o:.16, d2:'#E8A820', d2o:.20 },
+  standard: { accent:'#D4953A', tbar:'#3A5C28', d1:'#D4953A', d1o:.08, d2:'#E8C4B0', d2o:.12 },
+  evening:  { accent:'#F0C070', tbar:'#221830', d1:'#7A3050', d1o:.15, d2:'#D4953A', d2o:.14 },
+};
+
+function hexRgb(h) { return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)]; }
+function lerpHex(a, b, t) {
+  const [r1,g1,b1]=hexRgb(a), [r2,g2,b2]=hexRgb(b);
+  return `rgb(${Math.round(r1+(r2-r1)*t)},${Math.round(g1+(g2-g1)*t)},${Math.round(b1+(b2-b1)*t)})`;
+}
+function blendCol(cM, cS, cE, bl) {
+  if (bl.morning>0 && bl.standard>0) return lerpHex(cM, cS, bl.standard/(bl.morning+bl.standard));
+  if (bl.standard>0 && bl.evening>0) return lerpHex(cS, cE, bl.evening/(bl.standard+bl.evening));
+  return bl.morning>0 ? cM : bl.standard>0 ? cS : cE;
+}
+
+function applyHeaderTheme() {
+  const bl = getTimeBlend();
+  let mO, sO, eO;
+  if      (bl.morning>0 && bl.standard>0) { mO=bl.morning; sO=1; eO=0; }
+  else if (bl.standard>0 && bl.evening>0) { mO=0; sO=bl.standard; eO=1; }
+  else if (bl.morning===1)                { mO=1; sO=1; eO=0; }
+  else if (bl.standard===1)               { mO=0; sO=1; eO=0; }
+  else                                     { mO=0; sO=0; eO=1; }
+  document.getElementById('hbg-morning').style.opacity  = mO;
+  document.getElementById('hbg-standard').style.opacity = sO;
+  document.getElementById('hbg-evening').style.opacity  = eO;
+  document.getElementById('hstars-morning').style.opacity = bl.morning;
+  document.getElementById('hstars-evening').style.opacity = bl.evening;
+  const acc = blendCol(HT.morning.accent, HT.standard.accent, HT.evening.accent, bl);
+  const tbg = blendCol(HT.morning.tbar,   HT.standard.tbar,   HT.evening.tbar,   bl);
+  document.documentElement.style.setProperty('--header-accent', acc);
+  document.documentElement.style.setProperty('--timebar-bg',    tbg);
+  const dom = bl.morning>=bl.standard && bl.morning>=bl.evening ? 'morning'
+            : bl.standard>=bl.evening ? 'standard' : 'evening';
+  const dt = HT[dom];
+  const d1=document.getElementById('deco-1'), d2=document.getElementById('deco-2');
+  d1.style.background=dt.d1; d1.style.opacity=dt.d1o;
+  d2.style.background=dt.d2; d2.style.opacity=dt.d2o;
+}
+
+// ── COLLAPSIBLE PANELS ────────────────────────────────────────
+function buildAreaPanel() {
+  const container = document.getElementById('area-pills');
+  const cities    = [...new Set(VENUES.map(v=>v.city))].sort();
+  const allBtn = mkPill('All Areas','neighborhood','all');
+  allBtn.classList.add('tag-active');
+  container.appendChild(allBtn);
+  cities.forEach(city => {
+    const nhoods = [...new Set(VENUES.filter(v=>v.city===city).flatMap(v=>v.neighborhoods))].sort();
+    const ct = document.createElement('button');
+    ct.className = 'city-toggle open'; ct.dataset.city = city;
+    ct.innerHTML = `${city} <span class="city-chevron">▾</span>`;
+    container.appendChild(ct);
+    const pd = document.createElement('div');
+    pd.className = 'city-pills'; pd.dataset.cityPills = city;
+    nhoods.forEach(n => pd.appendChild(mkPill(n,'neighborhood',n)));
+    container.appendChild(pd);
+    ct.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = ct.classList.contains('open');
+      ct.classList.toggle('open', !open); pd.classList.toggle('collapsed', open);
+      positionPanels();
+    });
+  });
+  container.addEventListener('click', e => {
+    const btn = e.target.closest('[data-neighborhood]'); if (!btn) return;
+    const val = btn.dataset.neighborhood;
+    if (val==='all') activeNeighborhoods.clear(); else toggleSet(activeNeighborhoods,val);
+    syncPills(container,'neighborhood',activeNeighborhoods,'all');
+    updateBadge('badge-area',activeNeighborhoods.size,'panel-area');
+    render();
+  });
+}
+
+function buildDealPanel() {
+  const container = document.getElementById('deal-pills');
+  const all = [...new Set(VENUES.flatMap(v=>v.dealTags))].sort();
+  if (!all.length) return;
+  const ab = mkPill('All','deal','all'); ab.classList.add('tag-active'); container.appendChild(ab);
+  all.forEach(t => container.appendChild(mkPill(t,'deal',t)));
+  container.addEventListener('click', e => {
+    const btn = e.target.closest('[data-deal]'); if (!btn) return;
+    const val = btn.dataset.deal;
+    if (val==='all') activeDealTags.clear(); else toggleSet(activeDealTags,val);
+    syncPills(container,'deal',activeDealTags,'all');
+    updateBadge('badge-deals',activeDealTags.size,'panel-deals');
+    render();
+  });
+}
+
+function buildVibePanel() {
+  const container = document.getElementById('vibe-pills');
+  const all = [...new Set(VENUES.flatMap(v=>v.vibe))].sort();
+  if (!all.length) return;
+  const ab = mkPill('All','vibe','all'); ab.classList.add('tag-active'); container.appendChild(ab);
+  all.forEach(t => container.appendChild(mkPill(t,'vibe',t)));
+  container.addEventListener('click', e => {
+    const btn = e.target.closest('[data-vibe]'); if (!btn) return;
+    const val = btn.dataset.vibe;
+    if (val==='all') activeVibeTags.clear(); else toggleSet(activeVibeTags,val);
+    syncPills(container,'vibe',activeVibeTags,'all');
+    updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');
+    render();
+  });
+}
+
+function setupCollapsibles() {
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.collapsible-toggle') &&
+        !e.target.closest('.collapsible-panel') &&
+        !e.target.closest('.city-toggle')) closeAllPanels();
+  });
+  document.querySelectorAll('.collapsible-toggle').forEach(t => {
+    t.addEventListener('click', e => {
+      e.stopPropagation();
+      const pid = t.dataset.panel, panel = document.getElementById(pid);
+      const isOpen = panel.classList.contains('open');
+      closeAllPanels();
+      if (!isOpen) { panel.classList.add('open'); t.classList.add('open'); positionPanels(); }
+    });
+  });
+}
+
+function closeAllPanels() {
+  document.querySelectorAll('.collapsible-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.collapsible-toggle').forEach(t => t.classList.remove('open'));
+}
+
+// ── FOOTER RESET ──────────────────────────────────────────────
+function setupFooterReset() {
+  document.getElementById('footer-reset').addEventListener('click', e => {
+    e.preventDefault();
+    activeDays='today'; activeTime='pick'; sliderValue=17;
+    activeNeighborhoods=new Set(); activeDealTags=new Set(); activeVibeTags=new Set();
+    searchQuery='';
+    syncDayPills();
+    setTimeMode('pick');
+    document.getElementById('time-slider').value = 17;
+    moveThumb(17);
+    syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');
+    syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');
+    syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');
+    updateBadge('badge-area',0,'panel-area');
+    updateBadge('badge-deals',0,'panel-deals');
+    updateBadge('badge-vibe',0,'panel-vibe');
+    document.getElementById('search').value='';
+    closeAllPanels();
+    render();
+    document.getElementById('top').scrollIntoView({ behavior:'smooth' });
+  });
+}
+
+// ── BADGE ─────────────────────────────────────────────────────
+function updateBadge(bid, count, pid) {
+  const b=document.getElementById(bid), t=document.querySelector(`[data-panel="${pid}"]`);
+  if (count>0) { b.textContent=count; b.style.display='inline'; t?.classList.add('has-active'); }
+  else         { b.style.display='none'; t?.classList.remove('has-active'); }
+}
+
+// ── GENERIC HELPERS ───────────────────────────────────────────
+function mkPill(label, attr, value) {
+  const btn=document.createElement('button'); btn.className='pill';
+  btn.dataset[attr]=value; btn.textContent=label; return btn;
+}
+function toggleSet(set, val) { set.has(val) ? set.delete(val) : set.add(val); }
+function syncPills(container, attr, activeSet, allVal) {
+  container.querySelectorAll(`[data-${attr}]`).forEach(btn => {
+    const v=btn.dataset[attr];
+    btn.classList.toggle('tag-active', v===allVal ? activeSet.size===0 : activeSet.has(v));
+  });
+}
+function nowMinutes() { const d=new Date(); return d.getHours()*100+d.getMinutes(); }
+function todayAbbr()  { return DAY_NAMES[new Date().getDay()]; }
+function todayFull()  { return DAY_FULL[new Date().getDay()]; }
+function formatTime(t) {
+  const h=Math.floor(t/100), m=t%100;
+  const ampm=h>=12?'PM':'AM', h12=h>12?h-12:h===0?12:h;
+  return `${h12}${m?`:${String(m).padStart(2,'0')}`:''}  ${ampm}`;
+}
+function isOpenNow(v) {
+  const now=nowMinutes();
+  if (!v.days.includes(todayAbbr())) return false;
+  if (v.endTime<v.startTime) return now>=v.startTime||now<=v.endTime;
+  return now>=v.startTime&&now<=v.endTime;
+}
+function isOpenNowRange(s, e) {
+  const now=nowMinutes();
+  if (e<s) return now>=s||now<=e;
+  return now>=s&&now<=e;
+}
+function overlaps(vS, vE, wS, wE) { return vS<=wE && vE>=wS; }
+function overlapsLateNight(vS, vE) { return vS>=2100 || vE<600 || vE<vS; }
+
+// ── FILTERING ─────────────────────────────────────────────────
+function venueMatchesDay(v) {
+  if (activeDays==='today') return v.days.includes(todayAbbr());
+  return [...activeDays].some(d => v.days.includes(d));
+}
+function venueMatchesTime(v) {
+  if (activeTime==='any') return true;
+  if (activeTime==='pick') {
+    const t = sliderTo24hr(sliderValue);
+    if (v.endTime<v.startTime) return t>=v.startTime||t<=v.endTime;
+    return t>=v.startTime&&t<=v.endTime;
+  }
+  const def = TIME_DEFS[activeTime];
+  return def ? def.test(v.startTime, v.endTime) : true;
+}
+function venueMatchesNeighborhood(v) {
+  if (!activeNeighborhoods.size) return true;
+  return v.neighborhoods.some(n => activeNeighborhoods.has(n));
+}
+function venueMatchesDealTags(v) {
+  if (!activeDealTags.size) return true;
+  return [...activeDealTags].every(t => v.dealTags.includes(t));
+}
+function venueMatchesVibe(v) {
+  if (!activeVibeTags.size) return true;
+  return [...activeVibeTags].every(t => v.vibe.includes(t));
+}
+function venueMatchesSearch(v) {
+  if (!searchQuery) return true;
+  const q=searchQuery.toLowerCase();
+  return v.name.toLowerCase().includes(q)
+    || v.neighborhoods.some(n=>n.toLowerCase().includes(q))
+    || v.city.toLowerCase().includes(q)
+    || v.deals.some(d=>d.toLowerCase().includes(q))
+    || v.dealTags.some(t=>t.toLowerCase().includes(q))
+    || v.vibe.some(t=>t.toLowerCase().includes(q));
+}
+function filteredVenues() {
+  return VENUES.filter(v =>
+    venueMatchesDay(v) && venueMatchesTime(v) && venueMatchesNeighborhood(v) &&
+    venueMatchesDealTags(v) && venueMatchesVibe(v) && venueMatchesSearch(v)
+  );
+}
+
+// ── HEADING ───────────────────────────────────────────────────
+// "Happy Hours" [Playfair ink]
+// "on Thursday" or "on Mon · Wed" [Playfair italic sienna]
+// "at 5 PM" / "in the Morning" etc [DM Sans muted]
+// "Any Time" selected = no time text
+function buildHeading() {
+  let dayText = '';
+  if (activeDays==='today') {
+    dayText = `on ${todayFull()}`;
+  } else {
+    dayText = 'on ' + [...activeDays].join(' · ');
+  }
+
+  let timeText = '';
+  if (activeTime==='pick') {
+    timeText = ` at ${fmtSlider(sliderValue)}`;
+  } else if (activeTime!=='any') {
+    const def = TIME_DEFS[activeTime];
+    if (def) timeText = def.label;
+  }
+
+  document.getElementById('results-heading').innerHTML =
+    `<span class="h-label">Happy Hours</span>` +
+    `<span class="h-day"> ${dayText}</span>` +
+    (timeText ? `<span class="h-time">${timeText}</span>` : '');
+}
+
+// ── COMBO WARNING ─────────────────────────────────────────────
+function updateComboWarning() {
+  const el=document.getElementById('combo-warning'), txt=document.getElementById('combo-text');
+  let msg='';
+  if (activeTime==='now') {
+    const today=todayAbbr();
+    if (activeDays!=='today' && activeDays instanceof Set && !activeDays.has(today))
+      msg=`"Happening Now" shows what's open at this moment — today is ${todayFull()}. You may see zero results for other days.`;
+  }
+  txt.textContent=msg; el.style.display=msg?'block':'none';
+}
+
+// ── ACTIVE CHIPS ──────────────────────────────────────────────
+function renderChips() {
+  const c=document.getElementById('active-chips'); c.innerHTML='';
+  const add=(label,attr,val) => {
+    const chip=document.createElement('div'); chip.className='chip';
+    chip.innerHTML=`${label} <span class="chip-x" data-r="${attr}" data-v="${val}">×</span>`;
+    c.appendChild(chip);
+  };
+  [...activeNeighborhoods].forEach(n=>add(n,'neighborhood',n));
+  [...activeDealTags].forEach(t=>add(t,'deal',t));
+  [...activeVibeTags].forEach(t=>add(t,'vibe',t));
+  c.querySelectorAll('[data-r]').forEach(x => {
+    x.addEventListener('click', () => {
+      const attr=x.dataset.r, val=x.dataset.v;
+      if (attr==='neighborhood') { activeNeighborhoods.delete(val); syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all'); updateBadge('badge-area',activeNeighborhoods.size,'panel-area'); }
+      if (attr==='deal')         { activeDealTags.delete(val);      syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');             updateBadge('badge-deals',activeDealTags.size,'panel-deals'); }
+      if (attr==='vibe')         { activeVibeTags.delete(val);      syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');             updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe'); }
+      render();
+    });
+  });
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+function render() {
+  const venues=filteredVenues(), grid=document.getElementById('grid');
+  buildHeading(); updateComboWarning(); renderChips();
+
+  document.getElementById('results-count').textContent =
+    venues.length ? `${venues.length} spot${venues.length!==1?'s':''}` : 'No spots found';
+
+  if (!venues.length) {
+    grid.innerHTML=`<div class="empty"><div class="empty-icon">🍸</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>`;
+    return;
+  }
+
+  const sorted=[...venues].sort((a,b)=>{ const ao=isOpenNow(a),bo=isOpenNow(b); return ao===bo?0:ao?-1:1; });
+
+  grid.innerHTML=sorted.map((v,i) => {
+    const open=isOpenNow(v);
+    const badge=open?`<span class="open-badge">Open Now</span>`:'';
+    const deals=v.deals.map(d=>`<div class="deal-item"><span class="deal-dot"></span><span>${d}</span></div>`).join('');
+    const dealTagHTML=v.dealTags.map(t=>`<span class="tag-deal${activeDealTags.has(t)?' tag-active':''}" data-click-deal="${t}">${t}</span>`).join('');
+    const vibeTagHTML=v.vibe.map(t=>`<span class="tag-vibe${activeVibeTags.has(t)?' tag-active':''}" data-click-vibe="${t}">${t}</span>`).join('');
+    const mapLink=`<a class="card-link" href="${v.mapsUrl}" target="_blank" rel="noopener">Map ↗</a>`;
+    const siteLink=v.website?`<a class="card-link" href="${v.website}" target="_blank" rel="noopener">Website ↗</a>`:'';
+    return `
+      <div class="card" style="animation-delay:${i*.04}s">
+        <div class="card-accent" style="height:5px;background:${v.accentColor}"></div>
+        <div class="card-body">
+          <div class="card-header"><div class="venue-name">${v.name}</div>${badge}</div>
+          <div class="neighborhood">${v.neighborhoods[0]}, ${v.city}</div>
+          <div class="hours-row">
+            <span class="hours-text">🕐 ${formatTime(v.startTime)} – ${formatTime(v.endTime)}</span>
+            <span class="days-text">${v.days.join(' · ')}</span>
+          </div>
+          <div class="deals">${deals}</div>
+        </div>
+        <div class="card-footer">
+          <div class="tags">${dealTagHTML}${vibeTagHTML}</div>
+          <div class="card-links">${mapLink}${siteLink}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  grid.querySelectorAll('[data-click-deal]').forEach(el => {
+    el.addEventListener('click', () => {
+      toggleSet(activeDealTags,el.dataset.clickDeal);
+      syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');
+      updateBadge('badge-deals',activeDealTags.size,'panel-deals'); render();
+    });
+  });
+  grid.querySelectorAll('[data-click-vibe]').forEach(el => {
+    el.addEventListener('click', () => {
+      toggleSet(activeVibeTags,el.dataset.clickVibe);
+      syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');
+      updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe'); render();
+    });
+  });
+  positionPanels();
+}
+
+// ── SEARCH ────────────────────────────────────────────────────
+document.getElementById('search').addEventListener('input', e => {
+  searchQuery=e.target.value.trim(); render();
+});
+
+// ── CLOCK ─────────────────────────────────────────────────────
+function updateClock() {
+  const d=new Date(), h=d.getHours(), m=d.getMinutes();
+  const ampm=h>=12?'PM':'AM', h12=h>12?h-12:h===0?12:h;
+  document.getElementById('live-time').textContent=`${h12}:${String(m).padStart(2,'0')} ${ampm}`;
+  document.getElementById('live-day').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+}
+setInterval(updateClock, 10000);
+updateClock();
+
+// ── START ─────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
