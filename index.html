@@ -16,8 +16,6 @@
       --radius:14px; --header-accent:#D4953A; --timebar-bg:#3A5C28;
       --deal-tag-bg:#FDF0E8; --deal-tag-border:#E8C4A0; --deal-tag-text:#7A3A18;
       --vibe-tag-bg:#EAF0E4; --vibe-tag-border:#B8CCA8; --vibe-tag-text:#2E4A22;
-      /* Control the split width */
-      --map-width: 45%;
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     html { scroll-behavior:smooth; }
@@ -27,70 +25,77 @@
 
     /* ── HEADER ────────────────────────────────────────────── */
     header { position:relative; background:#1A1428; overflow:hidden; }
-    .hbg,.hstars { position:absolute; inset:0; opacity:0; transition:opacity 1s ease; }
+    .hbg,.hstars { position:absolute; inset:0; opacity:0; }
     .hstars { pointer-events:none; z-index:1; }
     #hbg-morning { background-color:#2A5A7A; background-image:radial-gradient(ellipse 140% 55% at 50% -5%,#4A90B8,transparent),radial-gradient(ellipse 120% 70% at 50% 30%,rgba(70,140,185,.55),transparent),radial-gradient(ellipse 110% 50% at 50% 78%,rgba(210,75,55,.70),transparent),radial-gradient(ellipse 100% 50% at 50% 125%,rgba(220,130,20,.95),transparent),radial-gradient(ellipse 55% 45% at 6% 85%,rgba(200,80,55,.50),transparent),radial-gradient(ellipse 50% 38% at 96% 88%,rgba(210,140,20,.55),transparent); }
     #hstars-morning { background-image:radial-gradient(1px 1px at 12% 12%,rgba(255,245,210,.50),transparent),radial-gradient(1.5px 1.5px at 45% 8%,rgba(255,245,210,.55),transparent),radial-gradient(1px 1px at 72% 15%,rgba(255,245,210,.40),transparent),radial-gradient(1px 1px at 28% 20%,rgba(255,245,210,.30),transparent),radial-gradient(1px 1px at 86% 10%,rgba(255,245,210,.35),transparent),radial-gradient(1px 1px at 58% 22%,rgba(255,245,210,.25),transparent); }
     #hbg-standard { background-color:#243D1A; background-image:radial-gradient(ellipse 80% 60% at 50% 110%,#3A5C28,transparent),radial-gradient(ellipse 40% 40% at 20% 20%,rgba(212,149,58,.18),transparent),radial-gradient(ellipse 30% 30% at 80% 10%,rgba(122,48,80,.22),transparent); }
     #hbg-evening { background-color:#1A1428; background-image:radial-gradient(ellipse 100% 80% at 50% 110%,#2A1E3E,transparent),radial-gradient(ellipse 60% 35% at 50% 115%,rgba(200,130,40,.50),transparent),radial-gradient(ellipse 45% 45% at 5% 10%,rgba(122,48,80,.40),transparent),radial-gradient(ellipse 30% 30% at 95% 15%,rgba(180,100,40,.30),transparent); }
     #hstars-evening { background-image:radial-gradient(1.5px 1.5px at 15% 20%,rgba(255,255,200,.70),transparent),radial-gradient(1px 1px at 35% 12%,rgba(255,255,200,.50),transparent),radial-gradient(1.5px 1.5px at 55% 18%,rgba(255,255,200,.80),transparent),radial-gradient(1px 1px at 72% 8%,rgba(255,255,200,.60),transparent),radial-gradient(1px 1px at 88% 22%,rgba(255,255,200,.50),transparent),radial-gradient(1px 1px at 25% 35%,rgba(255,255,200,.40),transparent),radial-gradient(1.5px 1.5px at 78% 30%,rgba(255,255,200,.60),transparent),radial-gradient(1px 1px at 45% 28%,rgba(255,255,200,.30),transparent),radial-gradient(1px 1px at 92% 40%,rgba(255,255,200,.50),transparent),radial-gradient(2px 2px at 8% 42%,rgba(255,240,180,.40),transparent); }
-    .hbg.active { opacity:1; }
-    .hstars.active { opacity:1; }
     .deco { position:absolute; border-radius:50%; }
-    .deco-1 { width:260px; height:260px; top:-80px; left:-60px; background:radial-gradient(circle,rgba(255,255,255,.08),transparent); }
-    .deco-2 { width:180px; height:180px; bottom:-50px; right:-30px; background:radial-gradient(circle,rgba(255,255,255,.05),transparent); }
+    .deco-1 { width:260px; height:260px; top:-80px; left:-60px; }
+    .deco-2 { width:180px; height:180px; bottom:-50px; right:-30px; }
     .header-inner { position:relative; z-index:2; padding:3.5rem 2rem 2.8rem; text-align:center; }
     .logo-eyebrow { font-size:.72rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--header-accent); margin-bottom:.6rem; }
     .header-home-link { text-decoration:none; display:block; }
     .header-home-link:hover h1 em { opacity:.85; }
-    header h1 { font-family:'Playfair Display',serif; font-size:clamp(2.6rem,7vw,4.4rem); font-weight:700; color:var(--cream); letter-spacing:-0.02em; line-height:1.05; }
-    header h1 em { font-style:italic; font-weight:600; color:var(--header-accent); transition:opacity .15s; }
-    header p.tagline { margin-top:.9rem; font-size:1rem; font-weight:300; color:rgba(250,246,239,.65); max-width:440px; margin-left:auto; margin-right:auto; line-height:1.5; }
-    .time-bar { background:var(--timebar-bg); text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:rgba(250,246,239,.7); letter-spacing:.06em; border-bottom:1px solid rgba(0,0,0,.05); transition:background-color 1s ease; }
+    header h1 { font-family:'Playfair Display',serif; font-size:clamp(2.6rem,7vw,4.4rem); font-weight:700; color:var(--cream); line-height:1.05; }
+    header h1 em { font-style:italic; color:var(--header-accent); transition:opacity .15s; }
+    header p.tagline { margin-top:.9rem; font-size:1rem; font-weight:300; color:rgba(250,246,239,.65); }
+    .time-bar { background:var(--timebar-bg); text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:rgba(250,246,239,.7); letter-spacing:.06em; }
     #live-time { color:var(--header-accent); font-weight:600; }
-    .dev-banner { background:#FFF8E6; border-bottom:1.5px solid #F5C97A; text-align:center; padding:.45rem 1rem; font-size:.75rem; color:#7A4F10; letter-spacing:.02em; }
-    .dev-banner strong { font-weight:600; color:#5C3B0C; }
+    .dev-banner { background:#FFF8E6; border-bottom:1.5px solid #F5C97A; text-align:center; padding:.45rem 1rem; font-size:.75rem; color:#7A4F10; }
+    .dev-banner strong { font-weight:600; }
 
     /* ── STICKY FILTERS ─────────────────────────────────────── */
     .filters-wrap { position:sticky; top:0; z-index:100; background:var(--cream); border-bottom:1.5px solid var(--cream-dk); box-shadow:0 2px 12px var(--shadow); }
+
+    /* Scroll-collapse summary bar — visible only when collapsed */
     .filter-summary-bar { display:none; align-items:center; justify-content:space-between; padding:.5rem 1.5rem; cursor:pointer; gap:.5rem; transition:background .15s; }
     .filter-summary-bar:hover { background:var(--cream-dk); }
     .summary-text { font-size:.75rem; font-weight:600; color:var(--ink-lt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .summary-text strong { color:var(--ink); }
     .summary-expand { font-size:.65rem; color:var(--ink-lt); opacity:.5; flex-shrink:0; white-space:nowrap; }
+
+    /* Filter expandable wrapper */
     .filter-expandable { overflow:hidden; max-height:600px; transition:max-height .28s ease, opacity .22s ease; opacity:1; }
     .filters-wrap.scroll-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
     .filters-wrap.scroll-collapsed .filter-summary-bar { display:flex; }
-    @media (max-width:899px) { .filters-wrap.map-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; } }
+    @media (max-width:899px) {
+      .filters-wrap.map-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
+    }
+
+    /* Mobile map handle */
     .filter-collapse-handle { display:none; align-items:center; justify-content:center; padding:.4rem; cursor:pointer; background:var(--cream-dk); font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-lt); gap:.35rem; user-select:none; }
     .filter-collapse-handle .hbar { width:32px; height:3px; background:var(--ink-lt); border-radius:2px; opacity:.35; }
     @media (max-width:899px) { .map-mode-active .filter-collapse-handle { display:flex; } }
+
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
     .search-wrap { position:relative; max-width:420px; }
-    .search-wrap svg { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; color:var(--ink); }
-    #search { width:100%; padding:.52rem .9rem .52rem 2.5rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:#fff; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .18s, box-shadow .18s; }
-    #search:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(36,61,26,.05); }
+    .search-wrap svg { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; }
+    #search { width:100%; padding:.52rem .9rem .52rem 2.5rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:#fff; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .18s; }
+    #search:focus { border-color:var(--green); }
     #search::placeholder { color:var(--ink-lt); opacity:.7; }
     .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; }
     .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; margin-right:.2rem; white-space:nowrap; min-width:2.8rem; }
     .pill { display:inline-flex; align-items:center; padding:.27rem .76rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-size:.78rem; font-weight:500; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; user-select:none; white-space:nowrap; }
     .pill:hover { border-color:var(--green); color:var(--green); }
-    .pill.day-active { background:var(--amber); border-color:var(--amber); color:#fff; }
-    .pill.today-active { background:var(--amber); border-color:var(--amber); color:#fff; }
-    .pill.time-active { background:var(--green); border-color:var(--green); color:var(--cream); }
+    .pill.day-active   { background:var(--amber);  border-color:var(--amber);  color:#fff; }
+    .pill.today-active { background:var(--amber);  border-color:var(--amber);  color:#fff; }
+    .pill.time-active  { background:var(--green);  border-color:var(--green);  color:var(--cream); }
     .pill.time-active-now { background:var(--sienna); border-color:var(--sienna); color:#fff; }
-    .pill.pick-active { background:var(--amber); border-color:var(--amber); color:#fff; }
-    .pill-pick { border-style:dashed; padding-left:1.2rem; padding-right:1.2rem; }
-    .pill.tag-active { background:var(--sienna); border-color:var(--sienna); color:#fff; }
+    .pill.pick-active  { background:var(--amber);  border-color:var(--amber);  color:#fff; }
+    .pill-pick { border-style:dashed; }
+    .pill.tag-active   { background:var(--sienna); border-color:var(--sienna); color:#fff; }
     .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
     .slider-outer { padding:0 10px; }
     .track-container { position:relative; padding:26px 0 26px; }
     .track-line { position:relative; height:4px; background:var(--cream-dk); border-radius:2px; }
     .tick { position:absolute; top:50%; transform:translate(-50%,-50%); border-radius:1px; pointer-events:none; }
     .tick-even { width:1.5px; height:9px; background:var(--ink-lt); opacity:.28; }
-    .tick-odd { width:1px; height:5px; background:var(--ink-lt); opacity:.16; }
+    .tick-odd  { width:1px;   height:5px; background:var(--ink-lt); opacity:.16; }
     .tick-label { position:absolute; top:calc(100% + 9px); transform:translateX(-50%); font-size:.63rem; font-weight:500; color:var(--ink-lt); opacity:.5; white-space:nowrap; pointer-events:none; }
-    .thumb-wrap { position:absolute; top:50%; transform:translate(-50%,-50%); pointer-events:none; display:flex; flex-direction:column; align-items:center; gap:3px; transition:left .1s cubic-bezier(0.2,0,0,1); }
+    .thumb-wrap { position:absolute; top:50%; transform:translate(-50%,-50%); pointer-events:none; display:flex; flex-direction:column; align-items:center; gap:3px; }
     .thumb-label-above { font-size:.7rem; font-weight:700; color:var(--green); white-space:nowrap; background:var(--cream); padding:.08rem .32rem; border-radius:4px; border:1px solid var(--cream-dk); box-shadow:0 1px 4px rgba(36,61,26,.08); }
     .thumb-dot { width:20px; height:20px; border-radius:50%; background:var(--green); border:2.5px solid #fff; box-shadow:0 1px 6px rgba(36,61,26,.3); }
     input[type=range].slider-input { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); width:100%; height:44px; opacity:0; cursor:grab; margin:0; -webkit-appearance:none; z-index:2; }
@@ -102,7 +107,7 @@
     .collapsible-toggle.has-active { color:var(--sienna); }
     .toggle-chevron { font-size:.58rem; transition:transform .2s; display:inline-block; opacity:.55; }
     .collapsible-toggle.open .toggle-chevron { transform:rotate(180deg); }
-    .active-badge { background:var(--sienna); color:#fff; border-radius:99px; padding:.07rem .42rem; font-size:.62rem; font-weight:700; margin-left:.2rem; box-shadow:0 1px 3px rgba(196,98,45,.2); }
+    .active-badge { background:var(--sienna); color:#fff; border-radius:99px; padding:.07rem .42rem; font-size:.62rem; font-weight:700; }
     .collapsible + .collapsible .collapsible-toggle::before { content:''; position:absolute; left:0; top:28%; bottom:28%; width:1px; background:var(--cream-dk); }
     .collapsible-panel { display:none; position:fixed; left:0; right:0; background:var(--cream); border-bottom:1.5px solid var(--cream-dk); box-shadow:0 6px 18px rgba(36,61,26,.10); z-index:99; }
     .collapsible-panel.open { display:block; }
@@ -121,83 +126,81 @@
     .results-count { font-size:.8rem; font-weight:500; color:var(--ink-lt); }
     #results-heading { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:600; display:flex; align-items:baseline; flex-wrap:wrap; gap:0; line-height:1.4; }
     .h-label { font-family:'Playfair Display',serif; font-weight:600; color:var(--ink); }
-    .h-day { font-family:'Playfair Display',serif; font-style:italic; color:var(--sienna); margin-left:.28em; }
-    .h-time { font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:400; color:var(--ink-lt); margin-left:.3em; }
+    .h-day   { font-family:'Playfair Display',serif; font-style:italic; color:var(--sienna); margin-left:.28em; }
+    .h-time  { font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:400; color:var(--ink-lt); margin-left:.3em; }
     #map-toggle-btn { display:inline-flex; align-items:center; gap:.35rem; padding:.3rem .9rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-family:'DM Sans',sans-serif; font-size:.78rem; font-weight:600; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; white-space:nowrap; }
     #map-toggle-btn:hover { border-color:var(--green); color:var(--green); }
     #map-toggle-btn.active { background:var(--green); border-color:var(--green); color:var(--cream); }
     .combo-warning { max-width:1100px; margin:.35rem auto .1rem; padding:0 1.5rem; }
     .combo-inner { display:inline-flex; align-items:center; gap:.4rem; background:#FEF3E2; border:1px solid #F5C97A; border-radius:8px; padding:.32rem .75rem; font-size:.78rem; color:#7A4F10; }
     .active-chips { max-width:1100px; margin:.45rem auto .65rem; padding:0 1.5rem; display:flex; flex-wrap:wrap; gap:.3rem; min-height:.5rem; }
-    .chip { display:inline-flex; align-items:center; gap:.28rem; padding:.18rem .6rem; border-radius:99px; background:var(--green); color:var(--cream); font-size:.7rem; font-weight:600; box-shadow:0 1px 4px rgba(36,61,26,.15); }
+    .chip { display:inline-flex; align-items:center; gap:.28rem; padding:.18rem .6rem; border-radius:99px; background:var(--green); color:var(--cream); font-size:.7rem; font-weight:600; }
     .chip-x { cursor:pointer; opacity:.6; font-size:.85rem; line-height:1; }
     .chip-x:hover { opacity:1; }
 
-    /* ── MAP LAYOUT (MODIFIED FOR RESIZER) ────────────────── */
-    .content-area { max-width:100%; margin:0 auto; transition: height 0.2s; }
+    /* ── MAP LAYOUT ─────────────────────────────────────────── */
+    .content-area { max-width:1400px; margin:0 auto; }
     .map-panel { display:none; }
-    
-    /* Resizer Bar Styles */
-    .resizer {
-        display: none;
-        width: 10px;
-        background: var(--cream-dk);
-        cursor: col-resize;
-        z-index: 10;
-        transition: background 0.2s;
-        border-left: 1px solid rgba(0,0,0,0.05);
-        border-right: 1px solid rgba(0,0,0,0.05);
-        position: sticky;
-        top: 0;
+    @media (min-width:900px) {
+      .content-area.map-active { display:flex; align-items:flex-start; }
+      .content-area.map-active .map-panel { display:block; position:sticky; top:0; flex:0 0 45%; height:calc(100vh - var(--filter-bar-h,200px)); }
+      .content-area.map-active .list-panel { flex:1; overflow-y:auto; height:calc(100vh - var(--filter-bar-h,200px)); }
     }
-    .resizer:hover, .resizer.dragging { background: var(--amber); }
-    .resizer::after {
+    @media (max-width:899px) {
+      .content-area.map-active .map-panel { display:block; position:fixed; inset:var(--filter-bar-h,60px) 0 80px; z-index:50; }
+      .content-area.map-active .list-panel { display:none; }
+    }
+    #map { width:100%; height:100%; min-height:400px; }
+    .map-mode-active footer { display:none; }
+
+    /* Leaflet */
+    .leaflet-popup-content-wrapper { border-radius:12px !important; box-shadow:0 4px 20px rgba(36,61,26,.18) !important; font-family:'DM Sans',sans-serif !important; padding:0 !important; overflow:hidden; }
+    .leaflet-popup-content { margin:0 !important; min-width:200px; }
+    .popup-accent { height:4px; }
+    .popup-inner { padding:.85rem 1rem .9rem; }
+    .popup-name { font-family:'Playfair Display',serif; font-size:.95rem; font-weight:600; color:var(--ink); margin-bottom:.2rem; }
+    .popup-hours { font-size:.76rem; color:var(--ink-lt); margin-bottom:.3rem; }
+    .popup-verified { font-size:.67rem; color:var(--green-lt); font-weight:600; margin-bottom:.5rem; }
+    .popup-open-btn { display:inline-flex; align-items:center; gap:.2rem; font-size:.73rem; font-weight:600; color:var(--sienna); cursor:pointer; background:none; border:none; padding:0; font-family:'DM Sans',sans-serif; }
+    .popup-open-btn:hover { text-decoration:underline; }
+    .map-pin { width:30px; height:30px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); border:2.5px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,.25); transition:width .15s,height .15s,box-shadow .15s; }
+    .map-pin.highlighted { width:38px; height:38px; box-shadow:0 4px 16px rgba(0,0,0,.4); }
+    .map-pin.qv-focus { width:36px; height:36px; box-shadow:0 0 0 3px rgba(255,255,255,.85),0 4px 16px rgba(0,0,0,.35); }
+
+    /* Desktop Map Divider */
+    .map-divider {
+      display: none;
+      width: 12px;
+      height: 100%;
+      background: var(--cream);
+      border-left: 1px solid var(--cream-dk);
+      border-right: 1px solid var(--cream-dk);
+      cursor: col-resize;
+      position: relative;
+      z-index: 60;
+      flex-shrink: 0;
+    }
+    .map-divider::after {
       content: "";
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 2px;
-      height: 30px;
-      background: rgba(0,0,0,0.1);
+      width: 4px;
+      height: 40px;
+      background: var(--ink-lt);
       border-radius: 2px;
-      box-shadow: -4px 0 rgba(0,0,0,0.1), 4px 0 rgba(0,0,0,0.1);
+      opacity: 0.15;
     }
-
-    @media (min-width:900px) {
-      .content-area.map-active { display:flex; align-items:flex-start; }
-      .content-area.map-active .map-panel { 
-        display:block; 
-        position:sticky; 
-        top:0; 
-        flex: 0 0 var(--map-width); 
-        height:calc(100vh - var(--filter-bar-h,200px)); 
-      }
-      .content-area.map-active .resizer { 
-        display:block; 
-        height:calc(100vh - var(--filter-bar-h,200px)); 
-      }
-      .content-area.map-active .list-panel { 
-        flex:1; 
-        overflow-y:auto; 
-        height:calc(100vh - var(--filter-bar-h,200px)); 
-      }
+    @media (min-width: 900px) {
+      .content-area.map-active .map-divider { display: block; }
     }
-    @media (max-width:899px) {
-      .content-area.map-active .map-panel { display:block; position:fixed; inset:var(--filter-bar-h,60px) 0 80px; z-index:50; }
-      .content-area.map-active .list-panel { display:none; }
-      .resizer { display: none !important; }
-    }
-    #map { width:100%; height:100%; min-height:400px; }
-    .map-pin { width:22px; height:22px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,.2); cursor:pointer; transition:transform .15s; }
-    .map-pin:hover { transform:rotate(-45deg) scale(1.15); z-index:1000 !important; }
-    .map-mode-active footer { display:none; }
 
     /* ── CARD GRID ──────────────────────────────────────────── */
     .grid { padding:0 1.5rem 5rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:1.2rem; margin-top:.5rem; }
     @media (min-width:900px) { .content-area.map-active .grid { grid-template-columns:1fr; padding:.5rem 1rem 5rem; } }
     .card { background:var(--card); border-radius:var(--radius); border:1.5px solid var(--cream-dk); overflow:hidden; box-shadow:0 2px 14px var(--shadow); transition:transform .2s ease,box-shadow .2s ease,border-color .2s; display:flex; flex-direction:column; animation:fadeUp .35s ease both; cursor:pointer; }
-    .card:hover { transform:translateY(-3px); box-shadow:0 8px 28px var(--shadow); border-color:var(--amber); }
+    .card:hover { transform:translateY(-3px); box-shadow:0 8px 28px var(--shadow); }
     .card.map-highlighted { border-color:var(--sienna) !important; box-shadow:0 0 0 2px var(--sienna),0 8px 28px var(--shadow) !important; }
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
     .card-body { padding:1.2rem 1.3rem; flex:1; }
@@ -208,12 +211,12 @@
     .neighborhood { margin-top:.3rem; font-size:.74rem; font-weight:500; color:var(--ink-lt); }
     .neighborhood::before { content:'📍 '; }
     .hours-row { margin-top:.8rem; display:flex; align-items:baseline; gap:.45rem; flex-wrap:wrap; }
-    .hours-text { font-size:.8rem; font-weight:600; color:var(--ink); }
-    .days-text { font-size:.73rem; color:var(--ink-lt); font-weight:400; }
+    .hours-text { font-size:.8rem; font-weight:500; }
+    .days-text  { font-size:.73rem; color:var(--ink-lt); }
     .deals { margin-top:.85rem; display:flex; flex-direction:column; gap:.38rem; }
-    .deal-item { display:flex; align-items:flex-start; gap:.5rem; font-size:.81rem; line-height:1.35; color:var(--ink-lt); }
-    .deal-dot { flex-shrink:0; width:6px; height:6px; border-radius:50%; background:var(--sienna); margin-top:.37em; opacity:.8; }
-    .card-footer { padding:.75rem 1.3rem; border-top:1px solid var(--cream-dk); display:flex; flex-direction:column; align-items:flex-start; gap:.45rem; background:rgba(250,246,239,.3); }
+    .deal-item { display:flex; align-items:flex-start; gap:.5rem; font-size:.81rem; line-height:1.35; }
+    .deal-dot { flex-shrink:0; width:6px; height:6px; border-radius:50%; background:var(--sienna); margin-top:.37em; }
+    .card-footer { padding:.75rem 1.3rem; border-top:1px solid var(--cream-dk); display:flex; flex-direction:column; align-items:flex-start; gap:.45rem; }
     .tags { display:flex; flex-wrap:wrap; gap:.3rem; }
     .card-links { display:flex; align-items:center; }
     .card-link { font-size:.75rem; font-weight:600; color:var(--green-lt); text-decoration:none; transition:color .15s; padding:.1rem .3rem; white-space:nowrap; position:relative; z-index:1; }
@@ -235,724 +238,746 @@
       .qv-sheet { top:50%; left:50%; transform:translate(-50%,calc(-50% + 30px)); opacity:0; bottom:auto; right:auto; width:680px; max-width:calc(100vw - 2rem); max-height:88vh; border-radius:20px; transition:transform .3s cubic-bezier(.32,.72,0,1),opacity .3s ease; }
       .qv-sheet.open { transform:translate(-50%,-50%); opacity:1; }
     }
-    .qv-accent { height:5px; width:100%; background:var(--green); }
+    .qv-accent { height:5px; width:100%; }
     .qv-handle { display:flex; justify-content:center; padding:.75rem 0 .25rem; touch-action:none; }
     .qv-handle-bar { width:36px; height:4px; border-radius:2px; background:var(--cream-dk); }
     @media (min-width:700px) { .qv-handle { display:none; } }
-    .qv-close { position:absolute; top:1rem; right:1rem; width:30px; height:30px; border-radius:50%; background:var(--cream-dk); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--ink-lt); transition:all .15s; z-index:1; }
-    .qv-close:hover { background:var(--ink); color:#fff; }
+    .qv-close { position:absolute; top:1rem; right:1rem; width:30px; height:30px; border-radius:50%; background:var(--cream-dk); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--ink-lt); transition:background .15s; z-index:1; }
+    .qv-close:hover { background:var(--cream); color:var(--ink); }
     .qv-body { padding:.5rem 1.5rem 1.5rem; }
     .qv-name { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:var(--ink); line-height:1.2; margin-bottom:.2rem; padding-right:2rem; }
     .qv-neighborhood { font-size:.8rem; font-weight:500; color:var(--ink-lt); margin-bottom:.85rem; }
     .qv-neighborhood::before { content:'📍 '; }
     .qv-hours-row { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.9rem; }
-    .qv-hours { font-size:.9rem; font-weight:600; color:var(--ink); }
-    .qv-days { font-size:.78rem; color:var(--ink-lt); }
+    .qv-hours { font-size:.9rem; font-weight:600; }
+    .qv-days  { font-size:.78rem; color:var(--ink-lt); }
     .qv-section-label { font-size:.65rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; margin-bottom:.4rem; }
     .qv-deals { display:flex; flex-direction:column; gap:.4rem; margin-bottom:1rem; }
-    .qv-deal-item { display:flex; align-items:flex-start; gap:.5rem; font-size:.88rem; line-height:1.4; color:var(--ink); }
+    .qv-deal-item { display:flex; align-items:flex-start; gap:.5rem; font-size:.88rem; line-height:1.4; }
     .qv-deal-dot { flex-shrink:0; width:7px; height:7px; border-radius:50%; background:var(--sienna); margin-top:.35em; }
     .qv-tags { display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:1.1rem; }
     .qv-verified { display:inline-flex; align-items:center; gap:.35rem; font-size:.75rem; font-weight:600; color:var(--green-lt); background:#EAF0E4; border:1px solid var(--vibe-tag-border); border-radius:8px; padding:.35rem .7rem; margin-bottom:1.1rem; }
     .qv-links { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1.2rem; }
     .qv-link { display:inline-flex; align-items:center; gap:.3rem; padding:.38rem .9rem; border-radius:99px; font-size:.78rem; font-weight:600; text-decoration:none; transition:all .15s; }
     .qv-link.primary { background:var(--green); color:var(--cream); }
-    .qv-link.primary:hover { background:var(--green-lt); transform:translateY(-1px); box-shadow:0 3px 8px rgba(36,61,26,.2); }
+    .qv-link.primary:hover { background:var(--green-lt); }
     .qv-link.secondary { background:var(--cream); border:1.5px solid var(--cream-dk); color:var(--ink-lt); }
     .qv-link.secondary:hover { border-color:var(--green); color:var(--green); }
     .qv-map-wrap { width:100%; height:260px; border-radius:12px; overflow:hidden; border:1.5px solid var(--cream-dk); }
     #qv-map { width:100%; height:100%; }
-    .qv-map-placeholder { width:100%; height:260px; background:var(--cream-dk); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:.75rem; color:var(--ink-lt); text-align:center; padding:2rem; }
-
-    /* ── FOOTER ─────────────────────────────────────────────── */
-    footer { padding:4rem 2rem; background:var(--cream-dk); text-align:center; font-size:.82rem; color:var(--ink-lt); border-top:1px solid rgba(0,0,0,.05); }
-    footer p { margin-bottom:.5rem; }
-    footer a { color:var(--ink); font-weight:600; text-decoration:none; }
-    footer a:hover { text-decoration:underline; }
+    .qv-map-placeholder { width:100%; height:200px; display:flex; align-items:center; justify-content:center; background:var(--cream-dk); color:var(--ink-lt); font-size:.8rem; border-radius:12px; border:1.5px solid var(--cream-dk); }
 
     /* ── FAB ────────────────────────────────────────────────── */
-    #fab { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); z-index:1000; background:var(--ink); color:#fff; border:none; padding:.75rem 1.8rem; border-radius:99px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:.85rem; letter-spacing:.05em; box-shadow:0 6px 20px rgba(0,0,0,.3); cursor:pointer; display:none; transition:transform .2s, background .2s; }
-    #fab:active { transform:translateX(-50%) scale(.95); }
-    @media (max-width:899px) { #fab { display:block; } }
+    #fab { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:200; background:var(--green); color:var(--cream); border:none; border-radius:99px; padding:.6rem 1.5rem; font-family:'DM Sans',sans-serif; font-size:.82rem; font-weight:700; letter-spacing:.05em; box-shadow:0 4px 20px rgba(36,61,26,.35); cursor:pointer; display:flex; align-items:center; gap:.35rem; transition:background .2s,transform .15s; }
+    #fab:hover { background:var(--green-lt); transform:translateX(-50%) translateY(-2px); }
+    #fab:active { transform:translateX(-50%) translateY(0); }
+
+    .empty { grid-column:1/-1; text-align:center; padding:4rem 1rem; color:var(--ink-lt); }
+    .empty-icon { font-size:2.8rem; margin-bottom:1rem; }
+    .empty h3 { font-family:'Playfair Display',serif; font-size:1.4rem; margin-bottom:.6rem; color:var(--ink); }
+    .empty p { font-size:.9rem; line-height:1.7; }
+    .tip-link { color:var(--sienna); font-weight:600; text-decoration:none; }
+    .tip-link:hover { text-decoration:underline; }
+
+    footer { background:var(--green); color:rgba(250,246,239,.6); text-align:center; padding:2rem 1.5rem 5rem; font-size:.8rem; letter-spacing:.03em; line-height:1.9; }
+    footer a { color:var(--blush); text-decoration:none; font-weight:500; }
+    footer a:hover { color:var(--amber); text-decoration:underline; }
+    #footer-home { color:var(--amber); font-weight:700; font-family:'DM Sans',sans-serif; font-style:normal; text-decoration:none; }
+    #footer-home:hover { text-decoration:underline; }
+
+    @media (max-width:600px) {
+      .filter-row,.slider-row { padding-left:1rem; padding-right:1rem; }
+      .collapsible-panel-inner { padding:.65rem 1rem .75rem; }
+      .grid { padding-left:1rem; padding-right:1rem; }
+      .filter-summary-bar { padding:.5rem 1rem; }
+    }
   </style>
 </head>
 <body>
 
-  <header id="main-header">
+<header>
+  <a href="/" class="header-home-link">
+    <div class="hbg" id="hbg-evening"></div>
+    <div class="hbg" id="hbg-standard"></div>
     <div class="hbg" id="hbg-morning"></div>
     <div class="hstars" id="hstars-morning"></div>
-    <div class="hbg active" id="hbg-standard"></div>
-    <div class="hbg" id="hbg-evening"></div>
     <div class="hstars" id="hstars-evening"></div>
-    <div class="deco deco-1"></div>
-    <div class="deco deco-2"></div>
+    <div class="deco deco-1" id="deco-1"></div>
+    <div class="deco deco-2" id="deco-2"></div>
     <div class="header-inner">
-      <div class="logo-eyebrow">Minneapolis &middot; St. Paul</div>
-      <a href="/" class="header-home-link"><h1><em>Golden</em> Hour</h1></a>
-      <p class="tagline">The best happy hours in Minneapolis & St. Paul, curated.</p>
+      <p class="logo-eyebrow">Twin Cities</p>
+      <h1><em>Golden</em> Hour</h1>
+      <p class="tagline">The best happy hours in Minneapolis &amp; St. Paul, curated.</p>
     </div>
-  </header>
+  </a>
+</header>
 
-  <div class="time-bar">
-    It's currently <span id="live-time">...</span> &mdash; <span id="live-day">...</span>
+<div class="time-bar">It's currently <span id="live-time"></span> — <span id="live-day"></span></div>
+
+<div class="dev-banner" id="dev-banner" style="display:none">
+  <strong>Dev mode:</strong> CSV not loaded — showing sample data.
+  <span style="margin-left:.75rem;cursor:pointer;opacity:.5;" id="dev-dismiss">✕ dismiss</span>
+</div>
+
+<div class="filters-wrap" id="filters-wrap">
+  <!-- Slim summary bar shown when scroll-collapsed -->
+  <div class="filter-summary-bar" id="filter-summary-bar">
+    <span class="summary-text" id="summary-text">Today · 5 PM</span>
+    <span class="summary-expand">Filters ▴</span>
   </div>
-
-  <div class="dev-banner">
-    <strong>Work in Progress:</strong> This site is currently under development. Data may be incomplete.
+  <!-- Mobile map handle -->
+  <div class="filter-collapse-handle" id="filter-handle">
+    <div class="hbar"></div><span id="handle-label">Filters</span><div class="hbar"></div>
   </div>
-
-  <div class="filters-wrap" id="filters-wrap">
-    <div class="filter-summary-bar" id="filter-summary-bar">
-      <span class="summary-text" id="summary-text">Today &middot; 4 PM &middot; Northeast</span>
-      <span class="summary-expand">Filters &#9652;</span>
-    </div>
-
-    <div class="filter-collapse-handle" id="filter-handle">
-      <div class="hbar"></div><span id="handle-label">Filters</span><div class="hbar"></div>
-    </div>
-
-    <div class="filter-expandable" id="filter-expandable">
-      <div class="search-row">
-        <div class="search-wrap">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M6 1a5 5 0 100 10A5 5 0 006 1zM0 6a6 6 0 1110.89 3.477l3.817 3.816a.5.5 0 01-.708.708l-3.816-3.817A6 6 0 010 6z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/></svg>
-          <input type="text" id="search" placeholder="Search venues, neighborhoods, deals&hellip;" autocomplete="off" />
-        </div>
-      </div>
-
-      <div class="filter-row" id="day-filters">
-        <span class="filter-row-label">Day</span>
-        <button class="pill today-active" data-day="today">Today</button>
-        <button class="pill" data-day="Mon">Mon</button>
-        <button class="pill" data-day="Tue">Tue</button>
-        <button class="pill" data-day="Wed">Wed</button>
-        <button class="pill" data-day="Thu">Thu</button>
-        <button class="pill" data-day="Fri">Fri</button>
-        <button class="pill" data-day="Sat">Sat</button>
-        <button class="pill" data-day="Sun">Sun</button>
-        <button class="pill" data-day="all">Any Day</button>
-      </div>
-
-      <div class="filter-row" id="time-pills">
-        <span class="filter-row-label">Time</span>
-        <button class="pill" id="tpill-any" data-time="any">Any Time</button>
-        <button class="pill" id="tpill-now" data-time="now">Happening Now</button>
-        <button class="pill" id="tpill-morning" data-time="morning">Morning</button>
-        <button class="pill" id="tpill-lunch" data-time="lunch">Lunch</button>
-        <button class="pill pill-pick pick-active" id="tpill-pick" data-time="pick">&larr; Pick a time &rarr;</button>
-        <button class="pill" id="tpill-late" data-time="late">Late Night</button>
-      </div>
-
-      <div class="slider-row" id="slider-row">
-        <div class="slider-outer">
-          <div class="track-container">
-            <div class="track-line" id="slider-track">
-              <div class="tick tick-even" style="left:0%"><span class="tick-label">2 PM</span></div>
-              <div class="tick tick-odd" style="left:14.29%"></div>
-              <div class="tick tick-even" style="left:28.57%"><span class="tick-label">4 PM</span></div>
-              <div class="tick tick-odd" style="left:42.86%"></div>
-              <div class="tick tick-even" style="left:57.14%"><span class="tick-label">6 PM</span></div>
-              <div class="tick tick-odd" style="left:71.43%"></div>
-              <div class="tick tick-even" style="left:85.71%"><span class="tick-label">8 PM</span></div>
-              <div class="tick tick-odd" style="left:100%"></div>
-            </div>
-            <div class="thumb-wrap" id="slider-thumb">
-              <div class="thumb-label-above" id="thumb-label">4:00 PM</div>
-              <div class="thumb-dot"></div>
-            </div>
-            <input type="range" class="slider-input" id="time-slider" min="1400" max="2100" step="15" value="1600">
-          </div>
-        </div>
-      </div>
-
-      <div class="collapsibles-bar">
-        <div class="collapsible">
-          <button class="collapsible-toggle" id="toggle-area">
-            Neighborhoods <span class="active-badge" id="badge-area" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span>
-          </button>
-        </div>
-        <div class="collapsible">
-          <button class="collapsible-toggle" id="toggle-deals">
-            Deals <span class="active-badge" id="badge-deals" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span>
-          </button>
-        </div>
-        <div class="collapsible">
-          <button class="collapsible-toggle" id="toggle-vibe">
-            Vibe <span class="active-badge" id="badge-vibe" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span>
-          </button>
-        </div>
+  <!-- All filter controls -->
+  <div class="filter-expandable" id="filter-expandable">
+    <div class="search-row">
+      <div class="search-wrap">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M6 1a5 5 0 100 10A5 5 0 006 1zM0 6a6 6 0 1110.89 3.477l3.817 3.816a.5.5 0 01-.708.708l-3.816-3.817A6 6 0 010 6z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"/></svg>
+        <input type="text" id="search" placeholder="Search venues, neighborhoods, deals…" autocomplete="off" />
       </div>
     </div>
-  </div>
-
-  <div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
-  <div class="collapsible-panel" id="panel-deals"><div class="collapsible-panel-inner" id="deal-pills"></div></div>
-  <div class="collapsible-panel" id="panel-vibe"><div class="collapsible-panel-inner" id="vibe-pills"></div></div>
-
-  <div class="results-meta">
-    <div class="results-meta-left">
-      <div id="results-heading">
-        <span class="h-label">Happy Hours</span>
-        <span class="h-day" id="h-day">Today</span>
-        <span class="h-time" id="h-time">@ 4 PM</span>
-      </div>
-      <div class="results-count" id="results-count">...</div>
+    <div class="filter-row" id="day-filters">
+      <span class="filter-row-label">Day</span>
+      <button class="pill today-active" data-day="today">Today</button>
+      <button class="pill" data-day="Mon">Mon</button><button class="pill" data-day="Tue">Tue</button>
+      <button class="pill" data-day="Wed">Wed</button><button class="pill" data-day="Thu">Thu</button>
+      <button class="pill" data-day="Fri">Fri</button><button class="pill" data-day="Sat">Sat</button>
+      <button class="pill" data-day="Sun">Sun</button>
     </div>
-    <button id="map-toggle-btn">Map view</button>
-  </div>
-
-  <div class="combo-warning" id="combo-warning" style="display:none">
-    <div class="combo-inner">
-      <strong>Note:</strong> No venues match all filters. Showing matches for your selected neighborhood/time.
+    <div class="filter-row" id="time-pills">
+      <span class="filter-row-label">Time</span>
+      <button class="pill" id="tpill-any" data-time="any">Any Time</button>
+      <button class="pill" id="tpill-now" data-time="now">Happening Now</button>
+      <button class="pill" id="tpill-morning" data-time="morning">Morning</button>
+      <button class="pill" id="tpill-lunch" data-time="lunch">Lunch</button>
+      <button class="pill pill-pick pick-active" id="tpill-pick" data-time="pick">← Pick a time →</button>
+      <button class="pill" id="tpill-late" data-time="late">Late Night</button>
+    </div>
+    <div class="slider-row" id="slider-row">
+      <div class="slider-outer"><div class="track-container"><div class="track-line" id="slider-track">
+        <div class="tick tick-even" style="left:0%"><span class="tick-label">2 PM</span></div>
+        <div class="tick tick-odd"  style="left:14.29%"></div>
+        <div class="tick tick-even" style="left:28.57%"><span class="tick-label">4 PM</span></div>
+        <div class="tick tick-odd"  style="left:42.86%"></div>
+        <div class="tick tick-even" style="left:57.14%"><span class="tick-label">6 PM</span></div>
+        <div class="tick tick-odd"  style="left:71.43%"></div>
+        <div class="tick tick-even" style="left:85.71%"><span class="tick-label">8 PM</span></div>
+        <div class="tick tick-even" style="left:100%"><span class="tick-label">9 PM</span></div>
+        <div class="thumb-wrap" id="slider-thumb"><div class="thumb-label-above" id="slider-label">5 PM</div><div class="thumb-dot"></div></div>
+        <input type="range" class="slider-input" id="time-slider" min="14" max="21" step="0.5" value="17" />
+      </div></div></div>
+    </div>
+    <div class="collapsibles-bar">
+      <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-area">Neighborhood <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-area" style="display:none"></span></button></div>
+      <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-deals">Deals <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-deals" style="display:none"></span></button></div>
+      <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-vibe">Vibe <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-vibe" style="display:none"></span></button></div>
     </div>
   </div>
+</div>
 
-  <div class="active-chips" id="active-chips"></div>
+<div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
+<div class="collapsible-panel" id="panel-deals"><div class="collapsible-panel-inner" id="deal-pills"></div></div>
+<div class="collapsible-panel" id="panel-vibe"><div class="collapsible-panel-inner" id="vibe-pills"></div></div>
 
-  <div class="content-area" id="content-area">
-    <div class="map-panel" id="map-panel"><div id="map"></div></div>
-    
-    <div class="resizer" id="resizer"></div>
-
-    <div class="list-panel" id="list-panel">
-      <div id="grid" class="grid"></div>
-    </div>
+<div class="results-meta">
+  <div class="results-meta-left">
+    <h2 id="results-heading"><span class="h-label">Happy Hours</span><span class="h-day"> on Friday</span><span class="h-time"> at 5 PM</span></h2>
+    <span class="results-count" id="results-count"></span>
   </div>
+  <button id="map-toggle-btn">🗺️ Map view</button>
+</div>
+<div class="combo-warning" id="combo-warning" style="display:none"><div class="combo-inner">⚠️ <span id="combo-text"></span></div></div>
+<div class="active-chips" id="active-chips"></div>
 
-  <button id="fab">Map</button>
+<div class="content-area" id="content-area">
+  <div class="map-panel" id="map-panel"><div id="map"></div></div>
+  
+  <div class="map-divider" id="map-divider"></div>
 
-  <div class="qv-backdrop" id="qv-backdrop"></div>
-  <div class="qv-sheet" id="qv-sheet">
-    <div class="qv-accent" id="qv-accent"></div>
-    <div class="qv-handle"><div class="qv-handle-bar"></div></div>
-    <button class="qv-close" id="qv-close">&times;</button>
-    <div class="qv-body" id="qv-body"></div>
+  <div class="list-panel" id="list-panel">
+    <div class="grid" id="grid"><div class="empty"><div class="empty-icon">🌇</div><h3>Loading spots…</h3></div></div>
   </div>
+</div>
 
-  <footer>
-    <p>&copy; 2024 &middot; <a href="/" id="footer-home">Golden Hour</a></p>
-    <p>Know a spot? <a href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p>
-  </footer>
+<button id="fab">🗺️ Map</button>
 
-  <script>
-    var CSV_URL = 'happyhours.csv';
-    var TILE_URL = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
-    var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
-    var NEIGHBORHOOD_BOUNDS = {
-      'Northeast': [[44.978,-93.278],[45.010,-93.238]],
-      'Arts District': [[44.978,-93.278],[45.010,-93.238]],
-      'North Loop': [[44.982,-93.295],[44.993,-93.268]],
-      'Downtown': [[44.972,-93.278],[44.988,-93.255]],
-      'Lowry Hill': [[44.955,-93.310],[44.972,-93.282]],
-      'Lowry Hill East': [[44.952,-93.297],[44.965,-93.277]],
-      'Whittier': [[44.945,-93.288],[44.962,-93.268]],
-      'Warehouse District': [[44.978,-93.298],[44.990,-93.277]],
-      'Longfellow': [[44.905,-93.245],[44.930,-93.215]],
-      'Powderhorn': [[44.920,-93.270],[44.950,-93.240]],
-      'Grand Avenue': [[44.930,-93.160],[44.950,-93.130]],
-      'Macalester-Groveland': [[44.930,-93.165],[44.950,-93.140]],
-      'University': [[44.970,-93.235],[44.992,-93.210]]
+<div class="qv-backdrop" id="qv-backdrop"></div>
+<div class="qv-sheet" id="qv-sheet">
+  <div class="qv-accent" id="qv-accent"></div>
+  <div class="qv-handle" id="qv-handle"><div class="qv-handle-bar"></div></div>
+  <button class="qv-close" id="qv-close">✕</button>
+  <div class="qv-body" id="qv-body"></div>
+</div>
+
+<footer>
+  <p>Made with 🥂 in the Twin Cities &nbsp;·&nbsp; <a href="/" id="footer-home">Golden Hour</a></p>
+  <p>Know a spot? <a href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p>
+</footer>
+
+<script>
+var CSV_URL   = 'happyhours.csv';
+var TILE_URL  = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
+
+var NEIGHBORHOOD_BOUNDS = {
+  'Northeast':            [[44.978,-93.278],[45.010,-93.238]],
+  'Arts District':        [[44.978,-93.278],[45.010,-93.238]],
+  'North Loop':           [[44.982,-93.295],[44.993,-93.268]],
+  'Downtown':             [[44.972,-93.278],[44.988,-93.255]],
+  'Lowry Hill':           [[44.955,-93.310],[44.972,-93.282]],
+  'Lowry Hill East':      [[44.952,-93.297],[44.965,-93.277]],
+  'Whittier':             [[44.945,-93.288],[44.962,-93.268]],
+  'Warehouse District':   [[44.978,-93.298],[44.990,-93.277]],
+  'Longfellow':           [[44.905,-93.245],[44.930,-93.215]],
+  'Powderhorn':           [[44.920,-93.270],[44.950,-93.240]],
+  'Grand Avenue':         [[44.930,-93.160],[44.950,-93.130]],
+  'Macalester-Groveland': [[44.930,-93.165],[44.950,-93.140]],
+  'University':           [[44.970,-93.235],[44.992,-93.210]]
+};
+var MAP_CENTER = [44.960,-93.240], MAP_ZOOM = 12;
+
+var FALLBACK = [
+  {name:"Blue Door Pub (Longfellow)",neighborhoods:["Longfellow"],city:"Minneapolis",days:["Mon","Tue","Wed","Thu","Fri"],startTime:1600,endTime:1700,deals:["$2 off tap beers & wines","Half-off fries & tots","Half-off deep-fried pickles & green beans","Half-off totchos"],dealTags:["Beer","Wine","Bar Bites"],vibe:["Pub/Dive","American"],website:"https://thebdp.com/happyhour-intro",mapsUrl:"https://maps.google.com/?q=3448+42nd+Ave+S+Minneapolis+MN",accentColor:"#1E5F9E",lat:44.9149,lng:-93.2318,verified:"Violet on 03/20/2026"},
+  {name:"Blue Door Pub (University)",neighborhoods:["University"],city:"Minneapolis",days:["Tue","Wed","Thu","Fri"],startTime:1400,endTime:1700,deals:["$2 off tap beers & wines","Half-off fries & tots","Half-off deep-fried pickles & green beans","Half-off totchos"],dealTags:["Beer","Wine","Bar Bites"],vibe:["Pub/Dive","American"],website:"https://thebdp.com/happyhour-intro",mapsUrl:"https://maps.google.com/?q=1514+Como+Ave+SE+Minneapolis+MN",accentColor:"#1E5F9E",lat:44.9784,lng:-93.2213,verified:"Violet on 03/20/2026"},
+  {name:"Bar + Cart",neighborhoods:["Grand Avenue"],city:"Saint Paul",days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],startTime:1500,endTime:1800,deals:["$8 margaritas","$9 Old Fashioneds","$5 Two Fisted (beer + spirit shot)","$10 Big Ass Glass of Wine","$7 Gimlets","$2.50 oysters","$8 smash burgers"],dealTags:["Beer","Wine","Rail Cocktails","Craft Cocktails","Margaritas","Bar Bites","Happy Hour Menu"],vibe:["Cocktail Bar","Restaurant"],website:"https://barcartlounge.com/saint-paul-bar-cart-restaurant-and-lounge-happy-hours-specials",mapsUrl:"https://maps.google.com/?q=1571+Grand+Ave+Saint+Paul+MN",accentColor:"#8B4513",lat:44.9398,lng:-93.1454,verified:"Violet on 03/20/2026"},
+  {name:"Northbound Smokehouse & Brewpub",neighborhoods:["Powderhorn"],city:"Minneapolis",days:["Sun","Mon","Tue","Wed","Thu","Fri"],startTime:1500,endTime:1800,deals:["$4 Northbound brewed beers","$5 rail drinks","$6 house wine","Tuesdays: $2.50 Northbound beers"],dealTags:["Beer","Wine","Rail Cocktails"],vibe:["Brewery/Taproom","American"],website:"https://www.northboundbrewpub.com/",mapsUrl:"https://maps.google.com/?q=2716+E+38th+St+Minneapolis+MN",accentColor:"#C17F24",lat:44.9342,lng:-93.2324,verified:"Violet on 03/20/2026"},
+  {name:"Longfellow Grill",neighborhoods:["Longfellow"],city:"Minneapolis",days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],startTime:1400,endTime:1800,deals:["$3.99 bar bites","$6.99 tacos & smash burgers","$7 rail cocktails & wines","$5 Freehouse tap beers"],dealTags:["Beer","Wine","Rail Cocktails","Bar Bites","Happy Hour Menu"],vibe:["Restaurant","American"],website:"https://www.longfellowgrill.com/happy-hour",mapsUrl:"https://maps.google.com/?q=2990+W+River+Pkwy+Minneapolis+MN",accentColor:"#2D6A2D",lat:44.9133,lng:-93.2241,verified:"Violet on 03/20/2026"},
+  {name:"The Sidecar at The Tap",neighborhoods:["Powderhorn"],city:"Minneapolis",days:["Thu","Fri","Sat"],startTime:1600,endTime:1800,deals:["$10 Barrel Aged Old Fashioned","$9 Bee's Knees","$9 Seasonal Spritz","$6 Sangria","$5 Town Hall Tap pints","$6 food specials"],dealTags:["Craft Cocktails","Wine","Beer","Bar Bites"],vibe:["Cocktail Bar","Restaurant"],website:"https://sidecarmpls.com/minneapolis-the-sidecar-at-the-tap-happy-hours-specials",mapsUrl:"https://maps.google.com/?q=4812+Chicago+Ave+Minneapolis+MN",accentColor:"#722F37",lat:44.8985,lng:-93.2615,verified:"Violet on 03/20/2026"},
+  {name:"Milly's Wine Bar & Bistro",neighborhoods:["Downtown"],city:"Minneapolis",days:["Mon","Tue","Wed","Thu"],startTime:1600,endTime:1730,deals:["$9 sparkling wine (Zardetto Prosecco)","$9 white wine (Mer Soleil Chardonnay)","$9 red wine (Flor De Morca Garnacha)","$5 off flatbreads","$6 off Somm Boards","$8 hummus cup"],dealTags:["Wine","Bar Bites","Happy Hour Menu","Natural Wine"],vibe:["Wine Bar","Restaurant"],website:"https://millysmpls.com/",mapsUrl:"https://maps.google.com/?q=1129+Washington+Ave+Minneapolis+MN",accentColor:"#8B1A4A",lat:44.9778,lng:-93.2599,verified:"Violet on 03/20/2026"},
+  {name:"Gus Gus",neighborhoods:["Macalester-Groveland"],city:"Saint Paul",days:["Mon","Tue","Wed","Thu","Fri","Sat"],startTime:1600,endTime:1700,deals:["$1 off all signature cocktails","$2 off wines by glass","$3 Tap Hamms","$3 Jell-O shots","$5 Lengua sliders","$8 chili cheese fries"],dealTags:["Craft Cocktails","Wine","Beer","Bar Bites"],vibe:["Cocktail Bar","Restaurant"],website:"https://www.gusgusmn.com/menus",mapsUrl:"https://maps.google.com/?q=128+Cleveland+Ave+N+Saint+Paul+MN",accentColor:"#1E4D5A",lat:44.9394,lng:-93.1534,verified:"Violet on 03/20/2026"}
+];
+
+var TIME_DEFS = {
+  morning:{label:'in the Morning',test:function(s,e){return overlaps(s,e,700,1059);}},
+  lunch:  {label:'over Lunch',    test:function(s,e){return overlaps(s,e,1100,1400);}},
+  late:   {label:', Late Night',  test:function(s,e){return overlapsLateNight(s,e);}},
+  now:    {label:', Happening Now',test:function(s,e){return isOpenNowRange(s,e);}}
+};
+var SLIDER_MIN=14, SLIDER_MAX=21;
+var DAY_NAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+var DAY_FULL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var VENUES=[], activeDays='today', activeTime='pick', sliderValue=17;
+var activeNeighborhoods=new Set(), activeDealTags=new Set(), activeVibeTags=new Set(), searchQuery='';
+var mapMode=false, mapInitialized=false, filterCollapsed=false;
+var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
+var scrollCollapsed=false, forcedOpen=false;
+
+// ── LOAD ───────────────────────────────────────────────────
+function loadData(){
+  Papa.parse(CSV_URL,{download:true,header:true,skipEmptyLines:true,comments:'#',
+    complete:function(r){VENUES=parseRows(r.data);init();},
+    error:function(){
+      VENUES=FALLBACK;
+      var b=document.getElementById('dev-banner');
+      if(b){b.style.display='block';document.getElementById('dev-dismiss').addEventListener('click',function(){b.style.display='none';});}
+      init();
+    }
+  });
+}
+
+function parseRows(data){
+  return data.map(function(r){
+    return {
+      name:r.name?r.name.trim():'',
+      neighborhoods:r.neighborhood?r.neighborhood.split('|').map(function(n){return n.trim();}).filter(Boolean):[],
+      city:r.city?r.city.trim():'',
+      days:r.days?r.days.split('|').map(function(d){return d.trim();}).filter(Boolean):[],
+      startTime:parseInt(r.startTime,10), endTime:parseInt(r.endTime,10),
+      deals:r.deals?r.deals.split('|').map(function(d){return d.trim();}).filter(Boolean):[],
+      dealTags:r.dealTags?r.dealTags.split('|').map(function(t){return t.trim();}).filter(Boolean):[],
+      vibe:r.vibe?r.vibe.split('|').map(function(t){return t.trim();}).filter(Boolean):[],
+      website:r.website?r.website.trim():'', mapsUrl:r.mapsUrl?r.mapsUrl.trim():'',
+      accentColor:r.accentColor?r.accentColor.trim():'#3A5C28',
+      lat:parseFloat(r.lat)||null, lng:parseFloat(r.lng)||null,
+      verified:r.verified?r.verified.trim():''
     };
-    var MAP_CENTER = [44.960,-93.240], MAP_ZOOM = 12;
-    var DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    var DAY_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  }).filter(function(v){return v.name&&!isNaN(v.startTime);});
+}
 
-    var VENUES = [], leafletMap = null, markers = {}, highlightedVenue = null;
-    var activeDays = 'today', activeTime = 'pick', sliderValue = 1600, searchQuery = '';
-    var activeNeighborhoods = new Set(), activeDealTags = new Set(), activeVibeTags = new Set();
-    var mapMode = false, filterCollapsed = false, scrollCollapsed = false, forcedOpen = false;
+function init(){
+  applyHeaderTheme();
+  buildAreaPanel(); buildDealPanel(); buildVibePanel();
+  setupCollapsibles(); setupDayFilters(); setupTimePills(); setupSlider();
+  setupMapToggle(); setupFAB(); setupQV(); setupFilterHandle();
+  setupScrollCollapse(); setupQVSwipe();
+  positionPanels();
+  window.addEventListener('resize',function(){positionPanels();updateContentHeight();});
+  window.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
+  var lp=document.getElementById('list-panel');
+  if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
+  new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
+  render();
+  setInterval(updateAllBadges,60000);
+}
 
-    Papa.parse(CSV_URL, {
-      download: true, header: true,
-      complete: function(results) {
-        VENUES = parseCSV(results.data);
-        init();
+// ── SCROLL COLLAPSE ────────────────────────────────────────
+// Threshold = actual rendered height of the filter bar.
+// Collapses once scroll passes that height (i.e. the bar would
+// naturally scroll off screen). Expands once scroll comes back
+// above that same height.
+function checkScrollCollapse(){
+  var winY = window.scrollY || window.pageYOffset || 0;
+  var lp = document.getElementById('list-panel');
+  var listY = (lp && mapMode) ? lp.scrollTop : 0;
+  var scrolled = Math.max(winY, listY);
+  var fw = document.getElementById('filters-wrap');
+  if(!fw) return;
+
+  // Use the current height of the filter bar as the threshold
+  var threshold = fw.offsetHeight;
+
+  if(scrolled > threshold && !forcedOpen){
+    if(!scrollCollapsed){
+      scrollCollapsed = true;
+      fw.classList.add('scroll-collapsed');
+      updateFilterSummary();
+      positionPanels();
+      updateContentHeight();
+    }
+  } else if(scrolled <= threshold){
+    forcedOpen = false;
+    if(scrollCollapsed){
+      scrollCollapsed = false;
+      fw.classList.remove('scroll-collapsed');
+      positionPanels();
+      updateContentHeight();
+    }
+  }
+}
+
+function updateFilterSummary(){
+  var parts = [];
+  if(activeDays === 'today'){
+    parts.push(todayFull().substring(0,3));
+  } else if(activeDays instanceof Set){
+    parts.push([...activeDays].join(' · '));
+  }
+  if(activeTime === 'pick'){
+    parts.push(fmtSlider(sliderValue));
+  } else if(activeTime === 'any'){
+    parts.push('Any Time');
+  } else {
+    var tl = {now:'Happening Now',morning:'Morning',lunch:'Lunch',late:'Late Night'};
+    parts.push(tl[activeTime] || activeTime);
+  }
+  activeNeighborhoods.forEach(function(n){parts.push(n);});
+  activeDealTags.forEach(function(t){parts.push(t);});
+  activeVibeTags.forEach(function(t){parts.push(t);});
+  var el = document.getElementById('summary-text');
+  if(el) el.textContent = parts.join(' · ');
+}
+
+function setupScrollCollapse(){
+  var bar = document.getElementById('filter-summary-bar');
+  if(bar){
+    bar.addEventListener('click',function(){
+      forcedOpen = true;
+      scrollCollapsed = false;
+      var fw = document.getElementById('filters-wrap');
+      fw.classList.remove('scroll-collapsed');
+      positionPanels();
+      updateContentHeight();
+    });
+  }
+}
+
+// ── QV SWIPE-TO-DISMISS (mobile only) ─────────────────────
+function setupQVSwipe(){
+  var sheet = document.getElementById('qv-sheet');
+  var startY=0, currentY=0, dragging=false;
+  sheet.addEventListener('touchstart',function(e){
+    if(window.innerWidth>=700)return;
+    startY=e.touches[0].clientY; currentY=startY; dragging=true;
+    sheet.style.transition='none';
+  },{passive:true});
+  sheet.addEventListener('touchmove',function(e){
+    if(!dragging||window.innerWidth>=700)return;
+    currentY=e.touches[0].clientY;
+    var diff=currentY-startY;
+    if(diff>0) sheet.style.transform='translateY('+diff+'px)';
+  },{passive:true});
+  sheet.addEventListener('touchend',function(){
+    if(!dragging||window.innerWidth>=700)return;
+    dragging=false;
+    var diff=currentY-startY;
+    if(diff>80){
+      sheet.style.transition='transform .25s ease';
+      sheet.style.transform='translateY(100%)';
+      setTimeout(function(){sheet.style.transform='';sheet.style.transition='';closeQV();},250);
+    } else {
+      sheet.style.transition='transform .2s ease';
+      sheet.style.transform='';
+      setTimeout(function(){sheet.style.transition='';},200);
+    }
+  },{passive:true});
+}
+
+// ── MAIN MAP ───────────────────────────────────────────────
+function initMapOnce(){
+  if(mapInitialized)return;
+  mapInitialized=true;
+  leafletMap=L.map('map',{center:MAP_CENTER,zoom:MAP_ZOOM});
+  L.tileLayer(TILE_URL,{attribution:TILE_ATTR,maxZoom:19,subdomains:'abcd'}).addTo(leafletMap);
+  leafletMap.on('moveend',onMapMoved);
+}
+
+function updateContentHeight(){
+  var bar=document.getElementById('filters-wrap');if(!bar)return;
+  var h=bar.getBoundingClientRect().bottom;
+  document.documentElement.style.setProperty('--filter-bar-h',h+'px');
+  var mp=document.getElementById('map-panel');if(mp)mp.style.top=h+'px';
+  if(leafletMap)leafletMap.invalidateSize();
+}
+
+function createMarker(v){
+  var icon=L.divIcon({className:'',html:'<div class="map-pin" style="background:'+v.accentColor+'"></div>',iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-32]});
+  var m=L.marker([v.lat,v.lng],{icon:icon}).bindPopup(buildPopupHTML(v),{maxWidth:240});
+  m.on('click',function(){openQV(v.name);});
+  return m;
+}
+
+function buildPopupHTML(v){
+  var vl=v.verified?'<div class="popup-verified">&#10003; Verified by '+v.verified+'</div>':'';
+  var badge=buildBadgeHTML(v);
+  return '<div class="popup-accent" style="background:'+v.accentColor+'"></div>'+
+    '<div class="popup-inner">'+
+      '<div class="popup-name">'+v.name+'</div>'+
+      '<div class="popup-hours">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</div>'+
+      vl+(badge?'<div style="margin:.3rem 0">'+badge+'</div>':'')+
+      '<button class="popup-open-btn" onclick="openQV(\''+v.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')">See details</button>'+
+    '</div>';
+}
+
+function updateMapMarkers(venues){
+  if(!leafletMap)return;
+  var names=new Set(venues.map(function(v){return v.name;}));
+  Object.keys(markers).forEach(function(n){if(!names.has(n)){leafletMap.removeLayer(markers[n]);delete markers[n];}});
+  venues.forEach(function(v){if(!v.lat||!v.lng||markers[v.name])return;markers[v.name]=createMarker(v).addTo(leafletMap);});
+}
+
+function onMapMoved(){
+  if(!leafletMap||!mapMode)return;
+  var bounds=leafletMap.getBounds();
+  renderCards(filteredVenues().filter(function(v){
+    return !v.lat||!v.lng||bounds.contains([v.lat,v.lng]);
+  }));
+}
+
+function flyToNeighborhood(name){
+  var b=NEIGHBORHOOD_BOUNDS[name];
+  if(b&&leafletMap&&mapMode)leafletMap.flyToBounds(b,{duration:1.2,padding:[40,40]});
+}
+
+function highlightMarker(name){
+  if(highlightedVenue){
+    var pm=markers[highlightedVenue];
+    if(pm){var pe=pm.getElement();if(pe){var pd=pe.querySelector('.map-pin');if(pd)pd.classList.remove('highlighted');}}
+    var pc=document.querySelector('.card[data-name="'+CSS.escape(highlightedVenue)+'"]');
+    if(pc)pc.classList.remove('map-highlighted');
+  }
+  highlightedVenue=name;
+  var m=markers[name];
+  if(m){var me=m.getElement();if(me){var md=me.querySelector('.map-pin');if(md)md.classList.add('highlighted');}}
+  var c=document.querySelector('.card[data-name="'+CSS.escape(name)+'"]');
+  if(c){c.classList.add('map-highlighted');c.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+
+// ── MAP TOGGLE & FAB ───────────────────────────────────────
+function setupMapToggle(){document.getElementById('map-toggle-btn').addEventListener('click',toggleMapMode);}
+function setupFAB(){document.getElementById('fab').addEventListener('click',toggleMapMode);}
+function toggleMapMode(){
+  mapMode=!mapMode;
+  document.getElementById('content-area').classList.toggle('map-active',mapMode);
+  document.body.classList.toggle('map-mode-active',mapMode);
+  var btn=document.getElementById('map-toggle-btn'),fab=document.getElementById('fab');
+  if(mapMode){
+    btn.innerHTML='List view'; btn.classList.add('active'); fab.innerHTML='List';
+    if(window.innerWidth<900){filterCollapsed=true;document.getElementById('filters-wrap').classList.add('map-collapsed');document.getElementById('handle-label').textContent='Show Filters';}
+    initMapOnce();updateContentHeight();
+    setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());},300);
+  } else {
+    btn.innerHTML='Map view'; btn.classList.remove('active'); fab.innerHTML='Map';
+    filterCollapsed=false;
+    document.getElementById('filters-wrap').classList.remove('map-collapsed');
+    document.getElementById('handle-label').textContent='Filters';
+    document.body.classList.remove('map-mode-active');
+    render();
+  }
+}
+
+function setupFilterHandle(){
+  document.getElementById('filter-handle').addEventListener('click',function(){
+    filterCollapsed=!filterCollapsed;
+    document.getElementById('filters-wrap').classList.toggle('map-collapsed',filterCollapsed);
+    document.getElementById('handle-label').textContent=filterCollapsed?'Show Filters':'Filters';
+    positionPanels();updateContentHeight();
+  });
+}
+
+// ── QUICK VIEW ─────────────────────────────────────────────
+function setupQV(){
+  document.getElementById('qv-backdrop').addEventListener('click',closeQV);
+  document.getElementById('qv-close').addEventListener('click',closeQV);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeQV();});
+}
+
+function openQV(name){
+  var v=VENUES.find(function(x){return x.name===name;});if(!v)return;
+  document.getElementById('qv-accent').style.background=v.accentColor;
+  var badge=buildBadgeHTML(v);
+  var verLine=v.verified?'<div class="qv-verified">&#10003; Verified by '+v.verified+'</div>':'';
+  var deals=v.deals.map(function(d){return '<div class="qv-deal-item"><span class="qv-deal-dot"></span><span>'+d+'</span></div>';}).join('');
+  var dTags=v.dealTags.map(function(t){return '<span class="tag-deal qv-tag-filter" data-filter-deal="'+t+'">'+t+'</span>';}).join('');
+  var vTags=v.vibe.map(function(t){return '<span class="tag-vibe qv-tag-filter" data-filter-vibe="'+t+'">'+t+'</span>';}).join('');
+  var webBtn=v.website?'<a class="qv-link secondary" href="'+v.website+'" target="_blank" rel="noopener">Website</a>':'';
+  var mapSec=v.lat&&v.lng
+    ?'<div class="qv-section-label">Location</div><div class="qv-map-wrap"><div id="qv-map"></div></div>'
+    :'<div class="qv-section-label">Location</div><div class="qv-map-placeholder">No coordinates yet</div>';
+
+  document.getElementById('qv-body').innerHTML=
+    '<div class="qv-name">'+v.name+'</div>'+
+    '<div class="qv-neighborhood">'+v.neighborhoods[0]+', '+v.city+'</div>'+
+    '<div class="qv-hours-row"><span class="qv-hours">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span><span class="qv-days">'+v.days.join(' · ')+'</span></div>'+
+    (badge?'<div style="margin-bottom:.7rem">'+badge+'</div>':'')+
+    verLine+
+    '<div class="qv-section-label">Happy Hour Deals</div>'+
+    '<div class="qv-deals">'+deals+'</div>'+
+    '<div class="qv-section-label">Tags <span style="font-size:.6rem;font-weight:400;opacity:.5;letter-spacing:0;text-transform:none;">- click to filter</span></div>'+
+    '<div class="qv-tags">'+dTags+vTags+'</div>'+
+    '<div class="qv-links"><a class="qv-link primary" href="'+v.mapsUrl+'" target="_blank" rel="noopener">Directions</a>'+webBtn+'</div>'+
+    mapSec;
+
+  document.querySelectorAll('.qv-tag-filter').forEach(function(tag){
+    tag.addEventListener('click',function(){
+      var deal=tag.dataset.filterDeal,vibe=tag.dataset.filterVibe;
+      if(deal){toggleSet(activeDealTags,deal);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');}
+      if(vibe){toggleSet(activeVibeTags,vibe);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');}
+      closeQV();render();
+    });
+  });
+
+  document.getElementById('qv-backdrop').classList.add('open');
+  document.getElementById('qv-sheet').classList.add('open');
+  document.body.style.overflow='hidden';
+
+  if(v.lat&&v.lng){
+    if(qvMap){qvMap.remove();qvMap=null;}
+    setTimeout(function(){
+      qvMap=L.map('qv-map',{center:[v.lat,v.lng],zoom:15,zoomControl:true,attributionControl:true,scrollWheelZoom:true,dragging:true});
+      L.tileLayer(TILE_URL,{maxZoom:19,subdomains:'abcd',attribution:TILE_ATTR}).addTo(qvMap);
+      VENUES.forEach(function(venue){
+        if(!venue.lat||!venue.lng)return;
+        var isFocus=(venue.name===v.name);
+        var sz=isFocus?36:24;
+        var pinClass=isFocus?'map-pin qv-focus':'map-pin';
+        var icon=L.divIcon({className:'',html:'<div class="'+pinClass+'" style="background:'+venue.accentColor+'"></div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz],popupAnchor:[0,-sz-2]});
+        var marker=L.marker([venue.lat,venue.lng],{icon:icon});
+        marker.bindPopup(
+          '<div class="popup-accent" style="background:'+venue.accentColor+'"></div>'+
+          '<div class="popup-inner">'+
+            '<div class="popup-name">'+venue.name+'</div>'+
+            '<div class="popup-hours">'+formatTime(venue.startTime)+' - '+formatTime(venue.endTime)+'</div>'+
+            (venue.verified?'<div class="popup-verified">&#10003; Verified by '+venue.verified+'</div>':'')+
+            '<button class="popup-open-btn" onclick="openQV(\''+venue.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')">See details</button>'+
+          '</div>',{maxWidth:220}
+        );
+        marker.addTo(qvMap);
+      });
+      qvMap.invalidateSize();
+    },80);
+  }
+}
+
+function closeQV(){
+  document.getElementById('qv-backdrop').classList.remove('open');
+  document.getElementById('qv-sheet').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── STATUS BADGE ───────────────────────────────────────────
+function getBadgeState(v){
+  var today=todayAbbr();if(v.days.indexOf(today)<0)return{type:'none'};
+  var d=new Date(),nowMins=d.getHours()*60+d.getMinutes();
+  var startMins=Math.floor(v.startTime/100)*60+(v.startTime%100);
+  var endMins=Math.floor(v.endTime/100)*60+(v.endTime%100);
+  var cross=v.endTime<v.startTime,minsLeft=null;
+  if(cross){if(nowMins>=startMins)minsLeft=(1440-nowMins)+endMins;else if(nowMins<endMins)minsLeft=endMins-nowMins;}
+  else{if(nowMins>=startMins&&nowMins<endMins)minsLeft=endMins-nowMins;}
+  if(minsLeft!==null&&minsLeft>0)return{type:'ending',minsLeft:minsLeft};
+  var mu=startMins-nowMins;if(mu<0)mu+=1440;
+  if(mu<=30&&mu>0)return{type:'soon',minsLeft:mu};
+  return{type:'none'};
+}
+function badgeColors(n){
+  var G='#D6EDD0',GT='#2A6020',A='#FEF3C7',AT='#92400E',R='#FECACA',RT='#7F1D1D';
+  function lc(c1,c2,t){var h=function(s){return[parseInt(s.slice(1,3),16),parseInt(s.slice(3,5),16),parseInt(s.slice(5,7),16)];};var a=h(c1),b=h(c2);return 'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';}
+  if(n>25)return{bg:G,color:GT};
+  if(n>15){var t=(25-n)/10;return{bg:lc(G,A,t),color:lc(GT,AT,t)};}
+  if(n>5){var t2=(15-n)/10;return{bg:lc(A,R,t2),color:lc(AT,RT,t2)};}
+  return{bg:R,color:RT};
+}
+function fmtMins(n){if(n<60)return n+' '+(n===1?'min':'mins');var h=Math.floor(n/60),m=n%60;return h+' '+(h===1?'hr':'hrs')+(m>0?' '+m+' '+(m===1?'min':'mins'):'');}
+function buildBadgeHTML(v){var s=getBadgeState(v);if(s.type==='none')return'';if(s.type==='soon')return '<span class="status-badge soon">Starts in '+fmtMins(s.minsLeft)+'</span>';var c=badgeColors(s.minsLeft);return '<span class="status-badge" style="background:'+c.bg+';color:'+c.color+'">Ends in '+fmtMins(s.minsLeft)+'</span>';}
+function updateAllBadges(){document.querySelectorAll('.card').forEach(function(card){var v=VENUES.find(function(x){return x.name===card.dataset.name;});if(!v)return;var slot=card.querySelector('.badge-slot');if(slot)slot.innerHTML=buildBadgeHTML(v);});}
+
+// ── HELPERS ────────────────────────────────────────────────
+function throttle(fn,ms){var last=0;return function(){var now=Date.now();if(now-last>=ms){last=now;fn();}};}
+function positionPanels(){var bar=document.getElementById('filters-wrap');if(!bar)return;var b=bar.getBoundingClientRect().bottom;document.querySelectorAll('.collapsible-panel').forEach(function(p){p.style.top=b+'px';});document.documentElement.style.setProperty('--filter-bar-h',b+'px');}
+function mkPill(l,attr,val){var b=document.createElement('button');b.className='pill';b.dataset[attr]=val;b.textContent=l;return b;}
+function toggleSet(s,v){s.has(v)?s.delete(v):s.add(v);}
+function syncPills(c,attr,aS,aV){c.querySelectorAll('[data-'+attr+']').forEach(function(b){var v=b.dataset[attr];b.classList.toggle('tag-active',v===aV?aS.size===0:aS.has(v));});}
+function nowMinutes(){var d=new Date();return d.getHours()*100+d.getMinutes();}
+function todayAbbr(){return DAY_NAMES[new Date().getDay()];}
+function todayFull(){return DAY_FULL[new Date().getDay()];}
+function formatTime(t){var h=Math.floor(t/100),m=t%100;var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;return h12+(m?':'+String(m).padStart(2,'0'):'')+'  '+ampm;}
+function isOpenNowRange(s,e){var now=nowMinutes();if(e<s)return now>=s||now<=e;return now>=s&&now<=e;}
+function overlaps(vS,vE,wS,wE){return vS<=wE&&vE>=wS;}
+function overlapsLateNight(vS,vE){return vS>=2100||vE<600||vE<vS;}
+
+// ── PANELS ─────────────────────────────────────────────────
+function buildAreaPanel(){
+  var c=document.getElementById('area-pills');
+  var cities=[...new Set(VENUES.map(function(v){return v.city;}))].sort();
+  var ab=mkPill('All Neighborhoods','neighborhood','all');ab.classList.add('tag-active');c.appendChild(ab);
+  cities.forEach(function(city){
+    var nh=[...new Set(VENUES.filter(function(v){return v.city===city;}).flatMap(function(v){return v.neighborhoods;}))].sort();
+    var ct=document.createElement('button');ct.className='city-toggle open';ct.dataset.city=city;ct.innerHTML=city+' <span class="city-chevron">&#9662;</span>';c.appendChild(ct);
+    var pd=document.createElement('div');pd.className='city-pills';pd.dataset.cityPills=city;nh.forEach(function(n){pd.appendChild(mkPill(n,'neighborhood',n));});c.appendChild(pd);
+    ct.addEventListener('click',function(e){e.stopPropagation();var o=ct.classList.contains('open');ct.classList.toggle('open',!o);pd.classList.toggle('collapsed',o);positionPanels();});
+  });
+  c.addEventListener('click',function(e){
+    var btn=e.target.closest('[data-neighborhood]');if(!btn)return;
+    var val=btn.dataset.neighborhood;
+    if(val==='all')activeNeighborhoods.clear();else toggleSet(activeNeighborhoods,val);
+    syncPills(c,'neighborhood',activeNeighborhoods,'all');
+    updateBadge('badge-area',activeNeighborhoods.size,'panel-area');
+    if(mapMode&&activeNeighborhoods.size===1)flyToNeighborhood([...activeNeighborhoods][0]);
+    render();
+  });
+}
+function buildDealPanel(){var c=document.getElementById('deal-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.dealTags;}))].sort();if(!all.length)return;var ab=mkPill('All','deal','all');ab.classList.add('tag-active');c.appendChild(ab);all.forEach(function(t){c.appendChild(mkPill(t,'deal',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-deal]');if(!btn)return;var val=btn.dataset.deal;if(val==='all')activeDealTags.clear();else toggleSet(activeDealTags,val);syncPills(c,'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');render();});}
+function buildVibePanel(){var c=document.getElementById('vibe-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.vibe;}))].sort();if(!all.length)return;var ab=mkPill('All','vibe','all');ab.classList.add('tag-active');c.appendChild(ab);all.forEach(function(t){c.appendChild(mkPill(t,'vibe',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-vibe]');if(!btn)return;var val=btn.dataset.vibe;if(val==='all')activeVibeTags.clear();else toggleSet(activeVibeTags,val);syncPills(c,'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});}
+function setupCollapsibles(){document.addEventListener('click',function(e){if(!e.target.closest('.collapsible-toggle')&&!e.target.closest('.collapsible-panel')&&!e.target.closest('.city-toggle')&&!e.target.closest('.qv-sheet'))closeAllPanels();});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.addEventListener('click',function(e){e.stopPropagation();var pid=t.dataset.panel,panel=document.getElementById(pid);var isOpen=panel.classList.contains('open');closeAllPanels();if(!isOpen){panel.classList.add('open');t.classList.add('open');positionPanels();}});});}
+function closeAllPanels(){document.querySelectorAll('.collapsible-panel').forEach(function(p){p.classList.remove('open');});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.classList.remove('open');});}
+function setupDayFilters(){document.getElementById('day-filters').addEventListener('click',function(e){var btn=e.target.closest('[data-day]');if(!btn)return;var day=btn.dataset.day;if(day==='today'){activeDays='today';}else{if(activeDays==='today')activeDays=new Set();if(activeDays.has(day))activeDays.delete(day);else activeDays.add(day);if(activeDays.size===0)activeDays='today';}syncDayPills();render();});}
+function syncDayPills(){document.querySelectorAll('[data-day]').forEach(function(btn){var day=btn.dataset.day;btn.classList.remove('today-active','day-active');if(day==='today'&&activeDays==='today')btn.classList.add('today-active');else if(day!=='today'&&activeDays!=='today'&&activeDays.has(day))btn.classList.add('day-active');});}
+function setupTimePills(){document.getElementById('time-pills').addEventListener('click',function(e){var btn=e.target.closest('[data-time]');if(!btn)return;setTimeMode(btn.dataset.time);render();});}
+function setTimeMode(mode){activeTime=mode;document.getElementById('slider-row').style.display=(mode==='pick')?'block':'none';document.querySelectorAll('[data-time]').forEach(function(b){b.classList.remove('time-active','time-active-now','pick-active');});var p=document.getElementById('tpill-'+mode);if(!p)return;if(mode==='now')p.classList.add('time-active-now');else if(mode==='pick')p.classList.add('pick-active');else p.classList.add('time-active');}
+function setupSlider(){var s=document.getElementById('time-slider');s.addEventListener('input',function(){sliderValue=parseFloat(s.value);moveThumb(sliderValue);if(activeTime!=='pick')setTimeMode('pick');render();});requestAnimationFrame(function(){moveThumb(sliderValue);});}
+function moveThumb(val){var pct=((val-SLIDER_MIN)/(SLIDER_MAX-SLIDER_MIN))*100;var t=document.getElementById('slider-thumb'),l=document.getElementById('slider-label');if(t)t.style.left=pct+'%';if(l)l.textContent=fmtSlider(val);}
+function fmtSlider(val){var h=Math.floor(val),m=(val%1===0.5)?':30':'',h12=h>12?h-12:h;return h12+m+' PM';}
+function sliderTo24hr(val){var h=Math.floor(val),m=(val%1===0.5)?30:0;return h*100+m;}
+function updateBadge(bid,count,pid){var b=document.getElementById(bid),t=document.querySelector('[data-panel="'+pid+'"]');if(count>0){b.textContent=count;b.style.display='inline';if(t)t.classList.add('has-active');}else{b.style.display='none';if(t)t.classList.remove('has-active');}}
+
+// ── HEADER THEME ───────────────────────────────────────────
+function getTimeBlend(){var d=new Date(),mins=d.getHours()*60+d.getMinutes();var MS=360,ME=660,SS=720,SE=1200,ES=1260;if(mins<MS)return{morning:0,standard:0,evening:1};else if(mins<ME)return{morning:1,standard:0,evening:0};else if(mins<SS){var t=(mins-ME)/(SS-ME);return{morning:1-t,standard:t,evening:0};}else if(mins<SE)return{morning:0,standard:1,evening:0};else if(mins<ES){var t2=(mins-SE)/(ES-SE);return{morning:0,standard:1-t2,evening:t2};}else return{morning:0,standard:0,evening:1};}
+var HT={morning:{accent:'#FFE070',tbar:'#1E4A6A',d1:'#D05030',d1o:.16,d2:'#E8A820',d2o:.20},standard:{accent:'#D4953A',tbar:'#3A5C28',d1:'#D4953A',d1o:.08,d2:'#E8C4B0',d2o:.12},evening:{accent:'#F0C070',tbar:'#221830',d1:'#7A3050',d1o:.15,d2:'#D4953A',d2o:.14}};
+function hexRgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function lerpHex(a,b,t){var r1=hexRgb(a),r2=hexRgb(b);return 'rgb('+Math.round(r1[0]+(r2[0]-r1[0])*t)+','+Math.round(r1[1]+(r2[1]-r1[1])*t)+','+Math.round(r1[2]+(r2[2]-r1[2])*t)+')';}
+function blendCol(cM,cS,cE,bl){if(bl.morning>0&&bl.standard>0)return lerpHex(cM,cS,bl.standard/(bl.morning+bl.standard));if(bl.standard>0&&bl.evening>0)return lerpHex(cS,cE,bl.evening/(bl.standard+bl.evening));return bl.morning>0?cM:bl.standard>0?cS:cE;}
+function applyHeaderTheme(){var bl=getTimeBlend();var mO,sO,eO;if(bl.morning>0&&bl.standard>0){mO=bl.morning;sO=1;eO=0;}else if(bl.standard>0&&bl.evening>0){mO=0;sO=bl.standard;eO=1;}else if(bl.morning===1){mO=1;sO=1;eO=0;}else if(bl.standard===1){mO=0;sO=1;eO=0;}else{mO=0;sO=0;eO=1;}document.getElementById('hbg-morning').style.opacity=mO;document.getElementById('hbg-standard').style.opacity=sO;document.getElementById('hbg-evening').style.opacity=eO;document.getElementById('hstars-morning').style.opacity=bl.morning;document.getElementById('hstars-evening').style.opacity=bl.evening;var acc=blendCol(HT.morning.accent,HT.standard.accent,HT.evening.accent,bl);var tbg=blendCol(HT.morning.tbar,HT.standard.tbar,HT.evening.tbar,bl);document.documentElement.style.setProperty('--header-accent',acc);document.documentElement.style.setProperty('--timebar-bg',tbg);var dom=bl.morning>=bl.standard&&bl.morning>=bl.evening?'morning':bl.standard>=bl.evening?'standard':'evening';var dt=HT[dom];var d1=document.getElementById('deco-1'),d2=document.getElementById('deco-2');d1.style.background=dt.d1;d1.style.opacity=dt.d1o;d2.style.background=dt.d2;d2.style.opacity=dt.d2o;}
+
+// ── FILTERING ──────────────────────────────────────────────
+function venueMatchesDay(v){if(activeDays==='today')return v.days.indexOf(todayAbbr())>=0;return [...activeDays].some(function(d){return v.days.indexOf(d)>=0;});}
+function venueMatchesTime(v){if(activeTime==='any')return true;if(activeTime==='pick'){var t=sliderTo24hr(sliderValue);if(v.endTime<v.startTime)return t>=v.startTime||t<=v.endTime;return t>=v.startTime&&t<=v.endTime;}var def=TIME_DEFS[activeTime];return def?def.test(v.startTime,v.endTime):true;}
+function venueMatchesNeighborhood(v){if(!activeNeighborhoods.size)return true;return v.neighborhoods.some(function(n){return activeNeighborhoods.has(n);});}
+function venueMatchesDealTags(v){if(!activeDealTags.size)return true;return [...activeDealTags].every(function(t){return v.dealTags.indexOf(t)>=0;});}
+function venueMatchesVibe(v){if(!activeVibeTags.size)return true;return [...activeVibeTags].every(function(t){return v.vibe.indexOf(t)>=0;});}
+function venueMatchesSearch(v){if(!searchQuery)return true;var q=searchQuery.toLowerCase();return v.name.toLowerCase().indexOf(q)>=0||v.neighborhoods.some(function(n){return n.toLowerCase().indexOf(q)>=0;})||v.city.toLowerCase().indexOf(q)>=0||v.deals.some(function(d){return d.toLowerCase().indexOf(q)>=0;})||v.dealTags.some(function(t){return t.toLowerCase().indexOf(q)>=0;})||v.vibe.some(function(t){return t.toLowerCase().indexOf(q)>=0;});}
+function filteredVenues(){return VENUES.filter(function(v){return venueMatchesDay(v)&&venueMatchesTime(v)&&venueMatchesNeighborhood(v)&&venueMatchesDealTags(v)&&venueMatchesVibe(v)&&venueMatchesSearch(v);});}
+
+function buildHeading(){var dayText=activeDays==='today'?('on '+todayFull()):('on '+[...activeDays].join(' · '));var timeText='';if(activeTime==='pick')timeText=' at '+fmtSlider(sliderValue);else if(activeTime!=='any'){var def=TIME_DEFS[activeTime];if(def)timeText=def.label;}document.getElementById('results-heading').innerHTML='<span class="h-label">Happy Hours</span><span class="h-day"> '+dayText+'</span>'+(timeText?'<span class="h-time">'+timeText+'</span>':'');}
+function updateComboWarning(){var el=document.getElementById('combo-warning'),txt=document.getElementById('combo-text');var msg='';if(activeTime==='now'){var today=todayAbbr();if(activeDays!=='today'&&activeDays instanceof Set&&!activeDays.has(today))msg='"Happening Now" shows what\'s open at this moment - today is '+todayFull()+'. You may see zero results for other days.';}txt.textContent=msg;el.style.display=msg?'block':'none';}
+function renderChips(){var c=document.getElementById('active-chips');c.innerHTML='';function add(label,attr,val){var chip=document.createElement('div');chip.className='chip';chip.innerHTML=label+' <span class="chip-x" data-r="'+attr+'" data-v="'+val+'">&times;</span>';c.appendChild(chip);}activeNeighborhoods.forEach(function(n){add(n,'neighborhood',n);});activeDealTags.forEach(function(t){add(t,'deal',t);});activeVibeTags.forEach(function(t){add(t,'vibe',t);});c.querySelectorAll('[data-r]').forEach(function(x){x.addEventListener('click',function(){var attr=x.dataset.r,val=x.dataset.v;if(attr==='neighborhood'){activeNeighborhoods.delete(val);syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');updateBadge('badge-area',activeNeighborhoods.size,'panel-area');}if(attr==='deal'){activeDealTags.delete(val);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');}if(attr==='vibe'){activeVibeTags.delete(val);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');}render();});});}
+
+// ── RENDER ─────────────────────────────────────────────────
+function render(){
+  var venues=filteredVenues();
+  buildHeading();updateComboWarning();renderChips();updateFilterSummary();
+  document.getElementById('results-count').textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'No spots found';
+  if(mapMode){
+    updateMapMarkers(venues);
+    var bounds=leafletMap&&leafletMap.getBounds();
+    var toShow=bounds?venues.filter(function(v){return !v.lat||!v.lng||bounds.contains([v.lat,v.lng]);}):venues;
+    renderCards(toShow);
+  } else {
+    renderCards(venues);
+  }
+}
+
+function renderCards(venues){
+  var grid=document.getElementById('grid');
+  if(!venues.length){grid.innerHTML='<div class="empty"><div class="empty-icon">&#127378;</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';return;}
+  var sorted=[...venues].sort(function(a,b){var sa=getBadgeState(a),sb=getBadgeState(b);var rank=function(s){return s.type==='ending'?0:s.type==='soon'?1:2;};if(rank(sa)!==rank(sb))return rank(sa)-rank(sb);if(sa.type==='ending'&&sb.type==='ending')return sb.minsLeft-sa.minsLeft;return 0;});
+  grid.innerHTML=sorted.map(function(v,i){
+    var deals=v.deals.map(function(d){return '<div class="deal-item"><span class="deal-dot"></span><span>'+d+'</span></div>';}).join('');
+    var dtHTML=v.dealTags.map(function(t){return '<span class="tag-deal'+(activeDealTags.has(t)?' tag-active':'')+'" data-click-deal="'+t+'">'+t+'</span>';}).join('');
+    var vtHTML=v.vibe.map(function(t){return '<span class="tag-vibe'+(activeVibeTags.has(t)?' tag-active':'')+'" data-click-vibe="'+t+'">'+t+'</span>';}).join('');
+    var mapLink=v.mapsUrl?'<a class="card-link" href="'+v.mapsUrl+'" target="_blank" rel="noopener">Map &#8599;</a>':'';
+    var siteLink=v.website?'<a class="card-link" href="'+v.website+'" target="_blank" rel="noopener">Website &#8599;</a>':'';
+    return '<div class="card" data-name="'+v.name+'" style="animation-delay:'+(i*.04)+'s">'+
+      '<div style="height:5px;background:'+v.accentColor+'"></div>'+
+      '<div class="card-body">'+
+        '<div class="card-header"><div class="venue-name">'+v.name+'</div><div class="badge-slot">'+buildBadgeHTML(v)+'</div></div>'+
+        '<div class="neighborhood">'+v.neighborhoods[0]+', '+v.city+'</div>'+
+        '<div class="hours-row"><span class="hours-text">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span><span class="days-text">'+v.days.join(' · ')+'</span></div>'+
+        '<div class="deals">'+deals+'</div>'+
+      '</div>'+
+      '<div class="card-footer"><div class="tags">'+dtHTML+vtHTML+'</div><div class="card-links">'+mapLink+siteLink+'</div></div>'+
+    '</div>';
+  }).join('');
+  grid.querySelectorAll('.card-link').forEach(function(link){link.addEventListener('click',function(e){e.stopPropagation();});});
+  grid.querySelectorAll('.card').forEach(function(card){
+    card.addEventListener('click',function(){var name=card.dataset.name;openQV(name);if(mapMode){highlightMarker(name);var v=VENUES.find(function(x){return x.name===name;});if(v&&v.lat&&leafletMap)leafletMap.panTo([v.lat,v.lng]);}});
+    card.addEventListener('mouseenter',function(){if(mapMode)highlightMarker(card.dataset.name);});
+  });
+  grid.querySelectorAll('[data-click-deal]').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();toggleSet(activeDealTags,el.dataset.clickDeal);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');render();});});
+  grid.querySelectorAll('[data-click-vibe]').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();toggleSet(activeVibeTags,el.dataset.clickVibe);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});});
+  positionPanels();
+}
+
+document.getElementById('search').addEventListener('input',function(e){searchQuery=e.target.value.trim();render();});
+function updateClock(){var d=new Date(),h=d.getHours(),m=d.getMinutes();var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;document.getElementById('live-time').textContent=h12+':'+String(m).padStart(2,'0')+' '+ampm;document.getElementById('live-day').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});}
+setInterval(updateClock,10000);
+updateClock();
+loadData();
+</script>
+
+<script>
+  (function() {
+    const divider = document.getElementById('map-divider');
+    const contentArea = document.getElementById('content-area');
+    const mapPanel = document.getElementById('map-panel');
+    let isDragging = false;
+
+    divider.addEventListener('mousedown', function(e) {
+      isDragging = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isDragging) return;
+      const containerRect = contentArea.getBoundingClientRect();
+      const relativeX = e.clientX - containerRect.left;
+      const percentage = (relativeX / containerRect.width) * 100;
+
+      if (percentage > 20 && percentage < 80) {
+        mapPanel.style.flex = `0 0 ${percentage}%`;
+        if (window.leafletMap) window.leafletMap.invalidateSize();
       }
     });
 
-    function parseCSV(data) {
-      return data.map(function(r) {
-        return {
-          name: r.name ? r.name.trim() : '',
-          neighborhoods: r.neighborhood ? r.neighborhood.split('|').map(function(n){return n.trim();}).filter(Boolean) : [],
-          city: r.city ? r.city.trim() : '',
-          days: r.days ? r.days.split('|').map(function(d){return d.trim();}).filter(Boolean) : [],
-          startTime: parseInt(r.startTime, 10),
-          endTime: parseInt(r.endTime, 10),
-          deals: r.deals ? r.deals.split('|').map(function(d){return d.trim();}).filter(Boolean) : [],
-          dealTags: r.dealTags ? r.dealTags.split('|').map(function(t){return t.trim();}).filter(Boolean) : [],
-          vibe: r.vibe ? r.vibe.split('|').map(function(t){return t.trim();}).filter(Boolean) : [],
-          website: r.website ? r.website.trim() : '',
-          mapsUrl: r.mapsUrl ? r.mapsUrl.trim() : '',
-          accentColor: r.accentColor ? r.accentColor.trim() : '#3A5C28',
-          lat: parseFloat(r.lat) || null,
-          lng: parseFloat(r.lng) || null,
-          verified: r.verified ? r.verified.trim() : ''
-        };
-      }).filter(function(v){return v.name && !isNaN(v.startTime);});
-    }
-
-    function init() {
-      applyHeaderTheme(); buildAreaPanel(); buildDealPanel(); buildVibePanel();
-      setupCollapsibles(); setupDayFilters(); setupTimePills(); setupSlider();
-      setupMapToggle(); setupFAB(); setupQV(); setupFilterHandle();
-      setupScrollCollapse(); setupQVSwipe(); setupResizer();
-      positionPanels();
-      window.addEventListener('resize', function(){positionPanels(); updateContentHeight();});
-      render(); setInterval(updateAllBadges, 60000); updateClock();
-    }
-
-    function setupResizer() {
-      const resizer = document.getElementById('resizer');
-      let isDragging = false;
-      resizer.addEventListener('mousedown', function(e) {
-        isDragging = true;
-        resizer.classList.add('dragging');
-        document.body.style.cursor = 'col-resize';
-        document.body.style.userSelect = 'none';
-      });
-      document.addEventListener('mousemove', function(e) {
-        if (!isDragging) return;
-        let p = (e.clientX / window.innerWidth) * 100;
-        if (p > 20 && p < 80) {
-          document.documentElement.style.setProperty('--map-width', p + '%');
-          if (leafletMap) leafletMap.invalidateSize();
-        }
-      });
-      document.addEventListener('mouseup', function() {
-        if (isDragging) {
-          isDragging = false;
-          resizer.classList.remove('dragging');
-          document.body.style.cursor = '';
-          document.body.style.userSelect = '';
-        }
-      });
-    }
-
-    function applyHeaderTheme() {
-      var hour = new Date().getHours();
-      document.querySelectorAll('.hbg, .hstars').forEach(function(el){el.classList.remove('active');});
-      var bar = document.querySelector('.time-bar');
-      if (hour >= 6 && hour < 11) {
-        document.getElementById('hbg-morning').classList.add('active');
-        document.getElementById('hstars-morning').classList.add('active');
-        bar.style.backgroundColor = '#2A5A7A';
-      } else if (hour >= 11 && hour < 17) {
-        document.getElementById('hbg-standard').classList.add('active');
-        bar.style.backgroundColor = 'var(--timebar-bg)';
-      } else {
-        document.getElementById('hbg-evening').classList.add('active');
-        document.getElementById('hstars-evening').classList.add('active');
-        bar.style.backgroundColor = '#1A1428';
+    document.addEventListener('mouseup', function() {
+      if (isDragging) {
+        isDragging = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
       }
-    }
+    });
+  })();
+</script>
 
-    function updateClock() {
-      var d = new Date(), h = d.getHours(), m = d.getMinutes();
-      var ampm = h >= 12 ? 'PM' : 'AM', h12 = h > 12 ? h - 12 : h === 0 ? 12 : h;
-      document.getElementById('live-time').textContent = h12 + (m ? ':'+String(m).padStart(2,'0') : '') + ' ' + ampm;
-      document.getElementById('live-day').textContent = DAY_FULL[d.getDay()];
-    }
-
-    function nowMinutes() { var d = new Date(); return d.getHours() * 100 + d.getMinutes(); }
-    function todayAbbr() { return DAY_NAMES[new Date().getDay()]; }
-
-    function isOpenNowRange(s, e, test) {
-      var n = test || nowMinutes();
-      if (e < s) { return n >= s || n <= e; }
-      return n >= s && n <= e;
-    }
-
-    function overlaps(vS, vE, wS, wE) { return vS <= wE && vE >= wS; }
-    function overlapsLateNight(vS, vE) { return vS >= 2100 || vE < 600 || vE < vS; }
-
-    function filteredVenues() {
-      var d = (activeDays === 'today') ? todayAbbr() : activeDays;
-      var q = searchQuery.toLowerCase();
-      var matches = VENUES.filter(function(v) {
-        var dayMatch = (d === 'all' || v.days.includes(d));
-        var searchMatch = !q || v.name.toLowerCase().includes(q) || v.neighborhoods.some(function(n){return n.toLowerCase().includes(q);}) || v.deals.some(function(dl){return dl.toLowerCase().includes(q);});
-        var nhMatch = activeNeighborhoods.size === 0 || v.neighborhoods.some(function(n){return activeNeighborhoods.has(n);});
-        var dlMatch = activeDealTags.size === 0 || v.dealTags.some(function(t){return activeDealTags.has(t);});
-        var vbMatch = activeVibeTags.size === 0 || v.vibe.some(function(t){return activeVibeTags.has(t);});
-        var tMatch = false;
-        if (activeTime === 'any') tMatch = true;
-        else if (activeTime === 'now') tMatch = isOpenNowRange(v.startTime, v.endTime);
-        else if (activeTime === 'morning') tMatch = v.startTime < 1200;
-        else if (activeTime === 'lunch') tMatch = overlaps(v.startTime, v.endTime, 1100, 1400);
-        else if (activeTime === 'late') tMatch = overlapsLateNight(v.startTime, v.endTime);
-        else if (activeTime === 'pick') tMatch = isOpenNowRange(v.startTime, v.endTime, sliderValue);
-        return dayMatch && searchMatch && nhMatch && dlMatch && vbMatch && tMatch;
-      });
-      if (matches.length === 0 && (activeNeighborhoods.size > 0 || activeDealTags.size > 0 || activeVibeTags.size > 0)) {
-        document.getElementById('combo-warning').style.display = 'block';
-        return VENUES.filter(function(v) {
-          var dMatch = (d === 'all' || v.days.includes(d));
-          var tMatch = false;
-          if (activeTime === 'any') tMatch = true;
-          else if (activeTime === 'now') tMatch = isOpenNowRange(v.startTime, v.endTime);
-          else if (activeTime === 'pick') tMatch = isOpenNowRange(v.startTime, v.endTime, sliderValue);
-          else tMatch = true;
-          return dMatch && tMatch;
-        }).slice(0, 12);
-      }
-      document.getElementById('combo-warning').style.display = 'none';
-      return matches;
-    }
-
-    function formatTime(t) {
-      var h = Math.floor(t / 100), m = t % 100;
-      var ampm = h >= 12 ? 'PM' : 'AM', h12 = h > 12 ? h - 12 : h === 0 ? 12 : h;
-      return h12 + (m ? ':'+String(m).padStart(2,'0') : '') + ' ' + ampm;
-    }
-
-    function render() {
-      var f = filteredVenues();
-      var grid = document.getElementById('grid');
-      grid.innerHTML = '';
-      if (f.length === 0) {
-        grid.innerHTML = '<div style="grid-column:1/-1;padding:4rem 2rem;text-align:center;color:var(--ink-lt);opacity:.6">No happy hours found for these filters. Try adjusting your time or neighborhood!</div>';
-      } else {
-        f.forEach(function(v) { grid.appendChild(createCard(v)); });
-      }
-      document.getElementById('results-count').textContent = f.length + ' spot' + (f.length===1?'':'s');
-      var dayText = (activeDays==='today') ? 'Today' : (activeDays==='all'?'Any Day':activeDays);
-      document.getElementById('h-day').textContent = dayText;
-      var timeText = (activeTime==='pick') ? formatTime(sliderValue) : (activeTime==='any'?'Any Time':activeTime);
-      document.getElementById('h-time').textContent = '@ ' + timeText;
-      updateSummaryText();
-      updateMapMarkers(f);
-      updateChips();
-    }
-
-    function createCard(v) {
-      var card = document.createElement('div');
-      card.className = 'card'; card.dataset.name = v.name;
-      var status = '', soon = '';
-      if (isOpenNowRange(v.startTime, v.endTime)) {
-        status = '<span class="status-badge" style="background:var(--green);color:#fff">Open Now</span>';
-      } else {
-        var now = nowMinutes();
-        if (v.startTime > now && v.startTime - now <= 100) { status = '<span class="status-badge soon">Starts Soon</span>'; }
-        else { status = '<span class="status-badge" style="background:var(--cream-dk);color:var(--ink-lt)">Closed</span>'; }
-      }
-      var dealsHTML = v.deals.slice(0,3).map(function(d){return '<div class="deal-item"><span class="deal-dot"></span><span>'+d+'</span></div>';}).join('');
-      var dtHTML = v.dealTags.map(function(t){return '<span class="tag-deal'+(activeDealTags.has(t)?' tag-active':'')+'" data-click-deal="'+t+'">'+t+'</span>';}).join('');
-      var vtHTML = v.vibe.map(function(t){return '<span class="tag-vibe'+(activeVibeTags.has(t)?' tag-active':'')+'" data-click-vibe="'+t+'">'+t+'</span>';}).join('');
-      card.innerHTML = '<div class="card-body"><div class="card-header"><div class="venue-name">'+v.name+'</div>'+status+'</div><div class="neighborhood">'+v.neighborhoods[0]+'</div><div class="hours-row"><span class="hours-text">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span><span class="days-text">'+v.days.join(' &middot; ')+'</span></div><div class="deals">'+dealsHTML+'</div></div><div class="card-footer"><div class="tags">'+dtHTML+vtHTML+'</div></div>';
-      card.addEventListener('click', function(e){
-        if(e.target.dataset.clickDeal || e.target.dataset.clickVibe) return;
-        var name = card.dataset.name; openQV(name);
-        if (mapMode) {
-          highlightMarker(name);
-          var v = VENUES.find(function(x){return x.name===name;});
-          if (v && v.lat && leafletMap) leafletMap.panTo([v.lat, v.lng]);
-        }
-      });
-      card.addEventListener('mouseenter', function(){ if (mapMode) highlightMarker(card.dataset.name); });
-      card.querySelectorAll('[data-click-deal]').forEach(function(el){
-        el.addEventListener('click', function(e){
-          e.stopPropagation(); toggleSet(activeDealTags, el.dataset.clickDeal);
-          syncPills(document.getElementById('deal-pills'), 'deal', activeDealTags, 'all');
-          updateBadge('badge-deals', activeDealTags.size, 'panel-deals'); render();
-        });
-      });
-      card.querySelectorAll('[data-click-vibe]').forEach(function(el){
-        el.addEventListener('click', function(e){
-          e.stopPropagation(); toggleSet(activeVibeTags, el.dataset.clickVibe);
-          syncPills(document.getElementById('vibe-pills'), 'vibe', activeVibeTags, 'all');
-          updateBadge('badge-vibe', activeVibeTags.size, 'panel-vibe'); render();
-        });
-      });
-      return card;
-    }
-
-    function initMapOnce() {
-      if (leafletMap) return;
-      leafletMap = L.map('map', {zoomControl: false}).setView(MAP_CENTER, MAP_ZOOM);
-      L.control.zoom({position: 'bottomright'}).addTo(leafletMap);
-      L.tileLayer(TILE_URL, {attribution: TILE_ATTR}).addTo(leafletMap);
-      leafletMap.on('moveend', onMapMoved);
-    }
-
-    function updateMapMarkers(venues) {
-      if (!leafletMap) return;
-      var visibleNames = new Set(venues.map(function(v){return v.name;}));
-      Object.keys(markers).forEach(function(name){
-        if (!visibleNames.has(name)) { leafletMap.removeLayer(markers[name]); delete markers[name]; }
-      });
-      venues.forEach(function(v) {
-        if (!v.lat || !v.lng || markers[v.name]) return;
-        var pin = L.divIcon({className:'', html:'<div class="map-pin" id="marker-'+v.name.replace(/\s+/g,'-')+'" style="background:'+v.accentColor+'"></div>', iconSize:[24,24], iconAnchor:[12,24]});
-        var m = L.marker([v.lat, v.lng], {icon: pin}).addTo(leafletMap);
-        m.on('click', function(){ openQV(v.name); highlightMarker(v.name); });
-        markers[v.name] = m;
-      });
-    }
-
-    function highlightMarker(name) {
-      if (highlightedVenue && markers[highlightedVenue]) {
-        var elOld = document.getElementById('marker-'+highlightedVenue.replace(/\s+/g,'-'));
-        if (elOld) elOld.style.transform = 'rotate(-45deg) scale(1)';
-      }
-      highlightedVenue = name;
-      var elNew = document.getElementById('marker-'+name.replace(/\s+/g,'-'));
-      if (elNew) elNew.style.transform = 'rotate(-45deg) scale(1.3)';
-      document.querySelectorAll('.card').forEach(function(c){
-        c.classList.toggle('map-highlighted', c.dataset.name === name);
-      });
-    }
-
-    function onMapMoved() {
-      if (!mapMode || !leafletMap) return;
-      var bounds = leafletMap.getBounds();
-      document.querySelectorAll('.card').forEach(function(c) {
-        var v = VENUES.find(function(x){return x.name===c.dataset.name;});
-        if (v && v.lat) { c.style.display = bounds.contains([v.lat, v.lng]) ? 'flex' : 'none'; }
-      });
-    }
-
-    function toggleMapMode() {
-      mapMode = !mapMode;
-      var content = document.getElementById('content-area');
-      content.classList.toggle('map-active', mapMode);
-      document.getElementById('map-toggle-btn').classList.toggle('active', mapMode);
-      document.getElementById('map-toggle-btn').textContent = mapMode ? 'List view' : 'Map view';
-      document.getElementById('fab').textContent = mapMode ? 'List' : 'Map';
-      document.body.classList.toggle('map-mode-active', mapMode);
-      if (mapMode) {
-        initMapOnce();
-        setTimeout(function(){ leafletMap.invalidateSize(); if(leafletMap) onMapMoved(); }, 300);
-      } else {
-        document.querySelectorAll('.card').forEach(function(c){c.style.display='flex';});
-      }
-      positionPanels();
-    }
-
-    function openQV(name) {
-      var v = VENUES.find(function(x){return x.name === name;}); if (!v) return;
-      document.getElementById('qv-accent').style.backgroundColor = v.accentColor;
-      var status = isOpenNowRange(v.startTime, v.endTime) ? '<span class="status-badge" style="background:var(--green);color:#fff">Open Now</span>' : '<span class="status-badge" style="background:var(--cream-dk);color:var(--ink-lt)">Closed</span>';
-      var dealsHTML = v.deals.map(function(d){return '<div class="qv-deal-item"><span class="qv-deal-dot"></span><span>'+d+'</span></div>';}).join('');
-      var tagsHTML = v.dealTags.map(function(t){return '<span class="tag-deal">'+t+'</span>';}).join('') + v.vibe.map(function(t){return '<span class="tag-vibe">'+t+'</span>';}).join('');
-      var linksHTML = '';
-      if (v.website) linksHTML += '<a href="'+v.website+'" target="_blank" class="qv-link primary">Visit Website</a>';
-      if (v.mapsUrl) linksHTML += '<a href="'+v.mapsUrl+'" target="_blank" class="qv-link secondary">Get Directions</a>';
-      var verifiedHTML = v.verified ? '<div class="qv-verified"><span>✓</span> Verified '+v.verified+'</div>' : '';
-      var mapHTML = (v.lat && v.lng) ? '<div class="qv-map-wrap" id="qv-map"></div>' : '<div class="qv-map-placeholder">Location details arriving soon.</div>';
-      document.getElementById('qv-body').innerHTML = '<div class="qv-name">'+v.name+'</div><div class="qv-neighborhood">'+v.neighborhoods.join(', ')+'</div><div class="qv-hours-row"><span class="qv-hours">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span><span class="qv-days">'+v.days.join(' &middot; ')+'</span>'+status+'</div>'+verifiedHTML+'<div class="qv-section-label">Happy Hour Deals</div><div class="qv-deals">'+dealsHTML+'</div><div class="qv-section-label">Vibe & Info</div><div class="qv-tags">'+tagsHTML+'</div><div class="qv-links">'+linksHTML+'</div>'+mapHTML;
-      document.getElementById('qv-backdrop').classList.add('open');
-      document.getElementById('qv-sheet').classList.add('open');
-      if (v.lat && v.lng) {
-        setTimeout(function(){
-          var qm = L.map('qv-map', {zoomControl:false, attributionControl:false}).setView([v.lat, v.lng], 15);
-          L.tileLayer(TILE_URL).addTo(qm);
-          L.marker([v.lat, v.lng], {icon: L.divIcon({className:'', html:'<div class="map-pin" style="background:'+v.accentColor+'"></div>', iconSize:[24,24], iconAnchor:[12,24]})}).addTo(qm);
-        }, 100);
-      }
-    }
-
-    function closeQV() {
-      document.getElementById('qv-backdrop').classList.remove('open');
-      document.getElementById('qv-sheet').classList.remove('open');
-    }
-
-    function setupQV() {
-      document.getElementById('qv-backdrop').addEventListener('click', closeQV);
-      document.getElementById('qv-close').addEventListener('click', closeQV);
-    }
-
-    function setupQVSwipe() {
-      var sheet = document.getElementById('qv-sheet'), startY = 0, currentY = 0;
-      sheet.addEventListener('touchstart', function(e){ startY = e.touches[0].clientY; }, {passive:true});
-      sheet.addEventListener('touchmove', function(e){
-        currentY = e.touches[0].clientY;
-        var diff = currentY - startY;
-        if (diff > 0 && sheet.scrollTop <= 0) { sheet.style.transform = 'translateY('+diff+'px)'; }
-      }, {passive:true});
-      sheet.addEventListener('touchend', function(e){
-        var diff = currentY - startY;
-        if (diff > 100 && sheet.scrollTop <= 0) { closeQV(); }
-        sheet.style.transform = '';
-      });
-    }
-
-    function setupDayFilters() {
-      document.getElementById('day-filters').addEventListener('click', function(e) {
-        var btn = e.target.closest('[data-day]'); if (!btn) return;
-        activeDays = btn.dataset.day;
-        document.querySelectorAll('#day-filters .pill').forEach(function(p){ p.classList.remove('today-active'); });
-        btn.classList.add('today-active'); render();
-      });
-    }
-
-    function setupTimePills() {
-      document.getElementById('time-pills').addEventListener('click', function(e) {
-        var btn = e.target.closest('[data-time]'); if (!btn) return;
-        activeTime = btn.dataset.time;
-        document.querySelectorAll('#time-pills .pill').forEach(function(p){ p.classList.remove('time-active','time-active-now','pick-active'); });
-        if (activeTime === 'now') btn.classList.add('time-active-now');
-        else if (activeTime === 'pick') btn.classList.add('pick-active');
-        else btn.classList.add('time-active');
-        document.getElementById('slider-row').style.display = (activeTime === 'pick' ? 'block' : 'none');
-        positionPanels(); render();
-      });
-    }
-
-    function setupSlider() {
-      var s = document.getElementById('time-slider'), t = document.getElementById('slider-thumb'), l = document.getElementById('thumb-label');
-      s.addEventListener('input', function() {
-        sliderValue = parseInt(s.value);
-        var pct = (sliderValue - 1400) / (2100 - 1400) * 100;
-        t.style.left = pct + '%'; l.textContent = formatTime(sliderValue);
-        if (activeTime === 'pick') render();
-      });
-    }
-
-    function setupCollapsibles() {
-      document.querySelectorAll('.collapsible-toggle').forEach(function(btn) {
-        btn.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var panelId = 'panel-' + btn.id.split('-')[1], panel = document.getElementById(panelId);
-          var isOpen = panel.classList.contains('open');
-          document.querySelectorAll('.collapsible-panel').forEach(function(p){ p.classList.remove('open'); });
-          document.querySelectorAll('.collapsible-toggle').forEach(function(t){ t.classList.remove('open'); });
-          if (!isOpen) { panel.classList.add('open'); btn.classList.add('open'); }
-        });
-      });
-      document.addEventListener('click', function() {
-        document.querySelectorAll('.collapsible-panel').forEach(function(p){ p.classList.remove('open'); });
-        document.querySelectorAll('.collapsible-toggle').forEach(function(t){ t.classList.remove('open'); });
-      });
-      document.querySelectorAll('.collapsible-panel').forEach(function(p){ p.addEventListener('click', function(e){ e.stopPropagation(); }); });
-    }
-
-    function buildAreaPanel() {
-      var areas = {};
-      VENUES.forEach(function(v){
-        v.neighborhoods.forEach(function(n){ if (!areas[n]) areas[n] = v.city; });
-      });
-      var cities = ['Minneapolis', 'Saint Paul'];
-      var container = document.getElementById('area-pills');
-      cities.forEach(function(city) {
-        var group = document.createElement('div'); group.style.width = '100%';
-        var t = document.createElement('button'); t.className = 'city-toggle open'; t.innerHTML = city + ' <span class="city-chevron">▾</span>';
-        var pWrap = document.createElement('div'); pWrap.className = 'city-pills';
-        t.addEventListener('click', function(){ t.classList.toggle('open'); pWrap.classList.toggle('collapsed'); });
-        Object.keys(areas).sort().forEach(function(n) {
-          if (areas[n] === city) { pWrap.appendChild(createPill(n, 'area', activeNeighborhoods)); }
-        });
-        group.appendChild(t); group.appendChild(pWrap); container.appendChild(group);
-      });
-    }
-
-    function buildDealPanel() {
-      var tags = new Set(); VENUES.forEach(function(v){ v.dealTags.forEach(function(t){ tags.add(t); }); });
-      var container = document.getElementById('deal-pills');
-      Array.from(tags).sort().forEach(function(t){ container.appendChild(createPill(t, 'deal', activeDealTags)); });
-    }
-
-    function buildVibePanel() {
-      var tags = new Set(); VENUES.forEach(function(v){ v.vibe.forEach(function(t){ tags.add(t); }); });
-      var container = document.getElementById('vibe-pills');
-      Array.from(tags).sort().forEach(function(t){ container.appendChild(createPill(t, 'vibe', activeVibeTags)); });
-    }
-
-    function createPill(label, type, set) {
-      var p = document.createElement('div'); p.className = 'pill'; p.textContent = label;
-      p.addEventListener('click', function() {
-        toggleSet(set, label); p.classList.toggle('tag-active', set.has(label));
-        var badgeId = 'badge-' + (type==='area'?'area':type==='deal'?'deals':'vibe');
-        var panelId = 'panel-' + (type==='area'?'area':type==='deal'?'deals':'vibe');
-        updateBadge(badgeId, set.size, panelId); render();
-      });
-      return p;
-    }
-
-    function toggleSet(set, val) { if (set.has(val)) set.delete(val); else set.add(val); }
-
-    function updateBadge(id, count, panelId) {
-      var b = document.getElementById(id), t = b.closest('.collapsible-toggle');
-      b.textContent = count; b.style.display = count > 0 ? 'inline-block' : 'none';
-      if (t) t.classList.toggle('has-active', count > 0);
-    }
-
-    function syncPills(container, type, set, scope) {
-      container.querySelectorAll('.pill').forEach(function(p){ p.classList.toggle('tag-active', set.has(p.textContent)); });
-    }
-
-    function updateChips() {
-      var c = document.getElementById('active-chips'); c.innerHTML = '';
-      activeNeighborhoods.forEach(function(n){ c.appendChild(createChip(n, activeNeighborhoods, 'area')); });
-      activeDealTags.forEach(function(t){ c.appendChild(createChip(t, activeDealTags, 'deal')); });
-      activeVibeTags.forEach(function(t){ c.appendChild(createChip(t, activeVibeTags, 'vibe')); });
-    }
-
-    function createChip(label, set, type) {
-      var chip = document.createElement('div'); chip.className = 'chip';
-      chip.innerHTML = label + ' <span class="chip-x">&times;</span>';
-      chip.querySelector('.chip-x').addEventListener('click', function(){
-        set.delete(label);
-        var badgeId = 'badge-' + (type==='area'?'area':type==='deal'?'deals':'vibe');
-        var panelId = 'panel-' + (type==='area'?'area':type==='deal'?'deals':'vibe');
-        var containerId = (type==='area'?'area-pills':type==='deal'?'deal-pills':'vibe-pills');
-        updateBadge(badgeId, set.size, panelId);
-        syncPills(document.getElementById(containerId), type, set, 'all'); render();
-      });
-      return chip;
-    }
-
-    function updateSummaryText() {
-      var day = (activeDays==='today') ? 'Today' : (activeDays==='all'?'Any Day':activeDays);
-      var time = (activeTime==='pick') ? formatTime(sliderValue) : (activeTime==='any'?'Any Time':activeTime);
-      var loc = activeNeighborhoods.size > 0 ? Array.from(activeNeighborhoods).join(', ') : 'All Areas';
-      document.getElementById('summary-text').innerHTML = '<strong>' + day + '</strong> &middot; ' + time + ' &middot; ' + loc;
-    }
-
-    function updateAllBadges() {
-      updateBadge('badge-area', activeNeighborhoods.size, 'panel-area');
-      updateBadge('badge-deals', activeDealTags.size, 'panel-deals');
-      updateBadge('badge-vibe', activeVibeTags.size, 'panel-vibe');
-    }
-
-    function setupMapToggle() { document.getElementById('map-toggle-btn').addEventListener('click', toggleMapMode); }
-    function setupFAB() { document.getElementById('fab').addEventListener('click', toggleMapMode); }
-
-    function positionPanels() {
-      var bar = document.getElementById('filters-wrap'); if (!bar) return;
-      var bottom = bar.getBoundingClientRect().bottom;
-      document.documentElement.style.setProperty('--filter-bar-h', bottom + 'px');
-      document.querySelectorAll('.collapsible-panel').forEach(function(p){ p.style.top = bottom + 'px'; });
-    }
-
-    function setupScrollCollapse() {
-      var wrap = document.getElementById('filters-wrap'), sum = document.getElementById('filter-summary-bar');
-      window.addEventListener('scroll', function() {
-        if (window.innerWidth < 900 && mapMode) return;
-        var threshold = 180;
-        if (window.scrollY > threshold && !scrollCollapsed) { wrap.classList.add('scroll-collapsed'); scrollCollapsed = true; positionPanels(); }
-        else if (window.scrollY <= threshold && scrollCollapsed) { wrap.classList.remove('scroll-collapsed'); scrollCollapsed = false; positionPanels(); }
-      });
-      sum.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
-    }
-
-    function setupFilterHandle() {
-      var h = document.getElementById('filter-handle'), wrap = document.getElementById('filters-wrap');
-      h.addEventListener('click', function(){
-        filterCollapsed = !filterCollapsed; wrap.classList.toggle('map-collapsed', filterCollapsed);
-        document.getElementById('handle-label').textContent = filterCollapsed ? 'Show Filters' : 'Hide Filters';
-        setTimeout(positionPanels, 300);
-      });
-    }
-
-    function updateContentHeight() {
-      if (mapMode && leafletMap) {
-        var h = window.innerHeight - parseInt(getComputedStyle(document.documentElement).getPropertyValue('--filter-bar-h'));
-        document.getElementById('map').style.height = h + 'px'; leafletMap.invalidateSize();
-      }
-    }
-
-    document.getElementById('search').addEventListener('input', function(e){ searchQuery = e.target.value.trim(); render(); });
-    setInterval(updateClock, 1000);
-  </script>
 </body>
 </html>
