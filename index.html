@@ -141,14 +141,7 @@
     /* ── MAP LAYOUT ─────────────────────────────────────────── */
     .content-area { max-width:1400px; margin:0 auto; }
     .map-panel { display:none; }
-    @media (min-width:900px) {
-      .content-area.map-active { display:flex; align-items:flex-start; }
-      .content-area.map-active .map-panel { display: block; flex: 0 0 50%; }
-      .content-area.map-active .list-panel { 
-        flex: 1;
-        min-width: 0;
-        overflow-y: auto;}
-    }
+  
     @media (max-width:899px) {
       .content-area.map-active .map-panel { display:block; position:fixed; inset:var(--filter-bar-h,60px) 0 80px; z-index:50; }
       .content-area.map-active .list-panel { display:none; }
@@ -187,31 +180,35 @@
 
       /* 2. Update the handle (the ::after pseudo-element) */
       .map-divider::after {
-        content: "";
-        width: 4px;
-        height: 32px;
+        content: "· · ·";
         position: absolute;
-        top: 50vh; /* center in viewport */
+        top: 50vh;
         left: 50%;
-        transform: translate(-50%, -50%);
-        background: transparent;
-        border-left: 2px solid var(--ink-lt);
-        border-right: 2px solid var(--ink-lt);
-        opacity: 0.2;
+        transform: translate(-50%, -50%) rotate(90deg);
+        color: var(--ink-lt);
+        font-size: 18px;
+        letter-spacing: 2px;
+        opacity: 0.3;
         transition: opacity 0.2s;
+        white-space: nowrap;
+        line-height: 1;
       }
 
-    .map-divider:hover::after {
-      opacity: 0.5;
-    }
+      .map-divider:hover::after,
+      .map-divider.dragging::after {
+        opacity: 0.8;
+      }
 
     @media (min-width:900px) {
+      body.map-mode-active {
+        overflow: hidden;
+      }
+
       .content-area.map-active { 
         display: flex; 
-        align-items: stretch; /* Change from flex-start to stretch */
+        align-items: stretch;
         height: calc(100vh - var(--filter-bar-h, 60px));
         overflow: hidden; 
-        
       }
       
       .content-area.map-active .map-divider { display: flex; }
@@ -996,9 +993,9 @@ loadData();
 
     divider.addEventListener('mousedown', function(e) {
       isDragging = true;
+      divider.classList.add('dragging');
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
-      // Disable card animations while dragging
       if (grid) grid.classList.add('no-anim');
       e.preventDefault();
     });
@@ -1006,7 +1003,6 @@ loadData();
     document.addEventListener('mousemove', function(e) {
       if (!isDragging) return;
       pendingX = e.clientX;
-      // Only schedule one frame at a time
       if (rafId) return;
       rafId = requestAnimationFrame(function() {
         rafId = null;
@@ -1015,7 +1011,6 @@ loadData();
         const percentage = (relativeX / containerRect.width) * 100;
         if (percentage > 20 && percentage < 80) {
           mapPanel.style.flex = '0 0 ' + percentage + '%';
-          // leafletMap is defined in the main script
           if (typeof leafletMap !== 'undefined' && leafletMap) {
             leafletMap.invalidateSize();
           }
@@ -1026,12 +1021,11 @@ loadData();
     document.addEventListener('mouseup', function() {
       if (!isDragging) return;
       isDragging = false;
+      divider.classList.remove('dragging');
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      // Re-enable card animations
       if (grid) grid.classList.remove('no-anim');
-      // Final invalidate after drag ends
       if (typeof leafletMap !== 'undefined' && leafletMap) {
         leafletMap.invalidateSize();
       }
