@@ -172,8 +172,8 @@
 
     /* Desktop Map Divider */
     .map-divider {
-      display: none;
-      width: 12px;
+      display: none; /* Stay hidden until map-active */
+      width: 14px;
       height: auto;
       background: var(--cream);
       border-left: 1px solid var(--cream-dk);
@@ -182,27 +182,30 @@
       position: relative;
       z-index: 60;
       flex-shrink: 0;
+      /* Centering logic */
       align-items: center;
       justify-content: center;
     }
     .map-divider::after {
       content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       width: 4px;
-      height: 40px;
-      background: var(--ink-lt);
-      border-radius: 2px;
+      height: 32px;
+      position: sticky;
+      top: 50%;
+      /* This creates the "double line" effect using a CSS gradient */
+      background: transparent;
+      border-left: 2px solid var(--ink-lt);
+      border-right: 2px solid var(--ink-lt);
       opacity: 0.15;
-    }
-    @media (min-width: 900px) {
-      .content-area.map-active .map-divider { display: flex; }
+      transition: opacity 0.2s;
     }
 
     .map-divider:hover::after {
-      opacity: 0.4;
+      opacity: 0.5;
+    }
+
+    @media (min-width: 900px) {
+      .content-area.map-active .map-divider { display: flex; }
     }
 
     /* ── CARD GRID ──────────────────────────────────────────── */
