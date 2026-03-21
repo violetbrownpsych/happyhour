@@ -190,16 +190,14 @@
         content: "";
         width: 4px;
         height: 32px;
-        position: sticky; /* Keeps it in view */
-        top: 50%;         /* Places it in the vertical middle of the viewport */
-        display: block;   /* Ensures it renders correctly */
-        margin: 0 auto;   /* Centers it horizontally within the 14px bar */
-      
-        /* Your double line styling */
+        position: absolute;
+        top: 50vh; /* center in viewport */
+        left: 50%;
+        transform: translate(-50%, -50%);
         background: transparent;
         border-left: 2px solid var(--ink-lt);
         border-right: 2px solid var(--ink-lt);
-        opacity: 0.15;
+        opacity: 0.2;
         transition: opacity 0.2s;
       }
 
@@ -211,14 +209,26 @@
       .content-area.map-active { 
         display: flex; 
         align-items: stretch; /* Change from flex-start to stretch */
-        height: calc(100vh - 60px); /* Adjust '60px' to the height of your sticky header */
+        height: calc(100vh - var(--filter-bar-h, 60px));
         overflow: hidden; 
+        
       }
       
-      .content-area.map-active .list-panel { 
+      .content-area.map-active .map-divider { display: flex; }
+
+      .content-area.map-active .map-panel {
+        display: block;
+        position: sticky;
+        top: 0;
+        height: calc(100vh - var(--filter-bar-h, 200px));
+        flex-shrink: 0;
+      }
+
+      .content-area.map-active .list-panel {
         flex: 1;
         min-width: 0;
-        overflow-y: auto; /* This allows the list to scroll while the divider stays put */
+        overflow-y: auto;
+        height: calc(100vh - var(--filter-bar-h, 200px));
       }
     }
 
@@ -231,6 +241,10 @@
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
     .card-body { padding:1.2rem 1.3rem; flex:1; }
     .card-header { display:flex; justify-content:space-between; align-items:flex-start; gap:.5rem; }
+    .grid.no-anim .card {
+      animation: none !important;
+      transition: none !important;
+    }
     .venue-name { font-family:'Playfair Display',serif; font-size:1.12rem; font-weight:600; color:var(--ink); line-height:1.25; }
     .status-badge { flex-shrink:0; font-size:.63rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:.22rem .65rem; border-radius:99px; white-space:nowrap; transition:background-color 1s ease,color 1s ease; }
     .status-badge.soon { background:#FEF3C7; color:#92400E; }
@@ -975,31 +989,51 @@ loadData();
     const divider = document.getElementById('map-divider');
     const contentArea = document.getElementById('content-area');
     const mapPanel = document.getElementById('map-panel');
+    const grid = document.getElementById('grid');
     let isDragging = false;
+    let rafId = null;
+    let pendingX = 0;
 
     divider.addEventListener('mousedown', function(e) {
       isDragging = true;
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
+      // Disable card animations while dragging
+      if (grid) grid.classList.add('no-anim');
+      e.preventDefault();
     });
 
     document.addEventListener('mousemove', function(e) {
       if (!isDragging) return;
-      const containerRect = contentArea.getBoundingClientRect();
-      const relativeX = e.clientX - containerRect.left;
-      const percentage = (relativeX / containerRect.width) * 100;
-
-      if (percentage > 20 && percentage < 80) {
-        mapPanel.style.flex = `0 0 ${percentage}%`;
-        if (window.leafletMap) window.leafletMap.invalidateSize();
-      }
+      pendingX = e.clientX;
+      // Only schedule one frame at a time
+      if (rafId) return;
+      rafId = requestAnimationFrame(function() {
+        rafId = null;
+        const containerRect = contentArea.getBoundingClientRect();
+        const relativeX = pendingX - containerRect.left;
+        const percentage = (relativeX / containerRect.width) * 100;
+        if (percentage > 20 && percentage < 80) {
+          mapPanel.style.flex = '0 0 ' + percentage + '%';
+          // leafletMap is defined in the main script
+          if (typeof leafletMap !== 'undefined' && leafletMap) {
+            leafletMap.invalidateSize();
+          }
+        }
+      });
     });
 
     document.addEventListener('mouseup', function() {
-      if (isDragging) {
-        isDragging = false;
-        document.body.style.cursor = '';
-        document.body.style.userSelect = '';
+      if (!isDragging) return;
+      isDragging = false;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      // Re-enable card animations
+      if (grid) grid.classList.remove('no-anim');
+      // Final invalidate after drag ends
+      if (typeof leafletMap !== 'undefined' && leafletMap) {
+        leafletMap.invalidateSize();
       }
     });
   })();
