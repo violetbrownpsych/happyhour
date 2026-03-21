@@ -13,196 +13,89 @@
       --cream:#FAF6EF; --cream-dk:#F0E9DC; --green:#243D1A; --green-lt:#3A5C28;
       --sienna:#C4622D; --amber:#D4953A; --berry:#7A3050; --blush:#E8C4B0;
       --ink:#1A1410; --ink-lt:#5A4A3A; --card:#FFFFFF; --shadow:rgba(36,61,26,.10);
-      --radius:14px; --header-accent:#D4953A; --timebar-bg:#3A5C28;
-      --deal-tag-bg:#FDF0E8; --deal-tag-border:#E8C4A0; --deal-tag-text:#7A3A18;
-      --vibe-tag-bg:#EAF0E4; --vibe-tag-border:#B8CCA8; --vibe-tag-text:#2E4A22;
-      --map-width: 45%; /* Default map width */
+      --radius:14px; --map-width: 45%; 
+      --filter-h: 180px; /* Initial Height */
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-    html { scroll-behavior:smooth; overflow-x: hidden; }
-    body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--ink); min-height:100vh; overflow-x: hidden; }
-    body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); }
-
-    /* ── HEADER ────────────────────────────────────────────── */
-    header { position:relative; background:#1A1428; overflow:hidden; }
-    .hbg,.hstars { position:absolute; inset:0; opacity:0; }
-    .hstars { pointer-events:none; z-index:1; }
-    #hbg-morning { background-color:#2A5A7A; background-image:radial-gradient(ellipse 140% 55% at 50% -5%,#4A90B8,transparent),radial-gradient(ellipse 120% 70% at 50% 30%,rgba(70,140,185,.55),transparent),radial-gradient(ellipse 110% 50% at 50% 78%,rgba(210,75,55,.70),transparent),radial-gradient(ellipse 100% 50% at 50% 125%,rgba(220,130,20,.95),transparent),radial-gradient(ellipse 55% 45% at 6% 85%,rgba(200,80,55,.50),transparent),radial-gradient(ellipse 50% 38% at 96% 88%,rgba(210,140,20,.55),transparent); }
-    #hstars-morning { background-image:radial-gradient(1px 1px at 12% 12%,rgba(255,245,210,.50),transparent),radial-gradient(1.5px 1.5px at 45% 8%,rgba(255,245,210,.55),transparent),radial-gradient(1px 1px at 72% 15%,rgba(255,245,210,.40),transparent),radial-gradient(1px 1px at 28% 20%,rgba(255,245,210,.30),transparent),radial-gradient(1px 1px at 86% 10%,rgba(255,245,210,.35),transparent),radial-gradient(1px 1px at 58% 22%,rgba(255,245,210,.25),transparent); }
-    #hbg-standard { background-color:#243D1A; background-image:radial-gradient(ellipse 80% 60% at 50% 110%,#3A5C28,transparent),radial-gradient(ellipse 40% 40% at 20% 20%,rgba(212,149,58,.18),transparent),radial-gradient(ellipse 30% 30% at 80% 10%,rgba(122,48,80,.22),transparent); }
-    #hbg-evening { background-color:#1A1428; background-image:radial-gradient(ellipse 100% 80% at 50% 110%,#2A1E3E,transparent),radial-gradient(ellipse 60% 35% at 50% 115%,rgba(200,130,40,.50),transparent),radial-gradient(ellipse 45% 45% at 5% 10%,rgba(122,48,80,.40),transparent),radial-gradient(ellipse 30% 30% at 95% 15%,rgba(180,100,40,.30),transparent); }
-    #hstars-evening { background-image:radial-gradient(1.5px 1.5px at 15% 20%,rgba(255,255,200,.70),transparent),radial-gradient(1px 1px at 35% 12%,rgba(255,255,200,.50),transparent),radial-gradient(1.5px 1.5px at 55% 18%,rgba(255,255,200,.80),transparent),radial-gradient(1px 1px at 72% 8%,rgba(255,255,200,.60),transparent),radial-gradient(1px 1px at 88% 22%,rgba(255,255,200,.50),transparent),radial-gradient(1px 1px at 25% 35%,rgba(255,255,200,.40),transparent),radial-gradient(1.5px 1.5px at 78% 30%,rgba(255,255,200,.60),transparent),radial-gradient(1px 1px at 45% 28%,rgba(255,255,200,.30),transparent),radial-gradient(1px 1px at 92% 40%,rgba(255,255,200,.50),transparent),radial-gradient(2px 2px at 8% 42%,rgba(255,240,180,.40),transparent); }
-    .deco { position:absolute; border-radius:50%; }
-    .deco-1 { width:260px; height:260px; top:-80px; left:-60px; }
-    .deco-2 { width:180px; height:180px; bottom:-50px; right:-30px; }
-    .header-inner { position:relative; z-index:2; padding:3.5rem 2rem 2.8rem; text-align:center; }
-    .logo-eyebrow { font-size:.72rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--header-accent); margin-bottom:.6rem; }
-    .header-home-link { text-decoration:none; display:block; }
-    .header-home-link:hover h1 em { opacity:.85; }
-    header h1 { font-family:'Playfair Display',serif; font-size:clamp(2.6rem,7vw,4.4rem); font-weight:700; color:var(--cream); line-height:1.05; }
-    header h1 em { font-style:italic; color:var(--header-accent); transition:opacity .15s; }
-    header p.tagline { margin-top:.9rem; font-size:1rem; font-weight:300; color:rgba(250,246,239,.65); }
-    .time-bar { background:var(--timebar-bg); text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:rgba(250,246,239,.7); letter-spacing:.06em; }
-    #live-time { color:var(--header-accent); font-weight:600; }
-
-    /* ── STICKY FILTERS ─────────────────────────────────────── */
-    .filters-wrap { position:sticky; top:0; z-index:1000; background:var(--cream); border-bottom:1.5px solid var(--cream-dk); box-shadow:0 2px 12px var(--shadow); transition: transform 0.2s ease; }
-
-    .filter-summary-bar { display:none; align-items:center; justify-content:space-between; padding:.5rem 1.5rem; cursor:pointer; gap:.5rem; transition:background .15s; }
-    .filter-summary-bar:hover { background:var(--cream-dk); }
-    .summary-text { font-size:.75rem; font-weight:600; color:var(--ink-lt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .summary-text strong { color:var(--ink); }
-    .summary-expand { font-size:.65rem; color:var(--ink-lt); opacity:.5; flex-shrink:0; white-space:nowrap; }
-
-    .filter-expandable { overflow:hidden; max-height:600px; transition:max-height .3s cubic-bezier(0.4, 0, 0.2, 1), opacity .2s ease; opacity:1; }
-    .filters-wrap.scroll-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
-    .filters-wrap.scroll-collapsed .filter-summary-bar { display:flex; }
-
-    .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
-    .search-wrap { position:relative; max-width:420px; }
-    .search-wrap svg { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; }
-    #search { width:100%; padding:.52rem .9rem .52rem 2.5rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:#fff; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .18s; }
-    #search:focus { border-color:var(--green); }
-    .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; }
-    .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; margin-right:.2rem; white-space:nowrap; min-width:2.8rem; }
-    .pill { display:inline-flex; align-items:center; padding:.27rem .76rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-size:.78rem; font-weight:500; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; user-select:none; white-space:nowrap; }
-    .pill:hover { border-color:var(--green); color:var(--green); }
-    .pill.today-active { background:var(--amber); border-color:var(--amber); color:#fff; }
-    .pill.day-active { background:var(--amber); border-color:var(--amber); color:#fff; }
-    .pill.time-active { background:var(--green); border-color:var(--green); color:var(--cream); }
-
-    .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
-    .slider-outer { padding:0 10px; }
-    .track-container { position:relative; padding:26px 0 26px; }
-    .track-line { position:relative; height:4px; background:var(--cream-dk); border-radius:2px; }
-    .thumb-wrap { position:absolute; top:50%; transform:translate(-50%,-50%); pointer-events:none; display:flex; flex-direction:column; align-items:center; gap:3px; }
-    .thumb-dot { width:20px; height:20px; border-radius:50%; background:var(--green); border:2.5px solid #fff; box-shadow:0 1px 6px rgba(36,61,26,.3); }
-    input[type=range].slider-input { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); width:100%; height:44px; opacity:0; cursor:grab; margin:0; -webkit-appearance:none; z-index:2; }
-
-    /* ── MAP LAYOUT & RESIZER ──────────────────────────────── */
-    .content-area { max-width:100%; margin:0 auto; position: relative; }
-    .map-panel { display:none; overflow: hidden; }
+    body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--ink); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
     
-    /* Vertical Resizer */
+    header { flex-shrink: 0; background:#1A1428; position: relative; z-index: 10; }
+    .header-inner { padding: 2rem; text-align:center; }
+    header h1 { font-family:'Playfair Display',serif; font-size: 2.5rem; color:var(--cream); }
+    header h1 em { color:var(--header-accent, var(--amber)); }
+
+    /* ── DYNAMIC FILTER BAR ────────────────────────────────── */
+    .filters-outer {
+      flex-shrink: 0;
+      background: var(--cream);
+      border-bottom: 1px solid var(--cream-dk);
+      z-index: 1000;
+      overflow: hidden;
+      transition: height 0.1s linear; /* Short transition for smooth manual scroll */
+    }
+
+    .filter-content { padding: 1rem 1.5rem; }
+    
+    /* ── CONTENT AREA ──────────────────────────────────────── */
+    .content-area {
+      flex-grow: 1;
+      display: flex;
+      overflow: hidden; /* Important: The container doesn't scroll, the panels do */
+      position: relative;
+    }
+
+    .map-panel { flex: 0 0 var(--map-width); height: 100%; position: relative; }
+    #map { width: 100%; height: 100%; background: var(--cream-dk); }
+
     .resizer {
-      display: none;
-      width: 8px;
+      width: 6px;
       background: var(--cream-dk);
       cursor: col-resize;
-      position: relative;
-      z-index: 100;
       transition: background 0.2s;
+      z-index: 10;
     }
-    .resizer:hover, .resizer.dragging { background: var(--amber); }
-    .resizer::after {
-      content: '';
-      position: absolute;
-      left: 50%; top: 50%;
-      transform: translate(-50%, -50%);
-      width: 2px; height: 30px;
-      background: rgba(0,0,0,0.1);
-      border-radius: 2px;
-    }
+    .resizer:hover { background: var(--amber); }
 
-    @media (min-width:900px) {
-      .content-area.map-active { display:flex; align-items:flex-start; height:calc(100vh - var(--filter-bar-h, 200px)); overflow: hidden; }
-      .content-area.map-active .map-panel { 
-        display:block; 
-        flex: 0 0 var(--map-width); 
-        height: 100%;
-      }
-      .content-area.map-active .resizer { display: block; height: 100%; }
-      .content-area.map-active .list-panel { 
-        flex: 1; 
-        overflow-y:auto; 
-        height: 100%;
-        scroll-behavior: smooth;
-      }
+    .list-panel {
+      flex: 1;
+      overflow-y: auto;
+      height: 100%;
+      -webkit-overflow-scrolling: touch;
     }
 
-    @media (max-width:899px) {
-      .content-area.map-active .map-panel { display:block; position:fixed; inset:var(--filter-bar-h,60px) 0 80px; z-index:50; }
-      .content-area.map-active .list-panel { display:none; }
+    .grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      gap: 1rem; 
+      padding: 1rem;
+      padding-bottom: 100px; /* Space for FAB */
     }
 
-    #map { width:100%; height:100%; background: var(--cream-dk); }
+    @media (max-width: 899px) {
+      .map-panel { display: none; }
+      .resizer { display: none; }
+      .content-area.map-active .map-panel { display: block; flex: 0 0 100%; position: absolute; inset: 0; z-index: 5; }
+      .content-area.map-active .list-panel { display: none; }
+    }
 
-    /* ── CARD GRID ──────────────────────────────────────────── */
-    .grid { padding:0 1.5rem 5rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:1.2rem; margin-top:.5rem; }
-    @media (min-width:900px) { .content-area.map-active .grid { grid-template-columns:1fr; padding:.5rem 1rem 5rem; } }
-    .card { background:var(--card); border-radius:var(--radius); border:1.5px solid var(--cream-dk); overflow:hidden; box-shadow:0 2px 14px var(--shadow); transition:transform .2s ease,box-shadow .2s ease; cursor:pointer; position: relative; }
-    .card:hover { transform:translateY(-3px); box-shadow:0 8px 28px var(--shadow); }
-    .card.map-highlighted { border-color:var(--sienna) !important; box-shadow:0 0 0 2px var(--sienna); }
-    .card-body { padding:1.2rem 1.3rem; }
-    .venue-name { font-family:'Playfair Display',serif; font-size:1.12rem; font-weight:600; }
-    .neighborhood { font-size:.74rem; color:var(--ink-lt); margin-top: .2rem; }
-    .hours-row { margin-top:.8rem; font-size:.8rem; font-weight:500; }
-    .deal-item { display:flex; gap:.5rem; font-size:.81rem; margin-top:.4rem; }
-    .deal-dot { width:6px; height:6px; border-radius:50%; background:var(--sienna); margin-top:.4em; flex-shrink:0; }
-
-    /* ── FAB & UI ───────────────────────────────────────────── */
-    .fab { position:fixed; bottom:1.5rem; right:1.5rem; z-index:400; background:var(--green); color:#fff; border:none; padding:.8rem 1.4rem; border-radius:99px; font-weight:700; box-shadow:0 4px 20px rgba(0,0,0,0.3); cursor:pointer; }
-    
-    /* Quick View Backdrop */
-    .qv-backdrop { position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:2000; display:none; backdrop-filter: blur(4px); }
-    .qv-backdrop.open { display:block; }
-    .qv-sheet { position:fixed; bottom:0; left:0; right:0; background:var(--cream); z-index:2001; border-radius:20px 20px 0 0; transform:translateY(100%); transition:transform 0.3s ease; max-height: 90vh; overflow-y: auto; }
-    .qv-sheet.open { transform:translateY(0); }
-
-    /* Scrollbar fixes for smooth scrolling */
-    .list-panel::-webkit-scrollbar { width: 8px; }
-    .list-panel::-webkit-scrollbar-track { background: var(--cream); }
-    .list-panel::-webkit-scrollbar-thumb { background: var(--cream-dk); border-radius: 10px; }
+    /* ── UI ELEMENTS ───────────────────────────────────────── */
+    .card { background: #fff; border-radius: var(--radius); padding: 1.2rem; border: 1px solid var(--cream-dk); cursor: pointer; }
+    .fab { position: fixed; bottom: 20px; right: 20px; z-index: 100; padding: 12px 24px; border-radius: 50px; background: var(--green); color: #fff; border: none; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <header id="header">
-    <div class="hbg" id="hbg-morning"></div><div class="hstars" id="hstars-morning"></div>
-    <div class="hbg" id="hbg-standard"></div>
-    <div class="hbg" id="hbg-evening"></div><div class="hstars" id="hstars-evening"></div>
+  <header>
     <div class="header-inner">
-      <div class="logo-eyebrow">Twin Cities</div>
-      <a href="/" class="header-home-link"><h1><em>Golden</em> Hour</h1></a>
-      <p class="tagline">The best happy hours in Minneapolis &amp; St. Paul, curated.</p>
+      <h1><em>Golden</em> Hour</h1>
     </div>
-    <div class="time-bar">It's <span id="live-time">...</span> — <span id="live-date">...</span></div>
   </header>
 
-  <div class="filters-wrap" id="filters-wrap">
-    <div class="filter-summary-bar" id="filter-summary-bar">
-      <span class="summary-text" id="summary-text">Today · Happy Hour</span>
-      <span class="summary-expand">Adjust Filters ▴</span>
-    </div>
-    <div class="filter-expandable" id="filter-expandable">
-      <div class="search-row">
-        <div class="search-wrap">
-          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M6 1a5 5 0 100 10A5 5 0 006 1zM0 6a6 6 0 1110.89 3.477l3.817 3.816a.5.5 0 01-.708.708l-3.816-3.817A6 6 0 010 6z" fill="currentColor"/></svg>
-          <input type="text" id="search" placeholder="Search venues, neighborhoods, deals…" />
-        </div>
-      </div>
-      <div class="filter-row" id="day-filters">
-        <span class="filter-row-label">Day</span>
-        <button class="pill today-active" data-day="today">Today</button>
-        <button class="pill" data-day="Mon">Mon</button>
-        <button class="pill" data-day="Tue">Tue</button>
-        <button class="pill" data-day="Wed">Wed</button>
-        <button class="pill" data-day="Thu">Thu</button>
-        <button class="pill" data-day="Fri">Fri</button>
-        <button class="pill" data-day="Sat">Sat</button>
-        <button class="pill" data-day="Sun">Sun</button>
-      </div>
-      <div class="slider-row">
-        <div class="slider-outer">
-          <div class="track-container">
-            <div class="track-line"></div>
-            <div class="thumb-wrap" id="thumb-wrap" style="left:50%">
-              <div class="thumb-dot"></div>
-            </div>
-            <input type="range" id="time-slider" class="slider-input" min="1400" max="2100" step="50" value="1700" />
-          </div>
-        </div>
+  <div class="filters-outer" id="filters-outer">
+    <div class="filter-content" id="filter-content">
+      <input type="text" id="search" placeholder="Search..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
+      <div style="margin-top:10px; font-size:0.8rem; color:#666;">
+        Scroll to collapse • Pull up to expand
       </div>
     </div>
   </div>
@@ -219,225 +112,87 @@
 
   <button class="fab" id="fab">Map</button>
 
-  <div class="qv-backdrop" id="qv-backdrop"></div>
-  <div class="qv-sheet" id="qv-sheet">
-    <div id="qv-content" style="padding:2rem;"></div>
-  </div>
-
   <script>
-    // Configuration
-    var CSV_URL = 'happyhours.csv';
-    var VENUES = [];
-    var mapMode = false;
-    var leafletMap = null;
-    var markers = {};
-    var scrollCollapsed = false;
+    let VENUES = [];
+    let mapMode = false;
+    let leafletMap = null;
+    let lastScrollY = 0;
+    const filterBar = document.getElementById('filters-outer');
+    const listPanel = document.getElementById('list-panel');
+    const initialFilterHeight = 110; // Adjust based on your content
 
-    // ── DATA LOADING ─────────────────────────────────────────
     function init() {
-      Papa.parse(CSV_URL, {
-        download: true,
-        header: true,
+      Papa.parse('happyhours.csv', {
+        download: true, header: true,
         complete: function(results) {
-          VENUES = results.data.filter(r => r.name).map(r => ({
-            ...r,
-            days: r.days ? r.days.split('|') : [],
-            startTime: parseInt(r.startTime),
-            endTime: parseInt(r.endTime),
-            deals: r.deals ? r.deals.split('|') : [],
-            lat: parseFloat(r.lat),
-            lng: parseFloat(r.lng)
-          }));
+          VENUES = results.data.filter(r => r.name);
           render();
           setupResizer();
-          updateClock();
-          setInterval(updateClock, 1000);
+          setupScrollLogic();
         }
       });
-
-      window.addEventListener('scroll', throttle(checkScrollCollapse, 100));
-      document.getElementById('list-panel').addEventListener('scroll', throttle(checkScrollCollapse, 100));
-      document.getElementById('fab').addEventListener('click', toggleMapMode);
-      document.getElementById('filter-summary-bar').addEventListener('click', () => {
-        scrollCollapsed = false;
-        document.getElementById('filters-wrap').classList.remove('scroll-collapsed');
-        positionPanels();
-      });
     }
 
-    // ── RENDER ───────────────────────────────────────────────
     function render() {
       const grid = document.getElementById('grid');
-      grid.innerHTML = '';
-      const filtered = filterVenues();
-      
-      filtered.forEach(v => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <div class="card-body">
-            <div class="venue-name">${v.name}</div>
-            <div class="neighborhood">📍 ${v.neighborhood}</div>
-            <div class="hours-row">${formatTime(v.startTime)} - ${formatTime(v.endTime)}</div>
-            <div class="deals">
-              ${v.deals.map(d => `<div class="deal-item"><span class="deal-dot"></span>${d}</div>`).join('')}
-            </div>
-          </div>
-        `;
-        card.onclick = () => openQV(v);
-        grid.appendChild(card);
+      grid.innerHTML = VENUES.map(v => `
+        <div class="card">
+          <h3>${v.name}</h3>
+          <p>${v.neighborhood}</p>
+        </div>
+      `).join('');
+    }
+
+    // ── SMOOTH SCROLL LOGIC ──────────────────────────────────
+    function setupScrollLogic() {
+      listPanel.addEventListener('scroll', () => {
+        const currentScrollY = listPanel.scrollTop;
+        const delta = currentScrollY - lastScrollY;
+
+        // Determine target height
+        let currentHeight = filterBar.offsetHeight;
+        
+        if (delta > 0 && currentScrollY > 20) {
+          // Scrolling Down: Collapse
+          filterBar.style.height = '0px';
+        } else if (delta < -10 || currentScrollY <= 5) {
+          // Scrolling Up or at Top: Expand
+          filterBar.style.height = initialFilterHeight + 'px';
+        }
+
+        lastScrollY = currentScrollY;
       });
-
-      if (mapMode) updateMarkers(filtered);
-      positionPanels();
     }
 
-    function filterVenues() {
-      const search = document.getElementById('search').value.toLowerCase();
-      return VENUES.filter(v => v.name.toLowerCase().includes(search));
-    }
-
-    // ── RESIZER LOGIC ────────────────────────────────────────
+    // ── RESIZER ──────────────────────────────────────────────
     function setupResizer() {
       const resizer = document.getElementById('resizer');
-      const contentArea = document.getElementById('content-area');
       let isDragging = false;
 
-      resizer.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        resizer.classList.add('dragging');
-        document.body.style.cursor = 'col-resize';
-        // Prevent map interaction while resizing
-        document.getElementById('map-panel').style.pointerEvents = 'none';
-      });
-
+      resizer.addEventListener('mousedown', () => { isDragging = true; });
       document.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
-        let containerWidth = contentArea.offsetWidth;
-        let newMapWidth = (e.clientX / containerWidth) * 100;
-        
-        // Limits
-        if (newMapWidth > 20 && newMapWidth < 80) {
-          document.documentElement.style.setProperty('--map-width', newMapWidth + '%');
+        let p = (e.clientX / window.innerWidth) * 100;
+        if (p > 20 && p < 80) {
+          document.documentElement.style.setProperty('--map-width', p + '%');
           if (leafletMap) leafletMap.invalidateSize();
         }
       });
-
-      document.addEventListener('mouseup', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        resizer.classList.remove('dragging');
-        document.body.style.cursor = 'default';
-        document.getElementById('map-panel').style.pointerEvents = 'auto';
-        if (leafletMap) leafletMap.invalidateSize();
-      });
+      document.addEventListener('mouseup', () => { isDragging = false; });
     }
 
-    // ── SCROLL & POSITIONING ─────────────────────────────────
-    function checkScrollCollapse() {
-      const fw = document.getElementById('filters-wrap');
-      const lp = document.getElementById('list-panel');
-      const scrollY = mapMode ? lp.scrollTop : window.scrollY;
-      
-      const threshold = 150;
-
-      if (scrollY > threshold && !scrollCollapsed) {
-        scrollCollapsed = true;
-        fw.classList.add('scroll-collapsed');
-        positionPanels();
-      } else if (scrollY <= 10 && scrollCollapsed) {
-        scrollCollapsed = false;
-        fw.classList.remove('scroll-collapsed');
-        positionPanels();
-      }
-    }
-
-    function positionPanels() {
-      const bar = document.getElementById('filters-wrap');
-      const rect = bar.getBoundingClientRect();
-      // Use requestAnimationFrame for smoother UI updates
-      requestAnimationFrame(() => {
-        document.documentElement.style.setProperty('--filter-bar-h', rect.bottom + 'px');
-      });
-    }
-
-    // ── MAP MODE ─────────────────────────────────────────────
     function toggleMapMode() {
       mapMode = !mapMode;
       document.getElementById('content-area').classList.toggle('map-active');
       document.getElementById('fab').textContent = mapMode ? 'List' : 'Map';
-      
       if (mapMode && !leafletMap) {
         leafletMap = L.map('map').setView([44.9778, -93.2650], 13);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(leafletMap);
       }
-      
-      setTimeout(() => {
-        if (leafletMap) leafletMap.invalidateSize();
-        render();
-      }, 300);
+      setTimeout(() => { if (leafletMap) leafletMap.invalidateSize(); }, 300);
     }
 
-    function updateMarkers(venues) {
-      if (!leafletMap) return;
-      Object.values(markers).forEach(m => leafletMap.removeLayer(m));
-      markers = {};
-
-      venues.forEach(v => {
-        if (v.lat && v.lng) {
-          markers[v.name] = L.marker([v.lat, v.lng]).addTo(leafletMap)
-            .bindPopup(`<b>${v.name}</b><br>${formatTime(v.startTime)} - ${formatTime(v.endTime)}`);
-        }
-      });
-    }
-
-    // ── HELPERS ──────────────────────────────────────────────
-    function formatTime(t) {
-      if (!t) return '';
-      let h = Math.floor(t / 100);
-      let m = t % 100;
-      let ampm = h >= 12 ? 'PM' : 'AM';
-      h = h % 12 || 12;
-      return `${h}:${m === 0 ? '00' : m} ${ampm}`;
-    }
-
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('live-time').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      document.getElementById('live-date').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
-    }
-
-    function throttle(fn, ms) {
-      let last = 0;
-      return function() {
-        const now = Date.now();
-        if (now - last >= ms) {
-          last = now;
-          fn.apply(this, arguments);
-        }
-      };
-    }
-
-    function openQV(v) {
-      document.getElementById('qv-content').innerHTML = `
-        <h2>${v.name}</h2>
-        <p>${v.neighborhood}</p>
-        <hr style="margin:1rem 0; opacity:0.1;">
-        <p><b>Happy Hour:</b> ${formatTime(v.startTime)} - ${formatTime(v.endTime)}</p>
-        <ul style="margin-top:1rem;">
-          ${v.deals.map(d => `<li>${d}</li>`).join('')}
-        </ul>
-        <button onclick="closeQV()" style="margin-top:2rem; padding:0.5rem 1rem;">Close</button>
-      `;
-      document.getElementById('qv-backdrop').classList.add('open');
-      document.getElementById('qv-sheet').classList.add('open');
-    }
-
-    function closeQV() {
-      document.getElementById('qv-backdrop').classList.remove('open');
-      document.getElementById('qv-sheet').classList.remove('open');
-    }
-
+    document.getElementById('fab').addEventListener('click', toggleMapMode);
     window.onload = init;
   </script>
 </body>
