@@ -144,7 +144,10 @@
     @media (min-width:900px) {
       .content-area.map-active { display:flex; align-items:flex-start; }
       .content-area.map-active .map-panel { display: block; flex: 0 0 50%; }
-      .content-area.map-active .list-panel { flex: 1; }
+      .content-area.map-active .list-panel { 
+        flex: 1;
+        min-width: 0;
+        overflow-y: auto;}
     }
     @media (max-width:899px) {
       .content-area.map-active .map-panel { display:block; position:fixed; inset:var(--filter-bar-h,60px) 0 80px; z-index:50; }
@@ -179,6 +182,8 @@
       position: relative;
       z-index: 60;
       flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
     }
     .map-divider::after {
       content: "";
@@ -194,6 +199,10 @@
     }
     @media (min-width: 900px) {
       .content-area.map-active .map-divider { display: flex; }
+    }
+
+    .map-divider:hover::after {
+      opacity: 0.4;
     }
 
     /* ── CARD GRID ──────────────────────────────────────────── */
