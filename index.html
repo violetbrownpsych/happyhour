@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Golden Hour — Twin Cities Happy Hours</title>
+  <title>Golden Hour — Twin Cities Happy Hour Directory</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -14,96 +14,95 @@
       --sienna:#C4622D; --amber:#D4953A; --berry:#7A3050; --blush:#E8C4B0;
       --ink:#1A1410; --ink-lt:#5A4A3A; --card:#FFFFFF; --shadow:rgba(36,61,26,.10);
       --radius:14px; --map-width: 45%; 
-      --filter-h: 180px; /* Initial Height */
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--ink); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
     
-    header { flex-shrink: 0; background:#1A1428; position: relative; z-index: 10; }
-    .header-inner { padding: 2rem; text-align:center; }
-    header h1 { font-family:'Playfair Display',serif; font-size: 2.5rem; color:var(--cream); }
-    header h1 em { color:var(--header-accent, var(--amber)); }
+    /* THE FLEXBOX FIX: This prevents the 'Ghost Footer' */
+    body { 
+      font-family:'DM Sans',sans-serif; 
+      background:var(--cream); 
+      color:var(--ink); 
+      height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+      overflow: hidden; 
+    }
 
-    /* ── DYNAMIC FILTER BAR ────────────────────────────────── */
+    /* ── HEADER ────────────────────────────────────────────── */
+    header { flex-shrink: 0; position:relative; background:#1A1428; overflow:hidden; z-index: 10; }
+    .hbg { position:absolute; inset:0; opacity:0; transition: opacity 1s ease; }
+    .hbg.active { opacity: 1; }
+    #hbg-standard { background-color:#243D1A; background-image:radial-gradient(ellipse 80% 60% at 50% 110%,#3A5C28,transparent); }
+    #hbg-evening { background-color:#1A1428; background-image:radial-gradient(ellipse 100% 80% at 50% 110%,#2A1E3E,transparent); }
+    
+    .header-inner { position:relative; z-index:2; padding: 1.5rem 2rem; text-align:center; }
+    header h1 { font-family:'Playfair Display',serif; font-size: 2.2rem; color:var(--cream); }
+    header h1 em { font-style:italic; color:var(--amber); }
+    .time-bar { background:rgba(0,0,0,0.2); text-align:center; padding:.4rem; font-size:.75rem; color:rgba(255,255,255,0.7); }
+
+    /* ── DYNAMIC FILTERS ───────────────────────────────────── */
     .filters-outer {
       flex-shrink: 0;
       background: var(--cream);
-      border-bottom: 1px solid var(--cream-dk);
-      z-index: 1000;
-      overflow: hidden;
-      transition: height 0.1s linear; /* Short transition for smooth manual scroll */
+      border-bottom: 1.5px solid var(--cream-dk);
+      z-index: 100;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      max-height: 250px;
     }
+    .filters-outer.collapsed { max-height: 0; padding: 0; opacity: 0; pointer-events: none; }
 
     .filter-content { padding: 1rem 1.5rem; }
-    
+    .search-wrap { position:relative; margin-bottom: 1rem; }
+    #search { width:100%; padding:.6rem 1rem; border-radius:99px; border:1.5px solid var(--cream-dk); outline:none; font-family: inherit; }
+
     /* ── CONTENT AREA ──────────────────────────────────────── */
-    .content-area {
-      flex-grow: 1;
-      display: flex;
-      overflow: hidden; /* Important: The container doesn't scroll, the panels do */
-      position: relative;
-    }
+    .content-area { flex-grow: 1; display: flex; overflow: hidden; position: relative; }
+    
+    .map-panel { flex: 0 0 var(--map-width); height: 100%; position: relative; background: #eee; }
+    #map { width: 100%; height: 100%; }
 
-    .map-panel { flex: 0 0 var(--map-width); height: 100%; position: relative; }
-    #map { width: 100%; height: 100%; background: var(--cream-dk); }
-
-    .resizer {
-      width: 6px;
-      background: var(--cream-dk);
-      cursor: col-resize;
-      transition: background 0.2s;
-      z-index: 10;
-    }
+    .resizer { width: 8px; background: var(--cream-dk); cursor: col-resize; z-index: 20; transition: background 0.2s; }
     .resizer:hover { background: var(--amber); }
 
-    .list-panel {
-      flex: 1;
-      overflow-y: auto;
-      height: 100%;
-      -webkit-overflow-scrolling: touch;
-    }
+    .list-panel { flex: 1; overflow-y: auto; height: 100%; background: var(--cream); scroll-behavior: smooth; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; padding: 1.5rem; }
 
-    .grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-      gap: 1rem; 
-      padding: 1rem;
-      padding-bottom: 100px; /* Space for FAB */
-    }
+    /* ── CARDS ─────────────────────────────────────────────── */
+    .card { background:var(--card); border-radius:var(--radius); border:1.5px solid var(--cream-dk); padding:1.2rem; cursor:pointer; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 4px 15px var(--shadow); }
+    .venue-name { font-family:'Playfair Display',serif; font-size: 1.2rem; font-weight: 700; color: var(--green); }
+    .deal-item { font-size: 0.85rem; margin-top: 0.5rem; display: flex; gap: 0.5rem; color: var(--ink-lt); }
+    .deal-dot { width: 6px; height: 6px; background: var(--sienna); border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
 
     @media (max-width: 899px) {
-      .map-panel { display: none; }
-      .resizer { display: none; }
-      .content-area.map-active .map-panel { display: block; flex: 0 0 100%; position: absolute; inset: 0; z-index: 5; }
-      .content-area.map-active .list-panel { display: none; }
+      .map-panel, .resizer { display: none; }
+      .content-area.map-active .map-panel { display: block; flex: 0 0 100%; position: absolute; inset: 0; z-index: 50; }
     }
 
-    /* ── UI ELEMENTS ───────────────────────────────────────── */
-    .card { background: #fff; border-radius: var(--radius); padding: 1.2rem; border: 1px solid var(--cream-dk); cursor: pointer; }
-    .fab { position: fixed; bottom: 20px; right: 20px; z-index: 100; padding: 12px 24px; border-radius: 50px; background: var(--green); color: #fff; border: none; font-weight: bold; }
+    .fab { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 1000; background: var(--green); color: #fff; border: none; padding: 1rem 1.8rem; border-radius: 99px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
   </style>
 </head>
 <body>
 
   <header>
+    <div class="hbg active" id="hbg-standard"></div>
+    <div class="hbg" id="hbg-evening"></div>
     <div class="header-inner">
       <h1><em>Golden</em> Hour</h1>
     </div>
+    <div class="time-bar">It's <span id="live-time">...</span> — <span id="live-date">...</span></div>
   </header>
 
   <div class="filters-outer" id="filters-outer">
-    <div class="filter-content" id="filter-content">
-      <input type="text" id="search" placeholder="Search..." style="width:100%; padding:10px; border-radius:8px; border:1px solid #ccc;">
-      <div style="margin-top:10px; font-size:0.8rem; color:#666;">
-        Scroll to collapse • Pull up to expand
+    <div class="filter-content">
+      <div class="search-wrap">
+        <input type="text" id="search" placeholder="Search Minneapolis & St. Paul..." />
       </div>
-    </div>
+      </div>
   </div>
 
   <div class="content-area" id="content-area">
-    <div class="map-panel" id="map-panel">
-      <div id="map"></div>
-    </div>
+    <div class="map-panel" id="map-panel"><div id="map"></div></div>
     <div class="resizer" id="resizer"></div>
     <div class="list-panel" id="list-panel">
       <div class="grid" id="grid"></div>
@@ -117,59 +116,59 @@
     let mapMode = false;
     let leafletMap = null;
     let lastScrollY = 0;
-    const filterBar = document.getElementById('filters-outer');
-    const listPanel = document.getElementById('list-panel');
-    const initialFilterHeight = 110; // Adjust based on your content
 
-    function init() {
+    async function init() {
       Papa.parse('happyhours.csv', {
         download: true, header: true,
-        complete: function(results) {
-          VENUES = results.data.filter(r => r.name);
+        complete: (results) => {
+          VENUES = results.data.filter(r => r.name).map(v => ({
+            ...v, deals: v.deals ? v.deals.split('|') : [],
+            lat: parseFloat(v.lat), lng: parseFloat(v.lng)
+          }));
           render();
           setupResizer();
           setupScrollLogic();
+          updateClock();
+          setInterval(updateClock, 1000);
         }
       });
     }
 
     function render() {
       const grid = document.getElementById('grid');
-      grid.innerHTML = VENUES.map(v => `
+      const search = document.getElementById('search').value.toLowerCase();
+      const filtered = VENUES.filter(v => v.name.toLowerCase().includes(search) || v.neighborhood.toLowerCase().includes(search));
+      
+      grid.innerHTML = filtered.map(v => `
         <div class="card">
-          <h3>${v.name}</h3>
-          <p>${v.neighborhood}</p>
+          <div class="venue-name">${v.name}</div>
+          <div style="font-size:0.75rem; color:var(--amber); font-weight:700; text-transform:uppercase;">${v.neighborhood}</div>
+          <div style="margin-top:0.5rem;">
+            ${v.deals.slice(0, 3).map(d => `<div class="deal-item"><span class="deal-dot"></span>${d}</div>`).join('')}
+          </div>
         </div>
       `).join('');
     }
 
-    // ── SMOOTH SCROLL LOGIC ──────────────────────────────────
     function setupScrollLogic() {
+      const listPanel = document.getElementById('list-panel');
+      const filterBar = document.getElementById('filters-outer');
+      
       listPanel.addEventListener('scroll', () => {
         const currentScrollY = listPanel.scrollTop;
-        const delta = currentScrollY - lastScrollY;
-
-        // Determine target height
-        let currentHeight = filterBar.offsetHeight;
-        
-        if (delta > 0 && currentScrollY > 20) {
-          // Scrolling Down: Collapse
-          filterBar.style.height = '0px';
-        } else if (delta < -10 || currentScrollY <= 5) {
-          // Scrolling Up or at Top: Expand
-          filterBar.style.height = initialFilterHeight + 'px';
+        if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+          filterBar.classList.add('collapsed');
+        } else if (currentScrollY < lastScrollY - 10 || currentScrollY < 10) {
+          filterBar.classList.remove('collapsed');
         }
-
         lastScrollY = currentScrollY;
       });
     }
 
-    // ── RESIZER ──────────────────────────────────────────────
     function setupResizer() {
       const resizer = document.getElementById('resizer');
       let isDragging = false;
-
-      resizer.addEventListener('mousedown', () => { isDragging = true; });
+      resizer.addEventListener('mousedown', () => isDragging = true);
       document.addEventListener('mousemove', (e) => {
         if (!isDragging) return;
         let p = (e.clientX / window.innerWidth) * 100;
@@ -178,21 +177,33 @@
           if (leafletMap) leafletMap.invalidateSize();
         }
       });
-      document.addEventListener('mouseup', () => { isDragging = false; });
+      document.addEventListener('mouseup', () => isDragging = false);
     }
 
-    function toggleMapMode() {
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-time').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('live-date').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+      
+      // Theme switching logic
+      const hour = now.getHours();
+      const evening = document.getElementById('hbg-evening');
+      if (hour >= 18 || hour < 6) evening.classList.add('active');
+      else evening.classList.remove('active');
+    }
+
+    document.getElementById('fab').addEventListener('click', () => {
       mapMode = !mapMode;
       document.getElementById('content-area').classList.toggle('map-active');
       document.getElementById('fab').textContent = mapMode ? 'List' : 'Map';
       if (mapMode && !leafletMap) {
-        leafletMap = L.map('map').setView([44.9778, -93.2650], 13);
+        leafletMap = L.map('map').setView([44.9778, -93.2650], 12);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(leafletMap);
       }
       setTimeout(() => { if (leafletMap) leafletMap.invalidateSize(); }, 300);
-    }
+    });
 
-    document.getElementById('fab').addEventListener('click', toggleMapMode);
+    document.getElementById('search').addEventListener('input', render);
     window.onload = init;
   </script>
 </body>
