@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Golden Hour — Twin Cities Happy Hour Directory</title>
+  <title>Golden Hour — Twin Cities Happy Hours</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -13,11 +13,10 @@
       --cream:#FAF6EF; --cream-dk:#F0E9DC; --green:#243D1A; --green-lt:#3A5C28;
       --sienna:#C4622D; --amber:#D4953A; --berry:#7A3050; --blush:#E8C4B0;
       --ink:#1A1410; --ink-lt:#5A4A3A; --card:#FFFFFF; --shadow:rgba(36,61,26,.10);
-      --radius:14px; --map-width: 45%; 
+      --radius:14px; --map-width: 0%; /* Default to 0 so list is full width */
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     
-    /* THE FLEXBOX FIX: This prevents the 'Ghost Footer' */
     body { 
       font-family:'DM Sans',sans-serif; 
       background:var(--cream); 
@@ -25,68 +24,78 @@
       height: 100vh; 
       display: flex; 
       flex-direction: column; 
-      overflow: hidden; 
+      overflow: hidden; /* Body doesn't scroll, panels do */
     }
 
     /* ── HEADER ────────────────────────────────────────────── */
-    header { flex-shrink: 0; position:relative; background:#1A1428; overflow:hidden; z-index: 10; }
+    header { flex-shrink: 0; position:relative; background:#1A1428; overflow:hidden; z-index: 1001; }
     .hbg { position:absolute; inset:0; opacity:0; transition: opacity 1s ease; }
-    .hbg.active { opacity: 1; }
-    #hbg-standard { background-color:#243D1A; background-image:radial-gradient(ellipse 80% 60% at 50% 110%,#3A5C28,transparent); }
-    #hbg-evening { background-color:#1A1428; background-image:radial-gradient(ellipse 100% 80% at 50% 110%,#2A1E3E,transparent); }
-    
+    #hbg-standard { background-color:#243D1A; background-image:radial-gradient(ellipse 80% 60% at 50% 110%,#3A5C28,transparent); opacity: 1; }
     .header-inner { position:relative; z-index:2; padding: 1.5rem 2rem; text-align:center; }
-    header h1 { font-family:'Playfair Display',serif; font-size: 2.2rem; color:var(--cream); }
+    header h1 { font-family:'Playfair Display',serif; font-size: 2.4rem; color:var(--cream); font-weight: 700; }
     header h1 em { font-style:italic; color:var(--amber); }
-    .time-bar { background:rgba(0,0,0,0.2); text-align:center; padding:.4rem; font-size:.75rem; color:rgba(255,255,255,0.7); }
+    .time-bar { background:rgba(0,0,0,0.2); text-align:center; padding:.4rem; font-size:.75rem; color:rgba(255,255,255,0.7); letter-spacing: 0.05em; }
 
-    /* ── DYNAMIC FILTERS ───────────────────────────────────── */
+    /* ── DYNAMIC FILTER BAR ────────────────────────────────── */
     .filters-outer {
       flex-shrink: 0;
       background: var(--cream);
-      border-bottom: 1.5px solid var(--cream-dk);
-      z-index: 100;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      max-height: 250px;
+      border-bottom: 1px solid var(--cream-dk);
+      z-index: 1000;
+      transition: transform 0.3s ease, margin-top 0.3s ease;
     }
-    .filters-outer.collapsed { max-height: 0; padding: 0; opacity: 0; pointer-events: none; }
+    .filters-outer.collapsed { transform: translateY(-100%); margin-bottom: -120px; } /* Slides up and hides */
 
-    .filter-content { padding: 1rem 1.5rem; }
-    .search-wrap { position:relative; margin-bottom: 1rem; }
-    #search { width:100%; padding:.6rem 1rem; border-radius:99px; border:1.5px solid var(--cream-dk); outline:none; font-family: inherit; }
+    .filter-content { padding: 1rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+    .search-wrap { position:relative; margin-bottom: 0.8rem; }
+    #search { 
+      width:100%; padding:.7rem 1.2rem; border-radius:99px; 
+      border:1.5px solid var(--cream-dk); font-family: inherit; font-size: 0.9rem;
+    }
+    .pill-row { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+    .pill-row::-webkit-scrollbar { display: none; }
+    .pill { 
+      padding: 0.4rem 1rem; border-radius: 99px; border: 1.5px solid var(--cream-dk); 
+      background: #fff; font-size: 0.75rem; font-weight: 600; white-space: nowrap; cursor: pointer;
+    }
+    .pill.active { background: var(--amber); border-color: var(--amber); color: #fff; }
 
     /* ── CONTENT AREA ──────────────────────────────────────── */
     .content-area { flex-grow: 1; display: flex; overflow: hidden; position: relative; }
     
-    .map-panel { flex: 0 0 var(--map-width); height: 100%; position: relative; background: #eee; }
+    .map-panel { flex: 0 0 var(--map-width); height: 100%; position: relative; transition: flex 0.3s ease; }
     #map { width: 100%; height: 100%; }
 
-    .resizer { width: 8px; background: var(--cream-dk); cursor: col-resize; z-index: 20; transition: background 0.2s; }
-    .resizer:hover { background: var(--amber); }
+    .resizer { width: 8px; background: var(--cream-dk); cursor: col-resize; z-index: 20; display: none; }
+    .content-area.map-active .resizer { display: block; }
 
-    .list-panel { flex: 1; overflow-y: auto; height: 100%; background: var(--cream); scroll-behavior: smooth; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.2rem; padding: 1.5rem; }
+    .list-panel { flex: 1; overflow-y: auto; height: 100%; background: var(--cream); -webkit-overflow-scrolling: touch; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; padding: 1.5rem 1.5rem 100px; }
 
     /* ── CARDS ─────────────────────────────────────────────── */
-    .card { background:var(--card); border-radius:var(--radius); border:1.5px solid var(--cream-dk); padding:1.2rem; cursor:pointer; transition: transform 0.2s; }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 4px 15px var(--shadow); }
-    .venue-name { font-family:'Playfair Display',serif; font-size: 1.2rem; font-weight: 700; color: var(--green); }
-    .deal-item { font-size: 0.85rem; margin-top: 0.5rem; display: flex; gap: 0.5rem; color: var(--ink-lt); }
-    .deal-dot { width: 6px; height: 6px; background: var(--sienna); border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+    .card { background:var(--card); border-radius:var(--radius); border:1px solid var(--cream-dk); padding:1.4rem; cursor:pointer; box-shadow: 0 2px 8px var(--shadow); }
+    .venue-name { font-family:'Playfair Display',serif; font-size: 1.3rem; font-weight: 700; color: var(--green); margin-bottom: 0.2rem; }
+    .neighborhood { font-size: 0.7rem; color: var(--amber); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .deal-item { font-size: 0.85rem; margin-top: 0.6rem; display: flex; gap: 0.6rem; color: var(--ink-lt); line-height: 1.4; }
+    .deal-dot { width: 6px; height: 6px; background: var(--sienna); border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
 
-    @media (max-width: 899px) {
-      .map-panel, .resizer { display: none; }
-      .content-area.map-active .map-panel { display: block; flex: 0 0 100%; position: absolute; inset: 0; z-index: 50; }
+    /* ── UI ELEMENTS ───────────────────────────────────────── */
+    .fab { 
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 2000; 
+      background: var(--green); color: #fff; border: none; padding: 1rem 2rem; 
+      border-radius: 99px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 20px rgba(0,0,0,0.3); 
     }
 
-    .fab { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 1000; background: var(--green); color: #fff; border: none; padding: 1rem 1.8rem; border-radius: 99px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+    @media (max-width: 899px) {
+      .content-area.map-active .map-panel { flex: 0 0 100%; position: absolute; inset: 0; z-index: 50; }
+      .content-area.map-active .list-panel { display: none; }
+    }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="hbg active" id="hbg-standard"></div>
-    <div class="hbg" id="hbg-evening"></div>
+    <div class="hbg" id="hbg-standard"></div>
     <div class="header-inner">
       <h1><em>Golden</em> Hour</h1>
     </div>
@@ -96,9 +105,17 @@
   <div class="filters-outer" id="filters-outer">
     <div class="filter-content">
       <div class="search-wrap">
-        <input type="text" id="search" placeholder="Search Minneapolis & St. Paul..." />
+        <input type="text" id="search" placeholder="Search venues or neighborhoods..." />
       </div>
+      <div class="pill-row">
+        <div class="pill active">Today</div>
+        <div class="pill">Minneapolis</div>
+        <div class="pill">St. Paul</div>
+        <div class="pill">Cocktails</div>
+        <div class="pill">Beer</div>
+        <div class="pill">Patio</div>
       </div>
+    </div>
   </div>
 
   <div class="content-area" id="content-area">
@@ -109,7 +126,7 @@
     </div>
   </div>
 
-  <button class="fab" id="fab">Map</button>
+  <button class="fab" id="fab">Map View</button>
 
   <script>
     let VENUES = [];
@@ -141,10 +158,11 @@
       
       grid.innerHTML = filtered.map(v => `
         <div class="card">
+          <div class="neighborhood">${v.neighborhood}</div>
           <div class="venue-name">${v.name}</div>
-          <div style="font-size:0.75rem; color:var(--amber); font-weight:700; text-transform:uppercase;">${v.neighborhood}</div>
-          <div style="margin-top:0.5rem;">
-            ${v.deals.slice(0, 3).map(d => `<div class="deal-item"><span class="deal-dot"></span>${d}</div>`).join('')}
+          <div style="font-size: 0.8rem; font-weight: 600; margin-top: 0.3rem;">${v.startTime} - ${v.endTime}</div>
+          <div style="margin-top: 0.5rem;">
+            ${v.deals.map(d => `<div class="deal-item"><span class="deal-dot"></span>${d}</div>`).join('')}
           </div>
         </div>
       `).join('');
@@ -156,9 +174,12 @@
       
       listPanel.addEventListener('scroll', () => {
         const currentScrollY = listPanel.scrollTop;
-        if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+        // If scrolling down significantly, collapse
+        if (currentScrollY > 80 && currentScrollY > lastScrollY) {
           filterBar.classList.add('collapsed');
-        } else if (currentScrollY < lastScrollY - 10 || currentScrollY < 10) {
+        } 
+        // If scrolling up or back at the very top, expand
+        else if (currentScrollY < lastScrollY - 5 || currentScrollY < 10) {
           filterBar.classList.remove('collapsed');
         }
         lastScrollY = currentScrollY;
@@ -184,27 +205,8 @@
       const now = new Date();
       document.getElementById('live-time').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       document.getElementById('live-date').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
-      
-      // Theme switching logic
-      const hour = now.getHours();
-      const evening = document.getElementById('hbg-evening');
-      if (hour >= 18 || hour < 6) evening.classList.add('active');
-      else evening.classList.remove('active');
     }
 
     document.getElementById('fab').addEventListener('click', () => {
       mapMode = !mapMode;
-      document.getElementById('content-area').classList.toggle('map-active');
-      document.getElementById('fab').textContent = mapMode ? 'List' : 'Map';
-      if (mapMode && !leafletMap) {
-        leafletMap = L.map('map').setView([44.9778, -93.2650], 12);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(leafletMap);
-      }
-      setTimeout(() => { if (leafletMap) leafletMap.invalidateSize(); }, 300);
-    });
-
-    document.getElementById('search').addEventListener('input', render);
-    window.onload = init;
-  </script>
-</body>
-</html>
+      const
