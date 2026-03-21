@@ -143,8 +143,8 @@
     .map-panel { display:none; }
     @media (min-width:900px) {
       .content-area.map-active { display:flex; align-items:flex-start; }
-      .content-area.map-active .map-panel { display:block; position:sticky; top:0; flex:0 0 45%; height:calc(100vh - var(--filter-bar-h,200px)); }
-      .content-area.map-active .list-panel { flex:1; overflow-y:auto; height:calc(100vh - var(--filter-bar-h,200px)); }
+      .content-area.map-active .map-panel { display: block; flex: 0 0 50%; }
+      .content-area.map-active .list-panel { flex: 1; }
     }
     @media (max-width:899px) {
       .content-area.map-active .map-panel { display:block; position:fixed; inset:var(--filter-bar-h,60px) 0 80px; z-index:50; }
@@ -171,7 +171,7 @@
     .map-divider {
       display: none;
       width: 12px;
-      height: 100%;
+      height: auto;
       background: var(--cream);
       border-left: 1px solid var(--cream-dk);
       border-right: 1px solid var(--cream-dk);
@@ -193,7 +193,7 @@
       opacity: 0.15;
     }
     @media (min-width: 900px) {
-      .content-area.map-active .map-divider { display: block; }
+      .content-area.map-active .map-divider { display: flex; }
     }
 
     /* ── CARD GRID ──────────────────────────────────────────── */
