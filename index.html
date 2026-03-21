@@ -16,7 +16,7 @@
       --radius:14px; --header-accent:#D4953A; --timebar-bg:#3A5C28;
       --deal-tag-bg:#FDF0E8; --deal-tag-border:#E8C4A0; --deal-tag-text:#7A3A18;
       --vibe-tag-bg:#EAF0E4; --vibe-tag-border:#B8CCA8; --vibe-tag-text:#2E4A22;
-      /* NEW: Map width variable */
+      /* Control the split width */
       --map-width: 45%;
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -27,27 +27,29 @@
 
     /* ── HEADER ────────────────────────────────────────────── */
     header { position:relative; background:#1A1428; overflow:hidden; }
-    .hbg,.hstars { position:absolute; inset:0; opacity:0; }
+    .hbg,.hstars { position:absolute; inset:0; opacity:0; transition:opacity 1s ease; }
     .hstars { pointer-events:none; z-index:1; }
     #hbg-morning { background-color:#2A5A7A; background-image:radial-gradient(ellipse 140% 55% at 50% -5%,#4A90B8,transparent),radial-gradient(ellipse 120% 70% at 50% 30%,rgba(70,140,185,.55),transparent),radial-gradient(ellipse 110% 50% at 50% 78%,rgba(210,75,55,.70),transparent),radial-gradient(ellipse 100% 50% at 50% 125%,rgba(220,130,20,.95),transparent),radial-gradient(ellipse 55% 45% at 6% 85%,rgba(200,80,55,.50),transparent),radial-gradient(ellipse 50% 38% at 96% 88%,rgba(210,140,20,.55),transparent); }
     #hstars-morning { background-image:radial-gradient(1px 1px at 12% 12%,rgba(255,245,210,.50),transparent),radial-gradient(1.5px 1.5px at 45% 8%,rgba(255,245,210,.55),transparent),radial-gradient(1px 1px at 72% 15%,rgba(255,245,210,.40),transparent),radial-gradient(1px 1px at 28% 20%,rgba(255,245,210,.30),transparent),radial-gradient(1px 1px at 86% 10%,rgba(255,245,210,.35),transparent),radial-gradient(1px 1px at 58% 22%,rgba(255,245,210,.25),transparent); }
     #hbg-standard { background-color:#243D1A; background-image:radial-gradient(ellipse 80% 60% at 50% 110%,#3A5C28,transparent),radial-gradient(ellipse 40% 40% at 20% 20%,rgba(212,149,58,.18),transparent),radial-gradient(ellipse 30% 30% at 80% 10%,rgba(122,48,80,.22),transparent); }
     #hbg-evening { background-color:#1A1428; background-image:radial-gradient(ellipse 100% 80% at 50% 110%,#2A1E3E,transparent),radial-gradient(ellipse 60% 35% at 50% 115%,rgba(200,130,40,.50),transparent),radial-gradient(ellipse 45% 45% at 5% 10%,rgba(122,48,80,.40),transparent),radial-gradient(ellipse 30% 30% at 95% 15%,rgba(180,100,40,.30),transparent); }
     #hstars-evening { background-image:radial-gradient(1.5px 1.5px at 15% 20%,rgba(255,255,200,.70),transparent),radial-gradient(1px 1px at 35% 12%,rgba(255,255,200,.50),transparent),radial-gradient(1.5px 1.5px at 55% 18%,rgba(255,255,200,.80),transparent),radial-gradient(1px 1px at 72% 8%,rgba(255,255,200,.60),transparent),radial-gradient(1px 1px at 88% 22%,rgba(255,255,200,.50),transparent),radial-gradient(1px 1px at 25% 35%,rgba(255,255,200,.40),transparent),radial-gradient(1.5px 1.5px at 78% 30%,rgba(255,255,200,.60),transparent),radial-gradient(1px 1px at 45% 28%,rgba(255,255,200,.30),transparent),radial-gradient(1px 1px at 92% 40%,rgba(255,255,200,.50),transparent),radial-gradient(2px 2px at 8% 42%,rgba(255,240,180,.40),transparent); }
+    .hbg.active { opacity:1; }
+    .hstars.active { opacity:1; }
     .deco { position:absolute; border-radius:50%; }
-    .deco-1 { width:260px; height:260px; top:-80px; left:-60px; }
-    .deco-2 { width:180px; height:180px; bottom:-50px; right:-30px; }
+    .deco-1 { width:260px; height:260px; top:-80px; left:-60px; background:radial-gradient(circle,rgba(255,255,255,.08),transparent); }
+    .deco-2 { width:180px; height:180px; bottom:-50px; right:-30px; background:radial-gradient(circle,rgba(255,255,255,.05),transparent); }
     .header-inner { position:relative; z-index:2; padding:3.5rem 2rem 2.8rem; text-align:center; }
     .logo-eyebrow { font-size:.72rem; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--header-accent); margin-bottom:.6rem; }
     .header-home-link { text-decoration:none; display:block; }
     .header-home-link:hover h1 em { opacity:.85; }
-    header h1 { font-family:'Playfair Display',serif; font-size:clamp(2.6rem,7vw,4.4rem); font-weight:700; color:var(--cream); line-height:1.05; }
-    header h1 em { font-style:italic; color:var(--header-accent); transition:opacity .15s; }
-    header p.tagline { margin-top:.9rem; font-size:1rem; font-weight:300; color:rgba(250,246,239,.65); }
-    .time-bar { background:var(--timebar-bg); text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:rgba(250,246,239,.7); letter-spacing:.06em; }
+    header h1 { font-family:'Playfair Display',serif; font-size:clamp(2.6rem,7vw,4.4rem); font-weight:700; color:var(--cream); letter-spacing:-0.02em; line-height:1.05; }
+    header h1 em { font-style:italic; font-weight:600; color:var(--header-accent); transition:opacity .15s; }
+    header p.tagline { margin-top:.9rem; font-size:1rem; font-weight:300; color:rgba(250,246,239,.65); max-width:440px; margin-left:auto; margin-right:auto; line-height:1.5; }
+    .time-bar { background:var(--timebar-bg); text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:rgba(250,246,239,.7); letter-spacing:.06em; border-bottom:1px solid rgba(0,0,0,.05); transition:background-color 1s ease; }
     #live-time { color:var(--header-accent); font-weight:600; }
-    .dev-banner { background:#FFF8E6; border-bottom:1.5px solid #F5C97A; text-align:center; padding:.45rem 1rem; font-size:.75rem; color:#7A4F10; }
-    .dev-banner strong { font-weight:600; }
+    .dev-banner { background:#FFF8E6; border-bottom:1.5px solid #F5C97A; text-align:center; padding:.45rem 1rem; font-size:.75rem; color:#7A4F10; letter-spacing:.02em; }
+    .dev-banner strong { font-weight:600; color:#5C3B0C; }
 
     /* ── STICKY FILTERS ─────────────────────────────────────── */
     .filters-wrap { position:sticky; top:0; z-index:100; background:var(--cream); border-bottom:1.5px solid var(--cream-dk); box-shadow:0 2px 12px var(--shadow); }
@@ -65,9 +67,9 @@
     @media (max-width:899px) { .map-mode-active .filter-collapse-handle { display:flex; } }
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
     .search-wrap { position:relative; max-width:420px; }
-    .search-wrap svg { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; }
-    #search { width:100%; padding:.52rem .9rem .52rem 2.5rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:#fff; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .18s; }
-    #search:focus { border-color:var(--green); }
+    .search-wrap svg { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; color:var(--ink); }
+    #search { width:100%; padding:.52rem .9rem .52rem 2.5rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:#fff; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .18s, box-shadow .18s; }
+    #search:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(36,61,26,.05); }
     #search::placeholder { color:var(--ink-lt); opacity:.7; }
     .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; }
     .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; margin-right:.2rem; white-space:nowrap; min-width:2.8rem; }
@@ -78,7 +80,7 @@
     .pill.time-active { background:var(--green); border-color:var(--green); color:var(--cream); }
     .pill.time-active-now { background:var(--sienna); border-color:var(--sienna); color:#fff; }
     .pill.pick-active { background:var(--amber); border-color:var(--amber); color:#fff; }
-    .pill-pick { border-style:dashed; }
+    .pill-pick { border-style:dashed; padding-left:1.2rem; padding-right:1.2rem; }
     .pill.tag-active { background:var(--sienna); border-color:var(--sienna); color:#fff; }
     .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
     .slider-outer { padding:0 10px; }
@@ -88,7 +90,7 @@
     .tick-even { width:1.5px; height:9px; background:var(--ink-lt); opacity:.28; }
     .tick-odd { width:1px; height:5px; background:var(--ink-lt); opacity:.16; }
     .tick-label { position:absolute; top:calc(100% + 9px); transform:translateX(-50%); font-size:.63rem; font-weight:500; color:var(--ink-lt); opacity:.5; white-space:nowrap; pointer-events:none; }
-    .thumb-wrap { position:absolute; top:50%; transform:translate(-50%,-50%); pointer-events:none; display:flex; flex-direction:column; align-items:center; gap:3px; }
+    .thumb-wrap { position:absolute; top:50%; transform:translate(-50%,-50%); pointer-events:none; display:flex; flex-direction:column; align-items:center; gap:3px; transition:left .1s cubic-bezier(0.2,0,0,1); }
     .thumb-label-above { font-size:.7rem; font-weight:700; color:var(--green); white-space:nowrap; background:var(--cream); padding:.08rem .32rem; border-radius:4px; border:1px solid var(--cream-dk); box-shadow:0 1px 4px rgba(36,61,26,.08); }
     .thumb-dot { width:20px; height:20px; border-radius:50%; background:var(--green); border:2.5px solid #fff; box-shadow:0 1px 6px rgba(36,61,26,.3); }
     input[type=range].slider-input { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); width:100%; height:44px; opacity:0; cursor:grab; margin:0; -webkit-appearance:none; z-index:2; }
@@ -100,7 +102,7 @@
     .collapsible-toggle.has-active { color:var(--sienna); }
     .toggle-chevron { font-size:.58rem; transition:transform .2s; display:inline-block; opacity:.55; }
     .collapsible-toggle.open .toggle-chevron { transform:rotate(180deg); }
-    .active-badge { background:var(--sienna); color:#fff; border-radius:99px; padding:.07rem .42rem; font-size:.62rem; font-weight:700; }
+    .active-badge { background:var(--sienna); color:#fff; border-radius:99px; padding:.07rem .42rem; font-size:.62rem; font-weight:700; margin-left:.2rem; box-shadow:0 1px 3px rgba(196,98,45,.2); }
     .collapsible + .collapsible .collapsible-toggle::before { content:''; position:absolute; left:0; top:28%; bottom:28%; width:1px; background:var(--cream-dk); }
     .collapsible-panel { display:none; position:fixed; left:0; right:0; background:var(--cream); border-bottom:1.5px solid var(--cream-dk); box-shadow:0 6px 18px rgba(36,61,26,.10); z-index:99; }
     .collapsible-panel.open { display:block; }
@@ -127,32 +129,59 @@
     .combo-warning { max-width:1100px; margin:.35rem auto .1rem; padding:0 1.5rem; }
     .combo-inner { display:inline-flex; align-items:center; gap:.4rem; background:#FEF3E2; border:1px solid #F5C97A; border-radius:8px; padding:.32rem .75rem; font-size:.78rem; color:#7A4F10; }
     .active-chips { max-width:1100px; margin:.45rem auto .65rem; padding:0 1.5rem; display:flex; flex-wrap:wrap; gap:.3rem; min-height:.5rem; }
-    .chip { display:inline-flex; align-items:center; gap:.28rem; padding:.18rem .6rem; border-radius:99px; background:var(--green); color:var(--cream); font-size:.7rem; font-weight:600; }
+    .chip { display:inline-flex; align-items:center; gap:.28rem; padding:.18rem .6rem; border-radius:99px; background:var(--green); color:var(--cream); font-size:.7rem; font-weight:600; box-shadow:0 1px 4px rgba(36,61,26,.15); }
     .chip-x { cursor:pointer; opacity:.6; font-size:.85rem; line-height:1; }
     .chip-x:hover { opacity:1; }
 
-    /* ── MAP LAYOUT ─────────────────────────────────────────── */
-    .content-area { max-width:1400px; margin:0 auto; transition: height 0.2s; }
+    /* ── MAP LAYOUT (MODIFIED FOR RESIZER) ────────────────── */
+    .content-area { max-width:100%; margin:0 auto; transition: height 0.2s; }
     .map-panel { display:none; }
     
-    /* NEW: Resizer Bar Styles */
+    /* Resizer Bar Styles */
     .resizer {
         display: none;
-        width: 8px;
+        width: 10px;
         background: var(--cream-dk);
         cursor: col-resize;
         z-index: 10;
         transition: background 0.2s;
         border-left: 1px solid rgba(0,0,0,0.05);
         border-right: 1px solid rgba(0,0,0,0.05);
+        position: sticky;
+        top: 0;
     }
-    .resizer:hover { background: var(--amber); }
+    .resizer:hover, .resizer.dragging { background: var(--amber); }
+    .resizer::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 2px;
+      height: 30px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 2px;
+      box-shadow: -4px 0 rgba(0,0,0,0.1), 4px 0 rgba(0,0,0,0.1);
+    }
 
     @media (min-width:900px) {
       .content-area.map-active { display:flex; align-items:flex-start; }
-      .content-area.map-active .map-panel { display:block; position:sticky; top:0; flex:0 0 var(--map-width); height:calc(100vh - var(--filter-bar-h,200px)); }
-      .content-area.map-active .resizer { display:block; height:calc(100vh - var(--filter-bar-h,200px)); position:sticky; top:0; }
-      .content-area.map-active .list-panel { flex:1; overflow-y:auto; height:calc(100vh - var(--filter-bar-h,200px)); }
+      .content-area.map-active .map-panel { 
+        display:block; 
+        position:sticky; 
+        top:0; 
+        flex: 0 0 var(--map-width); 
+        height:calc(100vh - var(--filter-bar-h,200px)); 
+      }
+      .content-area.map-active .resizer { 
+        display:block; 
+        height:calc(100vh - var(--filter-bar-h,200px)); 
+      }
+      .content-area.map-active .list-panel { 
+        flex:1; 
+        overflow-y:auto; 
+        height:calc(100vh - var(--filter-bar-h,200px)); 
+      }
     }
     @media (max-width:899px) {
       .content-area.map-active .map-panel { display:block; position:fixed; inset:var(--filter-bar-h,60px) 0 80px; z-index:50; }
@@ -160,13 +189,15 @@
       .resizer { display: none !important; }
     }
     #map { width:100%; height:100%; min-height:400px; }
+    .map-pin { width:22px; height:22px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,.2); cursor:pointer; transition:transform .15s; }
+    .map-pin:hover { transform:rotate(-45deg) scale(1.15); z-index:1000 !important; }
     .map-mode-active footer { display:none; }
 
     /* ── CARD GRID ──────────────────────────────────────────── */
     .grid { padding:0 1.5rem 5rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:1.2rem; margin-top:.5rem; }
     @media (min-width:900px) { .content-area.map-active .grid { grid-template-columns:1fr; padding:.5rem 1rem 5rem; } }
     .card { background:var(--card); border-radius:var(--radius); border:1.5px solid var(--cream-dk); overflow:hidden; box-shadow:0 2px 14px var(--shadow); transition:transform .2s ease,box-shadow .2s ease,border-color .2s; display:flex; flex-direction:column; animation:fadeUp .35s ease both; cursor:pointer; }
-    .card:hover { transform:translateY(-3px); box-shadow:0 8px 28px var(--shadow); }
+    .card:hover { transform:translateY(-3px); box-shadow:0 8px 28px var(--shadow); border-color:var(--amber); }
     .card.map-highlighted { border-color:var(--sienna) !important; box-shadow:0 0 0 2px var(--sienna),0 8px 28px var(--shadow) !important; }
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
     .card-body { padding:1.2rem 1.3rem; flex:1; }
@@ -177,12 +208,12 @@
     .neighborhood { margin-top:.3rem; font-size:.74rem; font-weight:500; color:var(--ink-lt); }
     .neighborhood::before { content:'📍 '; }
     .hours-row { margin-top:.8rem; display:flex; align-items:baseline; gap:.45rem; flex-wrap:wrap; }
-    .hours-text { font-size:.8rem; font-weight:500; }
-    .days-text { font-size:.73rem; color:var(--ink-lt); }
+    .hours-text { font-size:.8rem; font-weight:600; color:var(--ink); }
+    .days-text { font-size:.73rem; color:var(--ink-lt); font-weight:400; }
     .deals { margin-top:.85rem; display:flex; flex-direction:column; gap:.38rem; }
-    .deal-item { display:flex; align-items:flex-start; gap:.5rem; font-size:.81rem; line-height:1.35; }
-    .deal-dot { flex-shrink:0; width:6px; height:6px; border-radius:50%; background:var(--sienna); margin-top:.37em; }
-    .card-footer { padding:.75rem 1.3rem; border-top:1px solid var(--cream-dk); display:flex; flex-direction:column; align-items:flex-start; gap:.45rem; }
+    .deal-item { display:flex; align-items:flex-start; gap:.5rem; font-size:.81rem; line-height:1.35; color:var(--ink-lt); }
+    .deal-dot { flex-shrink:0; width:6px; height:6px; border-radius:50%; background:var(--sienna); margin-top:.37em; opacity:.8; }
+    .card-footer { padding:.75rem 1.3rem; border-top:1px solid var(--cream-dk); display:flex; flex-direction:column; align-items:flex-start; gap:.45rem; background:rgba(250,246,239,.3); }
     .tags { display:flex; flex-wrap:wrap; gap:.3rem; }
     .card-links { display:flex; align-items:center; }
     .card-link { font-size:.75rem; font-weight:600; color:var(--green-lt); text-decoration:none; transition:color .15s; padding:.1rem .3rem; white-space:nowrap; position:relative; z-index:1; }
@@ -204,34 +235,34 @@
       .qv-sheet { top:50%; left:50%; transform:translate(-50%,calc(-50% + 30px)); opacity:0; bottom:auto; right:auto; width:680px; max-width:calc(100vw - 2rem); max-height:88vh; border-radius:20px; transition:transform .3s cubic-bezier(.32,.72,0,1),opacity .3s ease; }
       .qv-sheet.open { transform:translate(-50%,-50%); opacity:1; }
     }
-    .qv-accent { height:5px; width:100%; }
+    .qv-accent { height:5px; width:100%; background:var(--green); }
     .qv-handle { display:flex; justify-content:center; padding:.75rem 0 .25rem; touch-action:none; }
     .qv-handle-bar { width:36px; height:4px; border-radius:2px; background:var(--cream-dk); }
     @media (min-width:700px) { .qv-handle { display:none; } }
-    .qv-close { position:absolute; top:1rem; right:1rem; width:30px; height:30px; border-radius:50%; background:var(--cream-dk); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--ink-lt); transition:background .15s; z-index:1; }
-    .qv-close:hover { background:var(--cream); color:var(--ink); }
+    .qv-close { position:absolute; top:1rem; right:1rem; width:30px; height:30px; border-radius:50%; background:var(--cream-dk); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1rem; color:var(--ink-lt); transition:all .15s; z-index:1; }
+    .qv-close:hover { background:var(--ink); color:#fff; }
     .qv-body { padding:.5rem 1.5rem 1.5rem; }
     .qv-name { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; color:var(--ink); line-height:1.2; margin-bottom:.2rem; padding-right:2rem; }
     .qv-neighborhood { font-size:.8rem; font-weight:500; color:var(--ink-lt); margin-bottom:.85rem; }
     .qv-neighborhood::before { content:'📍 '; }
     .qv-hours-row { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.9rem; }
-    .qv-hours { font-size:.9rem; font-weight:600; }
+    .qv-hours { font-size:.9rem; font-weight:600; color:var(--ink); }
     .qv-days { font-size:.78rem; color:var(--ink-lt); }
     .qv-section-label { font-size:.65rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; margin-bottom:.4rem; }
     .qv-deals { display:flex; flex-direction:column; gap:.4rem; margin-bottom:1rem; }
-    .qv-deal-item { display:flex; align-items:flex-start; gap:.5rem; font-size:.88rem; line-height:1.4; }
+    .qv-deal-item { display:flex; align-items:flex-start; gap:.5rem; font-size:.88rem; line-height:1.4; color:var(--ink); }
     .qv-deal-dot { flex-shrink:0; width:7px; height:7px; border-radius:50%; background:var(--sienna); margin-top:.35em; }
     .qv-tags { display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:1.1rem; }
     .qv-verified { display:inline-flex; align-items:center; gap:.35rem; font-size:.75rem; font-weight:600; color:var(--green-lt); background:#EAF0E4; border:1px solid var(--vibe-tag-border); border-radius:8px; padding:.35rem .7rem; margin-bottom:1.1rem; }
     .qv-links { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1.2rem; }
     .qv-link { display:inline-flex; align-items:center; gap:.3rem; padding:.38rem .9rem; border-radius:99px; font-size:.78rem; font-weight:600; text-decoration:none; transition:all .15s; }
     .qv-link.primary { background:var(--green); color:var(--cream); }
-    .qv-link.primary:hover { background:var(--green-lt); }
+    .qv-link.primary:hover { background:var(--green-lt); transform:translateY(-1px); box-shadow:0 3px 8px rgba(36,61,26,.2); }
     .qv-link.secondary { background:var(--cream); border:1.5px solid var(--cream-dk); color:var(--ink-lt); }
     .qv-link.secondary:hover { border-color:var(--green); color:var(--green); }
     .qv-map-wrap { width:100%; height:260px; border-radius:12px; overflow:hidden; border:1.5px solid var(--cream-dk); }
     #qv-map { width:100%; height:100%; }
-    .qv-map-placeholder { width:100%; height:260px; background:var(--cream-dk); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:.75rem; color:var(--ink-lt); }
+    .qv-map-placeholder { width:100%; height:260px; background:var(--cream-dk); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:.75rem; color:var(--ink-lt); text-align:center; padding:2rem; }
 
     /* ── FOOTER ─────────────────────────────────────────────── */
     footer { padding:4rem 2rem; background:var(--cream-dk); text-align:center; font-size:.82rem; color:var(--ink-lt); border-top:1px solid rgba(0,0,0,.05); }
@@ -240,7 +271,7 @@
     footer a:hover { text-decoration:underline; }
 
     /* ── FAB ────────────────────────────────────────────────── */
-    #fab { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); z-index:1000; background:var(--ink); color:#fff; border:none; padding:.75rem 1.8rem; border-radius:99px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:.85rem; letter-spacing:.05em; box-shadow:0 6px 20px rgba(0,0,0,.3); cursor:pointer; display:none; transition:transform .2s,background .2s; }
+    #fab { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%); z-index:1000; background:var(--ink); color:#fff; border:none; padding:.75rem 1.8rem; border-radius:99px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:.85rem; letter-spacing:.05em; box-shadow:0 6px 20px rgba(0,0,0,.3); cursor:pointer; display:none; transition:transform .2s, background .2s; }
     #fab:active { transform:translateX(-50%) scale(.95); }
     @media (max-width:899px) { #fab { display:block; } }
   </style>
@@ -253,6 +284,8 @@
     <div class="hbg active" id="hbg-standard"></div>
     <div class="hbg" id="hbg-evening"></div>
     <div class="hstars" id="hstars-evening"></div>
+    <div class="deco deco-1"></div>
+    <div class="deco deco-2"></div>
     <div class="header-inner">
       <div class="logo-eyebrow">Minneapolis &middot; St. Paul</div>
       <a href="/" class="header-home-link"><h1><em>Golden</em> Hour</h1></a>
@@ -264,9 +297,13 @@
     It's currently <span id="live-time">...</span> &mdash; <span id="live-day">...</span>
   </div>
 
+  <div class="dev-banner">
+    <strong>Work in Progress:</strong> This site is currently under development. Data may be incomplete.
+  </div>
+
   <div class="filters-wrap" id="filters-wrap">
     <div class="filter-summary-bar" id="filter-summary-bar">
-      <span class="summary-text" id="summary-text">Today &middot; 5 PM</span>
+      <span class="summary-text" id="summary-text">Today &middot; 4 PM &middot; Northeast</span>
       <span class="summary-expand">Filters &#9652;</span>
     </div>
 
@@ -285,10 +322,14 @@
       <div class="filter-row" id="day-filters">
         <span class="filter-row-label">Day</span>
         <button class="pill today-active" data-day="today">Today</button>
-        <button class="pill" data-day="Mon">Mon</button><button class="pill" data-day="Tue">Tue</button>
-        <button class="pill" data-day="Wed">Wed</button><button class="pill" data-day="Thu">Thu</button>
-        <button class="pill" data-day="Fri">Fri</button><button class="pill" data-day="Sat">Sat</button>
+        <button class="pill" data-day="Mon">Mon</button>
+        <button class="pill" data-day="Tue">Tue</button>
+        <button class="pill" data-day="Wed">Wed</button>
+        <button class="pill" data-day="Thu">Thu</button>
+        <button class="pill" data-day="Fri">Fri</button>
+        <button class="pill" data-day="Sat">Sat</button>
         <button class="pill" data-day="Sun">Sun</button>
+        <button class="pill" data-day="all">Any Day</button>
       </div>
 
       <div class="filter-row" id="time-pills">
@@ -302,32 +343,42 @@
       </div>
 
       <div class="slider-row" id="slider-row">
-        <div class="slider-outer"><div class="track-container"><div class="track-line" id="slider-track">
-          <div class="tick tick-even" style="left:0%"><span class="tick-label">2 PM</span></div>
-          <div class="tick tick-odd" style="left:14.29%"></div>
-          <div class="tick tick-even" style="left:28.57%"><span class="tick-label">4 PM</span></div>
-          <div class="tick tick-odd" style="left:42.86%"></div>
-          <div class="tick tick-even" style="left:57.14%"><span class="tick-label">6 PM</span></div>
-          <div class="tick tick-odd" style="left:71.43%"></div>
-          <div class="tick tick-even" style="left:85.71%"><span class="tick-label">8 PM</span></div>
-          <div class="tick tick-odd" style="left:100%"></div>
+        <div class="slider-outer">
+          <div class="track-container">
+            <div class="track-line" id="slider-track">
+              <div class="tick tick-even" style="left:0%"><span class="tick-label">2 PM</span></div>
+              <div class="tick tick-odd" style="left:14.29%"></div>
+              <div class="tick tick-even" style="left:28.57%"><span class="tick-label">4 PM</span></div>
+              <div class="tick tick-odd" style="left:42.86%"></div>
+              <div class="tick tick-even" style="left:57.14%"><span class="tick-label">6 PM</span></div>
+              <div class="tick tick-odd" style="left:71.43%"></div>
+              <div class="tick tick-even" style="left:85.71%"><span class="tick-label">8 PM</span></div>
+              <div class="tick tick-odd" style="left:100%"></div>
+            </div>
+            <div class="thumb-wrap" id="slider-thumb">
+              <div class="thumb-label-above" id="thumb-label">4:00 PM</div>
+              <div class="thumb-dot"></div>
+            </div>
+            <input type="range" class="slider-input" id="time-slider" min="1400" max="2100" step="15" value="1600">
+          </div>
         </div>
-        <div class="thumb-wrap" id="slider-thumb">
-          <div class="thumb-label-above" id="thumb-label">4:00 PM</div>
-          <div class="thumb-dot"></div>
-        </div>
-        <input type="range" class="slider-input" id="time-slider" min="1400" max="2100" step="15" value="1600">
-      </div></div></div>
+      </div>
 
       <div class="collapsibles-bar">
         <div class="collapsible">
-          <button class="collapsible-toggle" id="toggle-area">Neighborhoods <span class="active-badge" id="badge-area" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span></button>
+          <button class="collapsible-toggle" id="toggle-area">
+            Neighborhoods <span class="active-badge" id="badge-area" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span>
+          </button>
         </div>
         <div class="collapsible">
-          <button class="collapsible-toggle" id="toggle-deals">Deals <span class="active-badge" id="badge-deals" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span></button>
+          <button class="collapsible-toggle" id="toggle-deals">
+            Deals <span class="active-badge" id="badge-deals" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span>
+          </button>
         </div>
         <div class="collapsible">
-          <button class="collapsible-toggle" id="toggle-vibe">Vibe <span class="active-badge" id="badge-vibe" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span></button>
+          <button class="collapsible-toggle" id="toggle-vibe">
+            Vibe <span class="active-badge" id="badge-vibe" style="display:none">0</span> <span class="toggle-chevron">&#9662;</span>
+          </button>
         </div>
       </div>
     </div>
@@ -341,8 +392,8 @@
     <div class="results-meta-left">
       <div id="results-heading">
         <span class="h-label">Happy Hours</span>
-        <span class="h-day" id="h-day">...</span>
-        <span class="h-time" id="h-time">...</span>
+        <span class="h-day" id="h-day">Today</span>
+        <span class="h-time" id="h-time">@ 4 PM</span>
       </div>
       <div class="results-count" id="results-count">...</div>
     </div>
@@ -350,7 +401,9 @@
   </div>
 
   <div class="combo-warning" id="combo-warning" style="display:none">
-    <div class="combo-inner"><strong>Note:</strong> No venues match all filters. Showing matches for your selected neighborhood/time.</div>
+    <div class="combo-inner">
+      <strong>Note:</strong> No venues match all filters. Showing matches for your selected neighborhood/time.
+    </div>
   </div>
 
   <div class="active-chips" id="active-chips"></div>
@@ -385,12 +438,18 @@
     var TILE_URL = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
     var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
     var NEIGHBORHOOD_BOUNDS = {
-      'Northeast': [[44.978,-93.278],[45.010,-93.238]], 'Arts District': [[44.978,-93.278],[45.010,-93.238]],
-      'North Loop': [[44.982,-93.295],[44.993,-93.268]], 'Downtown': [[44.972,-93.278],[44.988,-93.255]],
-      'Lowry Hill': [[44.955,-93.310],[44.972,-93.282]], 'Lowry Hill East': [[44.952,-93.297],[44.965,-93.277]],
-      'Whittier': [[44.945,-93.288],[44.962,-93.268]], 'Warehouse District': [[44.978,-93.298],[44.990,-93.277]],
-      'Longfellow': [[44.905,-93.245],[44.930,-93.215]], 'Powderhorn': [[44.920,-93.270],[44.950,-93.240]],
-      'Grand Avenue': [[44.930,-93.160],[44.950,-93.130]], 'Macalester-Groveland': [[44.930,-93.165],[44.950,-93.140]],
+      'Northeast': [[44.978,-93.278],[45.010,-93.238]],
+      'Arts District': [[44.978,-93.278],[45.010,-93.238]],
+      'North Loop': [[44.982,-93.295],[44.993,-93.268]],
+      'Downtown': [[44.972,-93.278],[44.988,-93.255]],
+      'Lowry Hill': [[44.955,-93.310],[44.972,-93.282]],
+      'Lowry Hill East': [[44.952,-93.297],[44.965,-93.277]],
+      'Whittier': [[44.945,-93.288],[44.962,-93.268]],
+      'Warehouse District': [[44.978,-93.298],[44.990,-93.277]],
+      'Longfellow': [[44.905,-93.245],[44.930,-93.215]],
+      'Powderhorn': [[44.920,-93.270],[44.950,-93.240]],
+      'Grand Avenue': [[44.930,-93.160],[44.950,-93.130]],
+      'Macalester-Groveland': [[44.930,-93.165],[44.950,-93.140]],
       'University': [[44.970,-93.235],[44.992,-93.210]]
     };
     var MAP_CENTER = [44.960,-93.240], MAP_ZOOM = 12;
@@ -404,8 +463,8 @@
 
     Papa.parse(CSV_URL, {
       download: true, header: true,
-      complete: function(r) {
-        VENUES = parseCSV(r.data);
+      complete: function(results) {
+        VENUES = parseCSV(results.data);
         init();
       }
     });
@@ -417,13 +476,16 @@
           neighborhoods: r.neighborhood ? r.neighborhood.split('|').map(function(n){return n.trim();}).filter(Boolean) : [],
           city: r.city ? r.city.trim() : '',
           days: r.days ? r.days.split('|').map(function(d){return d.trim();}).filter(Boolean) : [],
-          startTime: parseInt(r.startTime,10), endTime: parseInt(r.endTime,10),
+          startTime: parseInt(r.startTime, 10),
+          endTime: parseInt(r.endTime, 10),
           deals: r.deals ? r.deals.split('|').map(function(d){return d.trim();}).filter(Boolean) : [],
           dealTags: r.dealTags ? r.dealTags.split('|').map(function(t){return t.trim();}).filter(Boolean) : [],
           vibe: r.vibe ? r.vibe.split('|').map(function(t){return t.trim();}).filter(Boolean) : [],
-          website: r.website ? r.website.trim() : '', mapsUrl: r.mapsUrl ? r.mapsUrl.trim() : '',
+          website: r.website ? r.website.trim() : '',
+          mapsUrl: r.mapsUrl ? r.mapsUrl.trim() : '',
           accentColor: r.accentColor ? r.accentColor.trim() : '#3A5C28',
-          lat: parseFloat(r.lat) || null, lng: parseFloat(r.lng) || null,
+          lat: parseFloat(r.lat) || null,
+          lng: parseFloat(r.lng) || null,
           verified: r.verified ? r.verified.trim() : ''
         };
       }).filter(function(v){return v.name && !isNaN(v.startTime);});
@@ -433,40 +495,80 @@
       applyHeaderTheme(); buildAreaPanel(); buildDealPanel(); buildVibePanel();
       setupCollapsibles(); setupDayFilters(); setupTimePills(); setupSlider();
       setupMapToggle(); setupFAB(); setupQV(); setupFilterHandle();
-      setupScrollCollapse(); setupQVSwipe(); setupResizer(); // NEW
+      setupScrollCollapse(); setupQVSwipe(); setupResizer();
       positionPanels();
       window.addEventListener('resize', function(){positionPanels(); updateContentHeight();});
       render(); setInterval(updateAllBadges, 60000); updateClock();
     }
 
-    // NEW: The dragging logic
     function setupResizer() {
-        const resizer = document.getElementById('resizer');
-        let isDragging = false;
-        resizer.addEventListener('mousedown', () => {
-            isDragging = true;
-            document.body.style.cursor = 'col-resize';
-            document.body.style.userSelect = 'none';
-        });
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            let p = (e.clientX / window.innerWidth) * 100;
-            if (p > 20 && p < 80) {
-                document.documentElement.style.setProperty('--map-width', p + '%');
-                if (leafletMap) leafletMap.invalidateSize();
-            }
-        });
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            document.body.style.cursor = 'default';
-            document.body.style.userSelect = 'auto';
-        });
+      const resizer = document.getElementById('resizer');
+      let isDragging = false;
+      resizer.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        resizer.classList.add('dragging');
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        let p = (e.clientX / window.innerWidth) * 100;
+        if (p > 20 && p < 80) {
+          document.documentElement.style.setProperty('--map-width', p + '%');
+          if (leafletMap) leafletMap.invalidateSize();
+        }
+      });
+      document.addEventListener('mouseup', function() {
+        if (isDragging) {
+          isDragging = false;
+          resizer.classList.remove('dragging');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+        }
+      });
     }
+
+    function applyHeaderTheme() {
+      var hour = new Date().getHours();
+      document.querySelectorAll('.hbg, .hstars').forEach(function(el){el.classList.remove('active');});
+      var bar = document.querySelector('.time-bar');
+      if (hour >= 6 && hour < 11) {
+        document.getElementById('hbg-morning').classList.add('active');
+        document.getElementById('hstars-morning').classList.add('active');
+        bar.style.backgroundColor = '#2A5A7A';
+      } else if (hour >= 11 && hour < 17) {
+        document.getElementById('hbg-standard').classList.add('active');
+        bar.style.backgroundColor = 'var(--timebar-bg)';
+      } else {
+        document.getElementById('hbg-evening').classList.add('active');
+        document.getElementById('hstars-evening').classList.add('active');
+        bar.style.backgroundColor = '#1A1428';
+      }
+    }
+
+    function updateClock() {
+      var d = new Date(), h = d.getHours(), m = d.getMinutes();
+      var ampm = h >= 12 ? 'PM' : 'AM', h12 = h > 12 ? h - 12 : h === 0 ? 12 : h;
+      document.getElementById('live-time').textContent = h12 + (m ? ':'+String(m).padStart(2,'0') : '') + ' ' + ampm;
+      document.getElementById('live-day').textContent = DAY_FULL[d.getDay()];
+    }
+
+    function nowMinutes() { var d = new Date(); return d.getHours() * 100 + d.getMinutes(); }
+    function todayAbbr() { return DAY_NAMES[new Date().getDay()]; }
+
+    function isOpenNowRange(s, e, test) {
+      var n = test || nowMinutes();
+      if (e < s) { return n >= s || n <= e; }
+      return n >= s && n <= e;
+    }
+
+    function overlaps(vS, vE, wS, wE) { return vS <= wE && vE >= wS; }
+    function overlapsLateNight(vS, vE) { return vS >= 2100 || vE < 600 || vE < vS; }
 
     function filteredVenues() {
       var d = (activeDays === 'today') ? todayAbbr() : activeDays;
       var q = searchQuery.toLowerCase();
-      var f = VENUES.filter(function(v) {
+      var matches = VENUES.filter(function(v) {
         var dayMatch = (d === 'all' || v.days.includes(d));
         var searchMatch = !q || v.name.toLowerCase().includes(q) || v.neighborhoods.some(function(n){return n.toLowerCase().includes(q);}) || v.deals.some(function(dl){return dl.toLowerCase().includes(q);});
         var nhMatch = activeNeighborhoods.size === 0 || v.neighborhoods.some(function(n){return activeNeighborhoods.has(n);});
@@ -481,7 +583,26 @@
         else if (activeTime === 'pick') tMatch = isOpenNowRange(v.startTime, v.endTime, sliderValue);
         return dayMatch && searchMatch && nhMatch && dlMatch && vbMatch && tMatch;
       });
-      return f;
+      if (matches.length === 0 && (activeNeighborhoods.size > 0 || activeDealTags.size > 0 || activeVibeTags.size > 0)) {
+        document.getElementById('combo-warning').style.display = 'block';
+        return VENUES.filter(function(v) {
+          var dMatch = (d === 'all' || v.days.includes(d));
+          var tMatch = false;
+          if (activeTime === 'any') tMatch = true;
+          else if (activeTime === 'now') tMatch = isOpenNowRange(v.startTime, v.endTime);
+          else if (activeTime === 'pick') tMatch = isOpenNowRange(v.startTime, v.endTime, sliderValue);
+          else tMatch = true;
+          return dMatch && tMatch;
+        }).slice(0, 12);
+      }
+      document.getElementById('combo-warning').style.display = 'none';
+      return matches;
+    }
+
+    function formatTime(t) {
+      var h = Math.floor(t / 100), m = t % 100;
+      var ampm = h >= 12 ? 'PM' : 'AM', h12 = h > 12 ? h - 12 : h === 0 ? 12 : h;
+      return h12 + (m ? ':'+String(m).padStart(2,'0') : '') + ' ' + ampm;
     }
 
     function render() {
@@ -494,11 +615,13 @@
         f.forEach(function(v) { grid.appendChild(createCard(v)); });
       }
       document.getElementById('results-count').textContent = f.length + ' spot' + (f.length===1?'':'s');
-      var dayText = (activeDays==='today') ? 'Today' : activeDays;
+      var dayText = (activeDays==='today') ? 'Today' : (activeDays==='all'?'Any Day':activeDays);
       document.getElementById('h-day').textContent = dayText;
       var timeText = (activeTime==='pick') ? formatTime(sliderValue) : (activeTime==='any'?'Any Time':activeTime);
       document.getElementById('h-time').textContent = '@ ' + timeText;
+      updateSummaryText();
       updateMapMarkers(f);
+      updateChips();
     }
 
     function createCard(v) {
@@ -509,149 +632,327 @@
         status = '<span class="status-badge" style="background:var(--green);color:#fff">Open Now</span>';
       } else {
         var now = nowMinutes();
-        if (v.startTime > now && v.startTime - now <= 100) {
-          status = '<span class="status-badge soon">Starts Soon</span>';
-        } else {
-          status = '<span class="status-badge" style="background:var(--cream-dk);color:var(--ink-lt)">Closed</span>';
-        }
+        if (v.startTime > now && v.startTime - now <= 100) { status = '<span class="status-badge soon">Starts Soon</span>'; }
+        else { status = '<span class="status-badge" style="background:var(--cream-dk);color:var(--ink-lt)">Closed</span>'; }
       }
       var dealsHTML = v.deals.slice(0,3).map(function(d){return '<div class="deal-item"><span class="deal-dot"></span><span>'+d+'</span></div>';}).join('');
       var dtHTML = v.dealTags.map(function(t){return '<span class="tag-deal'+(activeDealTags.has(t)?' tag-active':'')+'" data-click-deal="'+t+'">'+t+'</span>';}).join('');
       var vtHTML = v.vibe.map(function(t){return '<span class="tag-vibe'+(activeVibeTags.has(t)?' tag-active':'')+'" data-click-vibe="'+t+'">'+t+'</span>';}).join('');
       card.innerHTML = '<div class="card-body"><div class="card-header"><div class="venue-name">'+v.name+'</div>'+status+'</div><div class="neighborhood">'+v.neighborhoods[0]+'</div><div class="hours-row"><span class="hours-text">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span><span class="days-text">'+v.days.join(' &middot; ')+'</span></div><div class="deals">'+dealsHTML+'</div></div><div class="card-footer"><div class="tags">'+dtHTML+vtHTML+'</div></div>';
-      card.addEventListener('click', function(){openQV(v.name);});
+      card.addEventListener('click', function(e){
+        if(e.target.dataset.clickDeal || e.target.dataset.clickVibe) return;
+        var name = card.dataset.name; openQV(name);
+        if (mapMode) {
+          highlightMarker(name);
+          var v = VENUES.find(function(x){return x.name===name;});
+          if (v && v.lat && leafletMap) leafletMap.panTo([v.lat, v.lng]);
+        }
+      });
+      card.addEventListener('mouseenter', function(){ if (mapMode) highlightMarker(card.dataset.name); });
+      card.querySelectorAll('[data-click-deal]').forEach(function(el){
+        el.addEventListener('click', function(e){
+          e.stopPropagation(); toggleSet(activeDealTags, el.dataset.clickDeal);
+          syncPills(document.getElementById('deal-pills'), 'deal', activeDealTags, 'all');
+          updateBadge('badge-deals', activeDealTags.size, 'panel-deals'); render();
+        });
+      });
+      card.querySelectorAll('[data-click-vibe]').forEach(function(el){
+        el.addEventListener('click', function(e){
+          e.stopPropagation(); toggleSet(activeVibeTags, el.dataset.clickVibe);
+          syncPills(document.getElementById('vibe-pills'), 'vibe', activeVibeTags, 'all');
+          updateBadge('badge-vibe', activeVibeTags.size, 'panel-vibe'); render();
+        });
+      });
       return card;
     }
 
     function initMapOnce() {
       if (leafletMap) return;
-      leafletMap = L.map('map').setView(MAP_CENTER, MAP_ZOOM);
+      leafletMap = L.map('map', {zoomControl: false}).setView(MAP_CENTER, MAP_ZOOM);
+      L.control.zoom({position: 'bottomright'}).addTo(leafletMap);
       L.tileLayer(TILE_URL, {attribution: TILE_ATTR}).addTo(leafletMap);
       leafletMap.on('moveend', onMapMoved);
     }
 
     function updateMapMarkers(venues) {
       if (!leafletMap) return;
-      var names = new Set(venues.map(function(v){return v.name;}));
-      Object.keys(markers).forEach(function(n){ if (!names.has(n)) { leafletMap.removeLayer(markers[n]); delete markers[n]; } });
+      var visibleNames = new Set(venues.map(function(v){return v.name;}));
+      Object.keys(markers).forEach(function(name){
+        if (!visibleNames.has(name)) { leafletMap.removeLayer(markers[name]); delete markers[name]; }
+      });
       venues.forEach(function(v) {
         if (!v.lat || !v.lng || markers[v.name]) return;
-        markers[v.name] = L.marker([v.lat, v.lng], {icon: L.divIcon({className:'', html:'<div class="map-pin" style="background:'+v.accentColor+'"></div>', iconSize:[30,30], iconAnchor:[15,30]})}).addTo(leafletMap);
-        markers[v.name].on('click', function(){openQV(v.name);});
+        var pin = L.divIcon({className:'', html:'<div class="map-pin" id="marker-'+v.name.replace(/\s+/g,'-')+'" style="background:'+v.accentColor+'"></div>', iconSize:[24,24], iconAnchor:[12,24]});
+        var m = L.marker([v.lat, v.lng], {icon: pin}).addTo(leafletMap);
+        m.on('click', function(){ openQV(v.name); highlightMarker(v.name); });
+        markers[v.name] = m;
       });
     }
 
-    /* ALL OTHER ORIGINAL HELPER FUNCTIONS REMAIN UNTOUCHED */
-    function applyHeaderTheme(){
-      var h=new Date().getHours();
-      document.querySelectorAll('.hbg').forEach(function(el){el.classList.remove('active');});
-      if(h>=6&&h<11)document.getElementById('hbg-morning').classList.add('active');
-      else if(h>=11&&h<17)document.getElementById('hbg-standard').classList.add('active');
-      else document.getElementById('hbg-evening').classList.add('active');
+    function highlightMarker(name) {
+      if (highlightedVenue && markers[highlightedVenue]) {
+        var elOld = document.getElementById('marker-'+highlightedVenue.replace(/\s+/g,'-'));
+        if (elOld) elOld.style.transform = 'rotate(-45deg) scale(1)';
+      }
+      highlightedVenue = name;
+      var elNew = document.getElementById('marker-'+name.replace(/\s+/g,'-'));
+      if (elNew) elNew.style.transform = 'rotate(-45deg) scale(1.3)';
+      document.querySelectorAll('.card').forEach(function(c){
+        c.classList.toggle('map-highlighted', c.dataset.name === name);
+      });
     }
-    function updateClock(){
-      var d=new Date();
-      document.getElementById('live-time').textContent=formatTime(d.getHours()*100+d.getMinutes());
-      document.getElementById('live-day').textContent=DAY_FULL[d.getDay()];
-    }
-    function formatTime(t){
-      var h=Math.floor(t/100),m=t%100;
-      var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;
-      return h12+(m?':'+String(m).padStart(2,'0'):'')+' '+ampm;
-    }
-    function nowMinutes(){var d=new Date();return d.getHours()*100+d.getMinutes();}
-    function todayAbbr(){return DAY_NAMES[new Date().getDay()];}
-    function isOpenNowRange(s,e,test){
-      var n=test||nowMinutes();
-      if(e<s)return n>=s||n<=e;
-      return n>=s&&n<=e;
-    }
-    function overlaps(vS,vE,wS,wE){return vS<=wE&&vE>=wS;}
-    function overlapsLateNight(vS,vE){return vS>=2100||vE<600||vE<vS;}
 
-    function setupCollapsibles(){
-      document.querySelectorAll('.collapsible-toggle').forEach(function(btn){
-        btn.addEventListener('click',function(e){
-          e.stopPropagation();
-          var panelId='panel-'+btn.id.split('-')[1],panel=document.getElementById(panelId);
-          var isOpen=panel.classList.contains('open');
-          document.querySelectorAll('.collapsible-panel').forEach(function(p){p.classList.remove('open');});
-          document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.classList.remove('open');});
-          if(!isOpen){panel.classList.add('open');btn.classList.add('open');}
-        });
-      });
-      document.addEventListener('click',function(){
-        document.querySelectorAll('.collapsible-panel').forEach(function(p){p.classList.remove('open');});
-        document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.classList.remove('open');});
+    function onMapMoved() {
+      if (!mapMode || !leafletMap) return;
+      var bounds = leafletMap.getBounds();
+      document.querySelectorAll('.card').forEach(function(c) {
+        var v = VENUES.find(function(x){return x.name===c.dataset.name;});
+        if (v && v.lat) { c.style.display = bounds.contains([v.lat, v.lng]) ? 'flex' : 'none'; }
       });
     }
-    function setupDayFilters(){
-      document.getElementById('day-filters').addEventListener('click',function(e){
-        var btn=e.target.closest('[data-day]');if(!btn)return;
-        activeDays=btn.dataset.day;
-        document.querySelectorAll('#day-filters .pill').forEach(function(p){p.classList.remove('today-active');});
-        btn.classList.add('today-active'); render();
-      });
+
+    function toggleMapMode() {
+      mapMode = !mapMode;
+      var content = document.getElementById('content-area');
+      content.classList.toggle('map-active', mapMode);
+      document.getElementById('map-toggle-btn').classList.toggle('active', mapMode);
+      document.getElementById('map-toggle-btn').textContent = mapMode ? 'List view' : 'Map view';
+      document.getElementById('fab').textContent = mapMode ? 'List' : 'Map';
+      document.body.classList.toggle('map-mode-active', mapMode);
+      if (mapMode) {
+        initMapOnce();
+        setTimeout(function(){ leafletMap.invalidateSize(); if(leafletMap) onMapMoved(); }, 300);
+      } else {
+        document.querySelectorAll('.card').forEach(function(c){c.style.display='flex';});
+      }
+      positionPanels();
     }
-    function setupTimePills(){
-      document.getElementById('time-pills').addEventListener('click',function(e){
-        var btn=e.target.closest('[data-time]');if(!btn)return;
-        activeTime=btn.dataset.time;
-        document.querySelectorAll('#time-pills .pill').forEach(function(p){p.classList.remove('time-active','time-active-now','pick-active');});
-        if(activeTime==='now')btn.classList.add('time-active-now');
-        else if(activeTime==='pick')btn.classList.add('pick-active');
-        else btn.classList.add('time-active');
-        document.getElementById('slider-row').style.display=(activeTime==='pick'?'block':'none');
-        render();
-      });
-    }
-    function setupSlider(){
-      var s=document.getElementById('time-slider'),t=document.getElementById('slider-thumb'),l=document.getElementById('thumb-label');
-      s.addEventListener('input',function(){
-        sliderValue=parseInt(s.value);
-        var pct=(sliderValue-1400)/(2100-1400)*100;
-        t.style.left=pct+'%'; l.textContent=formatTime(sliderValue);
-        if(activeTime==='pick')render();
-      });
-    }
-    function setupMapToggle(){document.getElementById('map-toggle-btn').addEventListener('click',toggleMapMode);}
-    function setupFAB(){document.getElementById('fab').addEventListener('click',toggleMapMode);}
-    function toggleMapMode(){
-      mapMode=!mapMode;
-      document.getElementById('content-area').classList.toggle('map-active',mapMode);
-      document.getElementById('map-toggle-btn').textContent=mapMode?'List view':'Map view';
-      if(mapMode){initMapOnce(); setTimeout(function(){leafletMap.invalidateSize();},200);}
-      render();
-    }
-    function openQV(name){
-      var v=VENUES.find(function(x){return x.name===name;}); if(!v)return;
-      document.getElementById('qv-accent').style.background=v.accentColor;
-      document.getElementById('qv-body').innerHTML='<div class="qv-name">'+v.name+'</div><div class="qv-neighborhood">'+v.neighborhoods[0]+'</div><div class="qv-hours-row"><span class="qv-hours">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span></div>';
+
+    function openQV(name) {
+      var v = VENUES.find(function(x){return x.name === name;}); if (!v) return;
+      document.getElementById('qv-accent').style.backgroundColor = v.accentColor;
+      var status = isOpenNowRange(v.startTime, v.endTime) ? '<span class="status-badge" style="background:var(--green);color:#fff">Open Now</span>' : '<span class="status-badge" style="background:var(--cream-dk);color:var(--ink-lt)">Closed</span>';
+      var dealsHTML = v.deals.map(function(d){return '<div class="qv-deal-item"><span class="qv-deal-dot"></span><span>'+d+'</span></div>';}).join('');
+      var tagsHTML = v.dealTags.map(function(t){return '<span class="tag-deal">'+t+'</span>';}).join('') + v.vibe.map(function(t){return '<span class="tag-vibe">'+t+'</span>';}).join('');
+      var linksHTML = '';
+      if (v.website) linksHTML += '<a href="'+v.website+'" target="_blank" class="qv-link primary">Visit Website</a>';
+      if (v.mapsUrl) linksHTML += '<a href="'+v.mapsUrl+'" target="_blank" class="qv-link secondary">Get Directions</a>';
+      var verifiedHTML = v.verified ? '<div class="qv-verified"><span>✓</span> Verified '+v.verified+'</div>' : '';
+      var mapHTML = (v.lat && v.lng) ? '<div class="qv-map-wrap" id="qv-map"></div>' : '<div class="qv-map-placeholder">Location details arriving soon.</div>';
+      document.getElementById('qv-body').innerHTML = '<div class="qv-name">'+v.name+'</div><div class="qv-neighborhood">'+v.neighborhoods.join(', ')+'</div><div class="qv-hours-row"><span class="qv-hours">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span><span class="qv-days">'+v.days.join(' &middot; ')+'</span>'+status+'</div>'+verifiedHTML+'<div class="qv-section-label">Happy Hour Deals</div><div class="qv-deals">'+dealsHTML+'</div><div class="qv-section-label">Vibe & Info</div><div class="qv-tags">'+tagsHTML+'</div><div class="qv-links">'+linksHTML+'</div>'+mapHTML;
       document.getElementById('qv-backdrop').classList.add('open');
       document.getElementById('qv-sheet').classList.add('open');
+      if (v.lat && v.lng) {
+        setTimeout(function(){
+          var qm = L.map('qv-map', {zoomControl:false, attributionControl:false}).setView([v.lat, v.lng], 15);
+          L.tileLayer(TILE_URL).addTo(qm);
+          L.marker([v.lat, v.lng], {icon: L.divIcon({className:'', html:'<div class="map-pin" style="background:'+v.accentColor+'"></div>', iconSize:[24,24], iconAnchor:[12,24]})}).addTo(qm);
+        }, 100);
+      }
     }
-    function closeQV(){
+
+    function closeQV() {
       document.getElementById('qv-backdrop').classList.remove('open');
       document.getElementById('qv-sheet').classList.remove('open');
     }
-    function setupQV(){
-      document.getElementById('qv-backdrop').addEventListener('click',closeQV);
-      document.getElementById('qv-close').addEventListener('click',closeQV);
+
+    function setupQV() {
+      document.getElementById('qv-backdrop').addEventListener('click', closeQV);
+      document.getElementById('qv-close').addEventListener('click', closeQV);
     }
-    /* buildAreaPanel, buildDealPanel, buildVibePanel logic would go here similarly to your original file */
-    function positionPanels(){
-      var bar=document.getElementById('filters-wrap'); if(!bar)return;
-      var b=bar.getBoundingClientRect().bottom;
-      document.documentElement.style.setProperty('--filter-bar-h',b+'px');
+
+    function setupQVSwipe() {
+      var sheet = document.getElementById('qv-sheet'), startY = 0, currentY = 0;
+      sheet.addEventListener('touchstart', function(e){ startY = e.touches[0].clientY; }, {passive:true});
+      sheet.addEventListener('touchmove', function(e){
+        currentY = e.touches[0].clientY;
+        var diff = currentY - startY;
+        if (diff > 0 && sheet.scrollTop <= 0) { sheet.style.transform = 'translateY('+diff+'px)'; }
+      }, {passive:true});
+      sheet.addEventListener('touchend', function(e){
+        var diff = currentY - startY;
+        if (diff > 100 && sheet.scrollTop <= 0) { closeQV(); }
+        sheet.style.transform = '';
+      });
     }
-    function updateContentHeight(){} // Placeholders for remaining complex logic
-    function setupFilterHandle(){}
-    function setupScrollCollapse(){}
-    function setupQVSwipe(){}
-    function updateAllBadges(){}
-    function buildAreaPanel(){}
-    function buildDealPanel(){}
-    function buildVibePanel(){}
+
+    function setupDayFilters() {
+      document.getElementById('day-filters').addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-day]'); if (!btn) return;
+        activeDays = btn.dataset.day;
+        document.querySelectorAll('#day-filters .pill').forEach(function(p){ p.classList.remove('today-active'); });
+        btn.classList.add('today-active'); render();
+      });
+    }
+
+    function setupTimePills() {
+      document.getElementById('time-pills').addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-time]'); if (!btn) return;
+        activeTime = btn.dataset.time;
+        document.querySelectorAll('#time-pills .pill').forEach(function(p){ p.classList.remove('time-active','time-active-now','pick-active'); });
+        if (activeTime === 'now') btn.classList.add('time-active-now');
+        else if (activeTime === 'pick') btn.classList.add('pick-active');
+        else btn.classList.add('time-active');
+        document.getElementById('slider-row').style.display = (activeTime === 'pick' ? 'block' : 'none');
+        positionPanels(); render();
+      });
+    }
+
+    function setupSlider() {
+      var s = document.getElementById('time-slider'), t = document.getElementById('slider-thumb'), l = document.getElementById('thumb-label');
+      s.addEventListener('input', function() {
+        sliderValue = parseInt(s.value);
+        var pct = (sliderValue - 1400) / (2100 - 1400) * 100;
+        t.style.left = pct + '%'; l.textContent = formatTime(sliderValue);
+        if (activeTime === 'pick') render();
+      });
+    }
+
+    function setupCollapsibles() {
+      document.querySelectorAll('.collapsible-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var panelId = 'panel-' + btn.id.split('-')[1], panel = document.getElementById(panelId);
+          var isOpen = panel.classList.contains('open');
+          document.querySelectorAll('.collapsible-panel').forEach(function(p){ p.classList.remove('open'); });
+          document.querySelectorAll('.collapsible-toggle').forEach(function(t){ t.classList.remove('open'); });
+          if (!isOpen) { panel.classList.add('open'); btn.classList.add('open'); }
+        });
+      });
+      document.addEventListener('click', function() {
+        document.querySelectorAll('.collapsible-panel').forEach(function(p){ p.classList.remove('open'); });
+        document.querySelectorAll('.collapsible-toggle').forEach(function(t){ t.classList.remove('open'); });
+      });
+      document.querySelectorAll('.collapsible-panel').forEach(function(p){ p.addEventListener('click', function(e){ e.stopPropagation(); }); });
+    }
+
+    function buildAreaPanel() {
+      var areas = {};
+      VENUES.forEach(function(v){
+        v.neighborhoods.forEach(function(n){ if (!areas[n]) areas[n] = v.city; });
+      });
+      var cities = ['Minneapolis', 'Saint Paul'];
+      var container = document.getElementById('area-pills');
+      cities.forEach(function(city) {
+        var group = document.createElement('div'); group.style.width = '100%';
+        var t = document.createElement('button'); t.className = 'city-toggle open'; t.innerHTML = city + ' <span class="city-chevron">▾</span>';
+        var pWrap = document.createElement('div'); pWrap.className = 'city-pills';
+        t.addEventListener('click', function(){ t.classList.toggle('open'); pWrap.classList.toggle('collapsed'); });
+        Object.keys(areas).sort().forEach(function(n) {
+          if (areas[n] === city) { pWrap.appendChild(createPill(n, 'area', activeNeighborhoods)); }
+        });
+        group.appendChild(t); group.appendChild(pWrap); container.appendChild(group);
+      });
+    }
+
+    function buildDealPanel() {
+      var tags = new Set(); VENUES.forEach(function(v){ v.dealTags.forEach(function(t){ tags.add(t); }); });
+      var container = document.getElementById('deal-pills');
+      Array.from(tags).sort().forEach(function(t){ container.appendChild(createPill(t, 'deal', activeDealTags)); });
+    }
+
+    function buildVibePanel() {
+      var tags = new Set(); VENUES.forEach(function(v){ v.vibe.forEach(function(t){ tags.add(t); }); });
+      var container = document.getElementById('vibe-pills');
+      Array.from(tags).sort().forEach(function(t){ container.appendChild(createPill(t, 'vibe', activeVibeTags)); });
+    }
+
+    function createPill(label, type, set) {
+      var p = document.createElement('div'); p.className = 'pill'; p.textContent = label;
+      p.addEventListener('click', function() {
+        toggleSet(set, label); p.classList.toggle('tag-active', set.has(label));
+        var badgeId = 'badge-' + (type==='area'?'area':type==='deal'?'deals':'vibe');
+        var panelId = 'panel-' + (type==='area'?'area':type==='deal'?'deals':'vibe');
+        updateBadge(badgeId, set.size, panelId); render();
+      });
+      return p;
+    }
+
+    function toggleSet(set, val) { if (set.has(val)) set.delete(val); else set.add(val); }
+
+    function updateBadge(id, count, panelId) {
+      var b = document.getElementById(id), t = b.closest('.collapsible-toggle');
+      b.textContent = count; b.style.display = count > 0 ? 'inline-block' : 'none';
+      if (t) t.classList.toggle('has-active', count > 0);
+    }
+
+    function syncPills(container, type, set, scope) {
+      container.querySelectorAll('.pill').forEach(function(p){ p.classList.toggle('tag-active', set.has(p.textContent)); });
+    }
+
+    function updateChips() {
+      var c = document.getElementById('active-chips'); c.innerHTML = '';
+      activeNeighborhoods.forEach(function(n){ c.appendChild(createChip(n, activeNeighborhoods, 'area')); });
+      activeDealTags.forEach(function(t){ c.appendChild(createChip(t, activeDealTags, 'deal')); });
+      activeVibeTags.forEach(function(t){ c.appendChild(createChip(t, activeVibeTags, 'vibe')); });
+    }
+
+    function createChip(label, set, type) {
+      var chip = document.createElement('div'); chip.className = 'chip';
+      chip.innerHTML = label + ' <span class="chip-x">&times;</span>';
+      chip.querySelector('.chip-x').addEventListener('click', function(){
+        set.delete(label);
+        var badgeId = 'badge-' + (type==='area'?'area':type==='deal'?'deals':'vibe');
+        var panelId = 'panel-' + (type==='area'?'area':type==='deal'?'deals':'vibe');
+        var containerId = (type==='area'?'area-pills':type==='deal'?'deal-pills':'vibe-pills');
+        updateBadge(badgeId, set.size, panelId);
+        syncPills(document.getElementById(containerId), type, set, 'all'); render();
+      });
+      return chip;
+    }
+
+    function updateSummaryText() {
+      var day = (activeDays==='today') ? 'Today' : (activeDays==='all'?'Any Day':activeDays);
+      var time = (activeTime==='pick') ? formatTime(sliderValue) : (activeTime==='any'?'Any Time':activeTime);
+      var loc = activeNeighborhoods.size > 0 ? Array.from(activeNeighborhoods).join(', ') : 'All Areas';
+      document.getElementById('summary-text').innerHTML = '<strong>' + day + '</strong> &middot; ' + time + ' &middot; ' + loc;
+    }
+
+    function updateAllBadges() {
+      updateBadge('badge-area', activeNeighborhoods.size, 'panel-area');
+      updateBadge('badge-deals', activeDealTags.size, 'panel-deals');
+      updateBadge('badge-vibe', activeVibeTags.size, 'panel-vibe');
+    }
+
+    function setupMapToggle() { document.getElementById('map-toggle-btn').addEventListener('click', toggleMapMode); }
+    function setupFAB() { document.getElementById('fab').addEventListener('click', toggleMapMode); }
+
+    function positionPanels() {
+      var bar = document.getElementById('filters-wrap'); if (!bar) return;
+      var bottom = bar.getBoundingClientRect().bottom;
+      document.documentElement.style.setProperty('--filter-bar-h', bottom + 'px');
+      document.querySelectorAll('.collapsible-panel').forEach(function(p){ p.style.top = bottom + 'px'; });
+    }
+
+    function setupScrollCollapse() {
+      var wrap = document.getElementById('filters-wrap'), sum = document.getElementById('filter-summary-bar');
+      window.addEventListener('scroll', function() {
+        if (window.innerWidth < 900 && mapMode) return;
+        var threshold = 180;
+        if (window.scrollY > threshold && !scrollCollapsed) { wrap.classList.add('scroll-collapsed'); scrollCollapsed = true; positionPanels(); }
+        else if (window.scrollY <= threshold && scrollCollapsed) { wrap.classList.remove('scroll-collapsed'); scrollCollapsed = false; positionPanels(); }
+      });
+      sum.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+    }
+
+    function setupFilterHandle() {
+      var h = document.getElementById('filter-handle'), wrap = document.getElementById('filters-wrap');
+      h.addEventListener('click', function(){
+        filterCollapsed = !filterCollapsed; wrap.classList.toggle('map-collapsed', filterCollapsed);
+        document.getElementById('handle-label').textContent = filterCollapsed ? 'Show Filters' : 'Hide Filters';
+        setTimeout(positionPanels, 300);
+      });
+    }
+
+    function updateContentHeight() {
+      if (mapMode && leafletMap) {
+        var h = window.innerHeight - parseInt(getComputedStyle(document.documentElement).getPropertyValue('--filter-bar-h'));
+        document.getElementById('map').style.height = h + 'px'; leafletMap.invalidateSize();
+      }
+    }
+
+    document.getElementById('search').addEventListener('input', function(e){ searchQuery = e.target.value.trim(); render(); });
+    setInterval(updateClock, 1000);
   </script>
 </body>
 </html>
