@@ -48,7 +48,11 @@
     .dev-banner strong { font-weight:600; }
 
     /* ── STICKY FILTERS ─────────────────────────────────────── */
-    .filters-wrap { position:sticky; top:0; z-index:100; background:var(--cream); border-bottom:1.5px solid var(--cream-dk); box-shadow:0 2px 12px var(--shadow); }
+    .filters-wrap { 
+      background:var(--cream); 
+      border-bottom:1.5px solid var(--cream-dk); 
+      box-shadow:0 2px 12px var(--shadow); 
+    }
 
     /* Scroll-collapse summary bar — visible only when collapsed */
     .filter-summary-bar {
@@ -86,7 +90,12 @@
       pointer-events:none;
       transition: opacity .2s ease, max-height 0s .2s; /* wait .2s before snapping height */
     }
-    .filters-wrap.scroll-collapsed .filter-summary-bar { display:flex; }
+    .filters-wrap.scroll-collapsed .filter-summary-bar { 
+      display:flex;
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
     @media (max-width:899px) {
       .filters-wrap.map-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
     }
