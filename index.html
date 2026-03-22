@@ -669,6 +669,8 @@ function checkScrollCollapse(){
     scrollCollapsed = true;
     lastToggleTime = Date.now();
     fw.classList.add('scroll-collapsed');
+    var sb = document.getElementById('filter-summary-bar');
+    if(sb) sb.classList.add('visible');
   }
 }
 
@@ -701,7 +703,10 @@ function setupScrollCollapse(){
       var fw = document.getElementById('filters-wrap');
       if(fw.classList.contains('map-collapsed')){
         fw.classList.remove('map-collapsed');
-        bar.classList.remove('visible');
+        // don't remove visible — summary bar should stay
+        // just re-show the filters
+        positionPanels();
+        updateContentHeight();
       } else {
         forcedOpen = true;
         scrollCollapsed = false;
