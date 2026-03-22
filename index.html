@@ -47,6 +47,34 @@
     .dev-banner { background:#FFF8E6; border-bottom:1.5px solid #F5C97A; text-align:center; padding:.45rem 1rem; font-size:.75rem; color:#7A4F10; }
     .dev-banner strong { font-weight:600; }
 
+    .slim-header {
+      position: sticky;
+      top: 0;
+      z-index: 101;
+      background: var(--timebar-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: .55rem 1rem;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height .2s ease, opacity .15s ease;  /* add this */
+    }
+    .slim-header.visible {
+      max-height: 48px;
+      opacity: 1;
+    }
+    .slim-logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--header-accent);
+      text-decoration: none;
+    }
+    .slim-logo:hover { opacity: .85; }
+
     /* ── STICKY FILTERS ─────────────────────────────────────── */
     .filters-wrap { position:sticky; top:0; z-index:100; background:var(--cream); border-bottom:1.5px solid var(--cream-dk); box-shadow:0 2px 12px var(--shadow); }
 
@@ -365,6 +393,10 @@
   </a>
 </header>
 
+<div class="slim-header" id="slim-header">
+  <a href="/" class="slim-logo"><em>Golden</em> Hour</a>
+</div>
+
 <div class="time-bar">It's currently <span id="live-time"></span> — <span id="live-day"></span></div>
 
 <div class="dev-banner" id="dev-banner" style="display:none">
@@ -556,7 +588,10 @@ function init(){
   setupScrollCollapse(); setupQVSwipe();
   positionPanels();
   window.addEventListener('resize',function(){positionPanels();updateContentHeight();});
-  window.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
+  window.addEventListener('scroll', throttle(function(){
+    checkScrollCollapse();
+    checkSlimHeader();
+  }, 50), {passive:true});
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
   new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
@@ -574,6 +609,17 @@ function checkScrollCollapse(){
   var fw = document.getElementById('filters-wrap');
   var lp = document.getElementById('list-panel');
   if(!fw) return;
+
+function checkSlimHeader(){
+  var header = document.querySelector('header');
+  var slim = document.getElementById('slim-header');
+  if(!header || !slim) return;
+  if((window.scrollY || 0) >= header.offsetHeight){
+    slim.classList.add('visible');
+  } else {
+    slim.classList.remove('visible');
+  }
+}
 
   // In desktop map mode, only use list panel scroll — ignore window.scrollY
   // because body overflow:hidden makes it unreliable
@@ -1058,6 +1104,7 @@ loadData();
     });
   })();
 </script>
+
 
 </body>
 </html>
