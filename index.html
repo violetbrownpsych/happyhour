@@ -663,7 +663,10 @@ function init(){
   window.addEventListener('scroll', throttle(function(){
     checkScrollCollapse();
     if(document.querySelector('.collapsible-panel.open')){
-      closeAllPanels();
+      var fw = document.getElementById('filters-wrap');
+      if(fw && window.scrollY > fw.offsetHeight){
+        closeAllPanels();
+      }
     }
   }, 50), {passive:true});
   var lp=document.getElementById('list-panel');
