@@ -162,7 +162,7 @@
     #time-pills-mobile { display: flex; }
     #slider-row { display: none; }
     #tpill-m-hh { background: rgba(196,98,45,.08); }
-    #tpill-m-late { background: rgba(58,92,40,.10); }
+    #tpill-m-late { background: rgba(93, 151, 62, 0.18); }
     #tpill-m-hh.time-active, #tpill-m-hh.time-active-now { background: var(--green); color: var(--cream); }
     #tpill-m-late.time-active { background: var(--green); color: var(--cream); }
     .pill:focus:not(.time-active):not(.time-active-now):not(.pick-active):not(.day-active):not(.today-active) {
@@ -1065,6 +1065,7 @@ function setupTimePills(){
       var btn=e.target.closest('[data-time]');
       if(!btn)return;
       if(activeTime === btn.dataset.time){
+        btn.blur();
         setTimeMode('any');
       } else {
         setTimeMode(btn.dataset.time);
