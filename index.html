@@ -664,8 +664,11 @@ function init(){
     checkScrollCollapse();
     if(document.querySelector('.collapsible-panel.open')){
       var fw = document.getElementById('filters-wrap');
-      if(fw && window.scrollY > fw.offsetHeight){
-        closeAllPanels();
+      if(fw){
+        var bottom = fw.getBoundingClientRect().bottom;
+        if(bottom <= 0){
+          closeAllPanels();
+        }
       }
     }
   }, 50), {passive:true});
