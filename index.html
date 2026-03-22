@@ -67,6 +67,7 @@
       background:var(--cream); 
       border-bottom:1.5px solid var(--cream-dk); 
       box-shadow:0 2px 12px var(--shadow); 
+      overflow: visible;
     }
 
     /* Scroll-collapse summary bar — visible only when collapsed */
@@ -208,7 +209,7 @@
     .collapsible + .collapsible .collapsible-toggle::before { content:''; position:absolute; left:0; top:28%; bottom:28%; width:1px; background:var(--cream-dk); }
     .collapsible-panel { 
       display:none; 
-      position:relative;
+      position:fixed;
       left:0; 
       right:0; 
       background:var(--cream); 
@@ -524,10 +525,11 @@
     </div>
     <div class="filter-collapse-btn" id="filter-collapse-btn">&#8679; Hide filters</div>
   </div>
-    <div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
-    <div class="collapsible-panel" id="panel-deals"><div class="collapsible-panel-inner" id="deal-pills"></div></div>
-    <div class="collapsible-panel" id="panel-vibe"><div class="collapsible-panel-inner" id="vibe-pills"></div></div>
 </div>
+
+<div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
+<div class="collapsible-panel" id="panel-deals"><div class="collapsible-panel-inner" id="deal-pills"></div></div>
+<div class="collapsible-panel" id="panel-vibe"><div class="collapsible-panel-inner" id="vibe-pills"></div></div>
 
 <div class="filter-summary-bar" id="filter-summary-bar">
   <span id="summary-text">Today · 5 PM</span>
@@ -658,7 +660,12 @@ function init(){
   setupScrollCollapse(); setupQVSwipe();
   positionPanels();
   window.addEventListener('resize',function(){positionPanels();updateContentHeight();});
-  window.addEventListener('scroll', throttle(checkScrollCollapse, 50), {passive:true});
+  window.addEventListener('scroll', throttle(function(){
+    checkScrollCollapse();
+    if(document.querySelector('.collapsible-panel.open')){
+      positionPanels();
+    }
+  }, 16), {passive:true});
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
   new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
