@@ -87,13 +87,13 @@
       overflow:hidden; 
       max-height:600px; 
       opacity:1; 
-      transition: opacity .2s ease; 
+      transition: opacity .25s ease, max-height .25s ease; 
     }
     .filters-wrap.scroll-collapsed .filter-expandable { 
       max-height:0; 
       opacity:0; 
       pointer-events:none;
-      transition: opacity .1s ease, max-height 0s .1s; /* wait .1s before snapping height */
+      transition: opacity .25s ease, max-height .25s ease;
     }
     @media (max-width:899px) {
       .filters-wrap.map-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
