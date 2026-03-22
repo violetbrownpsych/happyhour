@@ -161,8 +161,8 @@
     .collapsibles-bar { margin-top: .1rem; }
     #time-pills-mobile { display: flex; }
     #slider-row { display: none; }
-    #tpill-m-hh { background: rgba(196,98,45,.08); border-color: rgba(196,98,45,.3); }
-    #tpill-m-late { background: rgba(36,61,26,.08); border-color: rgba(36,61,26,.3); }
+    #tpill-m-hh { background: rgba(196,98,45,.08); }
+    #tpill-m-late { background: rgba(36,61,26,.08); }
   }
 
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
@@ -1066,7 +1066,19 @@ function setupTimePills(){
     });
   }
 }
-function setTimeMode(mode){activeTime=mode;document.getElementById('slider-row').style.display=(mode==='pick')?'block':'none';document.querySelectorAll('[data-time]').forEach(function(b){b.classList.remove('time-active','time-active-now','pick-active');});var p=document.getElementById('tpill-'+mode);if(!p)return;if(mode==='now')p.classList.add('time-active-now');else if(mode==='pick')p.classList.add('pick-active');else p.classList.add('time-active');}
+function setTimeMode(mode){
+  activeTime=mode;
+  document.getElementById('slider-row').style.display=(mode==='pick')?'block':'none';
+  document.querySelectorAll('[data-time]').forEach(function(b){
+    b.classList.remove('time-active','time-active-now','pick-active');
+  });
+  // activate all pills with matching data-time (covers both desktop and mobile)
+  document.querySelectorAll('[data-time="'+mode+'"]').forEach(function(p){
+    if(mode==='now') p.classList.add('time-active-now');
+    else if(mode==='pick') p.classList.add('pick-active');
+    else p.classList.add('time-active');
+  });
+}
 function setupSlider(){var s=document.getElementById('time-slider');s.addEventListener('input',function(){sliderValue=parseFloat(s.value);moveThumb(sliderValue);if(activeTime!=='pick')setTimeMode('pick');render();});requestAnimationFrame(function(){moveThumb(sliderValue);});}
 function moveThumb(val){var pct=((val-SLIDER_MIN)/(SLIDER_MAX-SLIDER_MIN))*100;var t=document.getElementById('slider-thumb'),l=document.getElementById('slider-label');if(t)t.style.left=pct+'%';if(l)l.textContent=fmtSlider(val);}
 function fmtSlider(val){var h=Math.floor(val),m=(val%1===0.5)?':30':'',h12=h>12?h-12:h;return h12+m+' PM';}
