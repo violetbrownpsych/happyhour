@@ -525,7 +525,7 @@ var VENUES=[], activeDays='today', activeTime='pick', sliderValue=17;
 var activeNeighborhoods=new Set(), activeDealTags=new Set(), activeVibeTags=new Set(), searchQuery='';
 var mapMode=false, mapInitialized=false, filterCollapsed=false;
 var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
-var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0;
+var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0, lastScrollY=0;
 
 // ── LOAD ───────────────────────────────────────────────────
 function loadData(){
@@ -581,10 +581,11 @@ function init(){
 // Collapses once scroll passes that height (i.e. the bar would
 // naturally scroll off screen). Expands once scroll comes back
 // above that same height.
+
 function checkScrollCollapse(){
   var now = Date.now();
-  if(now - lastToggleTime < 400) return; // ignore scroll events for 400ms after toggling
-  
+  if(now - lastToggleTime < 500) return;
+
   var fw = document.getElementById('filters-wrap');
   var lp = document.getElementById('list-panel');
   if(!fw) return;
@@ -596,28 +597,25 @@ function checkScrollCollapse(){
     scrolled = window.scrollY || window.pageYOffset || 0;
   }
 
-  if(!scrollCollapsed){
-    filterBarFullHeight = fw.offsetHeight;
-  }
+  var scrollingDown = scrolled > lastScrollY;
+  lastScrollY = scrolled;
+
+  if(!scrollCollapsed) filterBarFullHeight = fw.offsetHeight;
   var threshold = filterBarFullHeight || fw.offsetHeight;
 
-  if(scrolled > threshold && !forcedOpen){
-    if(!scrollCollapsed){
-      lastToggleTime = Date.now();
-      fw.classList.add('scroll-collapsed');
-      updateFilterSummary();
-      positionPanels();
-      updateContentHeight();
-    }
-  } else if(scrolled <= threshold){
+  if(scrollingDown && scrolled > threshold && !forcedOpen && !scrollCollapsed){
+    scrollCollapsed = true;
+    lastToggleTime = Date.now();
+    fw.classList.add('scroll-collapsed');
+    positionPanels();
+    updateContentHeight();
+  } else if(!scrollingDown && scrolled < 20 && scrollCollapsed){
+    scrollCollapsed = false;
+    lastToggleTime = Date.now();
     forcedOpen = false;
-    if(scrollCollapsed){
-      scrollCollapsed = false;
-      lastToggleTime = Date.now();
-      fw.classList.remove('scroll-collapsed');
-      positionPanels();
-      updateContentHeight();
-    }
+    fw.classList.remove('scroll-collapsed');
+    positionPanels();
+    updateContentHeight();
   }
 }
 
