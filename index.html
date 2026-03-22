@@ -603,7 +603,8 @@ function checkScrollCollapse(){
   if(!scrollCollapsed){
     var header = document.querySelector('header');
     var timebar = document.querySelector('.time-bar');
-    filterBarFullHeight = (header ? header.offsetHeight : 0) + (timebar ? timebar.offsetHeight : 0);
+    var headerH = (header ? header.offsetHeight : 0) + (timebar ? timebar.offsetHeight : 0);
+    filterBarFullHeight = headerH + fw.offsetHeight;
   }
   var threshold = filterBarFullHeight || fw.offsetHeight;
 
