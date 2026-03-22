@@ -650,7 +650,10 @@ function init(){
   setupScrollCollapse(); setupQVSwipe();
   positionPanels();
   window.addEventListener('resize',function(){positionPanels();updateContentHeight();});
-  window.addEventListener('scroll', throttle(checkScrollCollapse, 50), {passive:true});
+  window.addEventListener('scroll', throttle(function(){
+    checkScrollCollapse();
+    positionPanels();
+  }, 50), {passive:true});
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
   new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
