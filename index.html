@@ -89,6 +89,13 @@
       pointer-events: none;
     }
 
+    .filter-summary-bar.visible { 
+      max-height: 48px;
+      opacity: 1;
+      pointer-events: auto;
+      padding: .5rem 1.5rem;
+    }
+
     .filters-wrap.scroll-collapsed .filter-summary-bar { 
       max-height: 48px;
       opacity: 1;
@@ -133,7 +140,7 @@
       text-transform: uppercase;
     }
     @media (max-width:899px) {
-      .filters-wrap.map-collapsed .filter-summary-bar { 
+      .filters-wrap.map-collapsed + .filter-summary-bar { 
         max-height: 48px;
         opacity: 1;
         pointer-events: auto;
@@ -438,13 +445,6 @@
 </div>
 
 <div class="filters-wrap" id="filters-wrap">
-  <!-- Slim summary bar shown when scroll-collapsed -->
-  <div class="filter-summary-bar" id="filter-summary-bar">
-    <span id="summary-text">Today · 5 PM</span>
-    <span class="summary-expand">&#8681; Show filters</span>
-  </div>
-
-  <!-- All filter controls -->
   <div class="filter-expandable" id="filter-expandable">
     <div class="search-row">
       <div class="search-wrap">
@@ -490,6 +490,11 @@
     </div>
     <div class="filter-collapse-btn" id="filter-collapse-btn">&#8679; Hide filters</div>
   </div>
+</div>
+
+<div class="filter-summary-bar" id="filter-summary-bar">
+  <span id="summary-text">Today · 5 PM</span>
+  <span class="summary-expand">&#8681; Show filters</span>
 </div>
 
 <div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
@@ -696,11 +701,13 @@ function setupScrollCollapse(){
       var fw = document.getElementById('filters-wrap');
       if(fw.classList.contains('map-collapsed')){
         fw.classList.remove('map-collapsed');
+        bar.classList.remove('visible');
       } else {
         forcedOpen = true;
         scrollCollapsed = false;
         lastToggleTime = Date.now();
         fw.classList.remove('scroll-collapsed');
+        bar.classList.remove('visible');
         positionPanels();
         updateContentHeight();
       }
@@ -714,6 +721,8 @@ function setupScrollCollapse(){
       lastToggleTime = Date.now();
       var fw = document.getElementById('filters-wrap');
       fw.classList.add('scroll-collapsed');
+      var sb = document.getElementById('filter-summary-bar');
+      if(sb) sb.classList.add('visible');
     });
   }
 }
@@ -954,7 +963,17 @@ function updateAllBadges(){document.querySelectorAll('.card').forEach(function(c
 
 // ── HELPERS ────────────────────────────────────────────────
 function throttle(fn,ms){var last=0;return function(){var now=Date.now();if(now-last>=ms){last=now;fn();}};}
-function positionPanels(){var bar=document.getElementById('filters-wrap');if(!bar)return;var b=bar.getBoundingClientRect().bottom;document.querySelectorAll('.collapsible-panel').forEach(function(p){p.style.top=b+'px';});document.documentElement.style.setProperty('--filter-bar-h',b+'px');}
+function positionPanels(){
+  var fw = document.getElementById('filters-wrap');
+  var sb = document.getElementById('filter-summary-bar');
+  if(!fw) return;
+  var b = fw.getBoundingClientRect().bottom;
+  if(sb && sb.classList.contains('visible')){
+    b = sb.getBoundingClientRect().bottom;
+  }
+  document.querySelectorAll('.collapsible-panel').forEach(function(p){p.style.top=b+'px';});
+  document.documentElement.style.setProperty('--filter-bar-h',b+'px');
+}
 function mkPill(l,attr,val){var b=document.createElement('button');b.className='pill';b.dataset[attr]=val;b.textContent=l;return b;}
 function toggleSet(s,v){s.has(v)?s.delete(v):s.add(v);}
 function syncPills(c,attr,aS,aV){c.querySelectorAll('[data-'+attr+']').forEach(function(b){var v=b.dataset[attr];b.classList.toggle('tag-active',v===aV?aS.size===0:aS.has(v));});}
