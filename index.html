@@ -51,7 +51,53 @@
     .filters-wrap { position:sticky; top:0; z-index:100; background:var(--cream); border-bottom:1.5px solid var(--cream-dk); box-shadow:0 2px 12px var(--shadow); }
 
     /* Scroll-collapse summary bar — visible only when collapsed */
-    .filter-summary-bar { display:none; align-items:center; justify-content:space-between; padding:.5rem 1.5rem; cursor:pointer; gap:.5rem; transition:background .15s; }
+    .filter-summary-bar {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      padding: .45rem 1.5rem;
+      cursor: pointer;
+      background: var(--timebar-bg);
+      position: relative;
+    }
+
+    /* Centered logo */
+    .summary-logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--header-accent);
+      text-decoration: none;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+    }
+    .summary-logo:hover { opacity: .85; }
+
+    /* Left: filter state */
+    .summary-filter-state {
+      font-size: .72rem;
+      font-weight: 500;
+      color: rgba(250,246,239,.7);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 35%;
+    }
+
+    /* Right: expand hint */
+    .summary-filters-right {
+      display: flex;
+      align-items: center;
+    }
+    .summary-expand {
+      font-size: .62rem;
+      color: rgba(250,246,239,.45);
+      white-space: nowrap;
+    }
+    
     .filter-summary-bar:hover { background:var(--cream-dk); }
     .summary-text { font-size:.75rem; font-weight:600; color:var(--ink-lt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .summary-text strong { color:var(--ink); }
@@ -360,8 +406,11 @@
 <div class="filters-wrap" id="filters-wrap">
   <!-- Slim summary bar shown when scroll-collapsed -->
   <div class="filter-summary-bar" id="filter-summary-bar">
-    <span class="summary-text" id="summary-text">Today · 5 PM</span>
-    <span class="summary-expand">Filters ▴</span>
+    <span class="summary-filter-state" id="summary-text">Sat · 5 PM</span>
+    <a href="/" class="summary-logo"><em>Golden</em> Hour</a>
+    <span class="summary-filters-right">
+      <span class="summary-expand">Filters ▴</span>
+    </span>
   </div>
   <!-- Mobile map handle -->
   <div class="filter-collapse-handle" id="filter-handle">
