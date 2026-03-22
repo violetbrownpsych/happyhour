@@ -575,17 +575,34 @@ function checkScrollCollapse(){
   var lp = document.getElementById('list-panel');
   if(!fw) return;
 
-function checkSlimHeader(){
-  var header = document.querySelector('header');
-  var slim = document.getElementById('slim-header');
-  var fw = document.getElementById('filters-wrap');
-  if(!header || !slim || !fw) return;
-  // Use same threshold as filter collapse so both happen simultaneously
-  var threshold = filterBarFullHeight || fw.offsetHeight;
-  if((window.scrollY || 0) >= threshold){
-    slim.classList.add('visible');
+  var scrolled;
+  if(mapMode && window.innerWidth >= 900){
+    scrolled = lp ? lp.scrollTop : 0;
   } else {
-    slim.classList.remove('visible');
+    scrolled = window.scrollY || window.pageYOffset || 0;
+  }
+
+  if(!scrollCollapsed){
+    filterBarFullHeight = fw.offsetHeight;
+  }
+  var threshold = filterBarFullHeight || fw.offsetHeight;
+
+  if(scrolled > threshold && !forcedOpen){
+    if(!scrollCollapsed){
+      scrollCollapsed = true;
+      fw.classList.add('scroll-collapsed');
+      updateFilterSummary();
+      positionPanels();
+      updateContentHeight();
+    }
+  } else if(scrolled <= threshold){
+    forcedOpen = false;
+    if(scrollCollapsed){
+      scrollCollapsed = false;
+      fw.classList.remove('scroll-collapsed');
+      positionPanels();
+      updateContentHeight();
+    }
   }
 }
 
