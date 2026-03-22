@@ -63,11 +63,13 @@
     }
 
     /* ── STICKY FILTERS ─────────────────────────────────────── */
-    .filters-wrap { 
-      background:var(--cream); 
-      border-bottom:1.5px solid var(--cream-dk); 
-      box-shadow:0 2px 12px var(--shadow); 
-      overflow: visible;
+    .filters-wrap {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--cream);
+      border-bottom: 1.5px solid var(--cream-dk);
+      box-shadow: 0 2px 12px var(--shadow);
     }
 
     /* Scroll-collapse summary bar — visible only when collapsed */
@@ -660,15 +662,7 @@ function init(){
   setupScrollCollapse(); setupQVSwipe();
   positionPanels();
   window.addEventListener('resize',function(){positionPanels();updateContentHeight();});
-  window.addEventListener('scroll', throttle(function(){
-    checkScrollCollapse();
-    if(document.querySelector('.collapsible-panel.open')){
-      var fw = document.getElementById('filters-wrap');
-      if(fw && fw.getBoundingClientRect().top < fw.offsetTop){
-        closeAllPanels();
-      }
-    }
-  }, 50), {passive:true});
+  window.addEventListener('scroll', throttle(checkScrollCollapse, 50), {passive:true});
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
   new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
