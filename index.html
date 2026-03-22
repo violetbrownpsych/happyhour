@@ -621,6 +621,7 @@ var activeNeighborhoods=new Set(), activeDealTags=new Set(), activeVibeTags=new 
 var mapMode=false, mapInitialized=false, filterCollapsed=false;
 var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
 var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0, lastScrollY=0;
+var scrollRaf = null;
 
 // ── LOAD ───────────────────────────────────────────────────
 function loadData(){
@@ -662,12 +663,16 @@ function init(){
   setupScrollCollapse(); setupQVSwipe();
   positionPanels();
   window.addEventListener('resize',function(){positionPanels();updateContentHeight();});
-  window.addEventListener('scroll', throttle(function(){
-    checkScrollCollapse();
-    if(document.querySelector('.collapsible-panel.open')){
-      positionPanels();
-    }
-  }, 16), {passive:true});
+  window.addEventListener('scroll', function(){
+    if(scrollRaf) return;
+    scrollRaf = requestAnimationFrame(function(){
+      scrollRaf = null;
+      checkScrollCollapse();
+      if(document.querySelector('.collapsible-panel.open')){
+        positionPanels();
+      }
+    });
+  }, {passive:true});
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
   new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
@@ -1018,10 +1023,10 @@ function throttle(fn,ms){var last=0;return function(){var now=Date.now();if(now-
 function positionPanels(){
   var fw = document.getElementById('filters-wrap');
   if(!fw) return;
-  var rect = fw.getBoundingClientRect();
-  var h = rect.bottom;
+  var h = fw.getBoundingClientRect().bottom;
   document.querySelectorAll('.collapsible-panel').forEach(function(p){
-    p.style.top = h + 'px';
+    p.style.top = '0';
+    p.style.transform = 'translateY(' + h + 'px)';
   });
   document.documentElement.style.setProperty('--filter-bar-h', h + 'px');
 }
