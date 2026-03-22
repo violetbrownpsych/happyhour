@@ -670,10 +670,6 @@ function init(){
       checkScrollCollapse();
       if(document.querySelector('.collapsible-panel.open')){
         positionPanels();
-        var fw = document.getElementById('filters-wrap');
-        if(fw && fw.getBoundingClientRect().top > 0){
-          closeAllPanels();
-        }
       }
     });
   }, {passive:true});
