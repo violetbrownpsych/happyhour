@@ -670,6 +670,10 @@ function init(){
       checkScrollCollapse();
       if(document.querySelector('.collapsible-panel.open')){
         positionPanels();
+        // close panel when scrolled back to top
+        if((window.scrollY || 0) < 10){
+          closeAllPanels();
+        }
       }
     });
   }, {passive:true});
