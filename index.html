@@ -671,6 +671,11 @@ function checkScrollCollapse(){
     fw.classList.add('scroll-collapsed');
     var sb = document.getElementById('filter-summary-bar');
     if(sb) sb.classList.add('visible');
+    // Compensate for height loss on mobile
+    if(window.innerWidth < 900){
+      var collapsedHeight = fw.offsetHeight;
+      window.scrollBy(0, -collapsedHeight);
+    }
   }
 }
 
