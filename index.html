@@ -679,13 +679,17 @@ function setupScrollCollapse(){
   var bar = document.getElementById('filter-summary-bar');
   if(bar){
     bar.addEventListener('click', function(){
-      forcedOpen = true;
-      scrollCollapsed = false;
-      lastToggleTime = Date.now();
       var fw = document.getElementById('filters-wrap');
-      fw.classList.remove('scroll-collapsed');
-      positionPanels();
-      updateContentHeight();
+      if(fw.classList.contains('map-collapsed')){
+        fw.classList.remove('map-collapsed');
+      } else {
+        forcedOpen = true;
+        scrollCollapsed = false;
+        lastToggleTime = Date.now();
+        fw.classList.remove('scroll-collapsed');
+        positionPanels();
+        updateContentHeight();
+      }
     });
   }
 
@@ -812,6 +816,12 @@ function toggleMapMode(){
   if(mapMode){
     btn.innerHTML='List view'; btn.classList.add('active'); fab.innerHTML='List';
     if(window.innerWidth<900){filterCollapsed=true;document.getElementById('filters-wrap').classList.add('map-collapsed');document.getElementById('handle-label').textContent='Show Filters';}
+    if(window.innerWidth<900){
+      // force filter bar height recalculation for mobile map positioning
+      updateContentHeight();
+      filterCollapsed=true;
+      document.getElementById('filters-wrap').classList.add('map-collapsed');
+    }
     initMapOnce();updateContentHeight();
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());},300);
   } else {
