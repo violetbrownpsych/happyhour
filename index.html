@@ -218,12 +218,7 @@
     @media (max-width:899px) {
       .content-area.map-active .map-panel { display:block; position:fixed; inset:var(--filter-bar-h,60px) 0 80px; z-index:50; }
       .content-area.map-active .list-panel { display:none; }
-      body:not(.map-mode-active) .filters-wrap {
-        position: sticky;
-        top: 0;
-        z-index: 100;
       }
-    }
     #map { width:100%; height:100%; min-height:400px; }
     .map-mode-active footer { display:none; }
 
@@ -631,8 +626,11 @@ function init(){
   new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
   render();
   setInterval(updateAllBadges,60000);
-  filterBarFullHeight = document.getElementById('filters-wrap').offsetHeight;
-}
+  var header = document.querySelector('header');
+  var timebar = document.querySelector('.time-bar');
+  var fw = document.getElementById('filters-wrap');
+  filterBarFullHeight = (header ? header.offsetHeight : 0) + (timebar ? timebar.offsetHeight : 0) + (fw ? fw.offsetHeight : 0);
+  }
 
 // ── SCROLL COLLAPSE ────────────────────────────────────────
 // Threshold = actual rendered height of the filter bar.
@@ -654,17 +652,11 @@ function checkScrollCollapse(){
   } else {
     scrolled = window.scrollY || window.pageYOffset || 0;
   }
+  
+  var threshold = filterBarFullHeight;
 
   var scrollingDown = scrolled > lastScrollY;
   lastScrollY = scrolled;
-
-  if(!scrollCollapsed){
-    var header = document.querySelector('header');
-    var timebar = document.querySelector('.time-bar');
-    var headerH = (header ? header.offsetHeight : 0) + (timebar ? timebar.offsetHeight : 0);
-    filterBarFullHeight = headerH + fw.offsetHeight;
-  }
-  var threshold = filterBarFullHeight || fw.offsetHeight;
 
   if(scrollingDown && scrolled > threshold && !scrollCollapsed){
     forcedOpen = false; 
