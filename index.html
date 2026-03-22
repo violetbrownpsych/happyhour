@@ -56,29 +56,28 @@
 
     /* Scroll-collapse summary bar — visible only when collapsed */
     .filter-summary-bar {
-      display: flex;          /* always flex, not none */
+      display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: .5rem 1.5rem;
+      padding: 0;
       cursor: pointer;
       background: var(--cream);
       border-bottom: 1.5px solid var(--cream-dk);
       position: sticky;
       top: 0;
       z-index: 100;
-      transform: translateY(-100%);
       max-height: 0;
       overflow: hidden;
       opacity: 0;
-      transition: transform .25s ease, opacity .2s ease, max-height 0s;
+      transition: opacity .25s ease;
       pointer-events: none;
     }
 
     .filters-wrap.scroll-collapsed .filter-summary-bar { 
-      transform: translateY(0);
       max-height: 48px;
       opacity: 1;
       pointer-events: auto;
+      padding: .5rem 1.5rem;
     }
 
     /* Filter expandable wrapper */
@@ -101,6 +100,17 @@
     /* Mobile map handle */
     .filter-collapse-handle { display:none; align-items:center; justify-content:center; padding:.4rem; cursor:pointer; background:var(--cream-dk); font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-lt); gap:.35rem; user-select:none; }
     .filter-collapse-handle .hbar { width:32px; height:3px; background:var(--ink-lt); border-radius:2px; opacity:.35; }
+    .filter-collapse-btn {
+      text-align: center;
+      padding: .3rem;
+      font-size: .7rem;
+      font-weight: 600;
+      color: var(--ink-lt);
+      cursor: pointer;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .filter-collapse-btn:hover { color: var(--ink); }
     @media (max-width:899px) { .map-mode-active .filter-collapse-handle { display:flex; } }
 
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
@@ -401,6 +411,7 @@
     <div class="hbar"></div><span id="handle-label">Filters</span><div class="hbar"></div>
   </div>
   <!-- All filter controls -->
+  <div class="filter-collapse-btn" id="filter-collapse-btn">&#8679; Hide filters</div>
   <div class="filter-expandable" id="filter-expandable">
     <div class="search-row">
       <div class="search-wrap">
@@ -615,13 +626,12 @@ function checkScrollCollapse(){
   }
   var threshold = filterBarFullHeight || fw.offsetHeight;
 
-  if(scrollingDown && scrolled > threshold && !forcedOpen && !scrollCollapsed){
+  if(scrollingDown && scrolled > threshold && !scrollCollapsed){
+    forcedOpen = false; 
     scrollCollapsed = true;
     lastToggleTime = Date.now();
     fw.classList.add('scroll-collapsed');
-    positionPanels();
-    updateContentHeight();
-  } 
+  }
 }
 
 function updateFilterSummary(){
@@ -657,6 +667,16 @@ function setupScrollCollapse(){
       fw.classList.remove('scroll-collapsed');
       positionPanels();
       updateContentHeight();
+    });
+  }
+
+  var collapseBtn = document.getElementById('filter-collapse-btn');
+  if(collapseBtn){
+    collapseBtn.addEventListener('click', function(){
+      scrollCollapsed = true;
+      lastToggleTime = Date.now();
+      var fw = document.getElementById('filters-wrap');
+      fw.classList.add('scroll-collapsed');
     });
   }
 }
