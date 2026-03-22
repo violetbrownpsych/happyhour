@@ -500,6 +500,7 @@ var activeNeighborhoods=new Set(), activeDealTags=new Set(), activeVibeTags=new 
 var mapMode=false, mapInitialized=false, filterCollapsed=false;
 var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
 var scrollCollapsed=false, forcedOpen=false;
+var filterBarFullHeight = 0;
 
 // ── LOAD ───────────────────────────────────────────────────
 function loadData(){
@@ -562,8 +563,12 @@ function checkScrollCollapse(){
   var fw = document.getElementById('filters-wrap');
   if(!fw) return;
 
-  // Use the current height of the filter bar as the threshold
-  var threshold = fw.offsetHeight;
+  // Cache the full height while expanded so we can use it
+  // as the expand threshold even after the bar has shrunk
+  if(!scrollCollapsed){
+    filterBarFullHeight = fw.offsetHeight;
+  }
+  var threshold = filterBarFullHeight || fw.offsetHeight;
 
   if(scrolled > threshold && !forcedOpen){
     if(!scrollCollapsed){
