@@ -111,6 +111,13 @@
       text-transform: uppercase;
     }
     .filter-collapse-btn:hover { color: var(--ink); }
+    .summary-expand {
+      font-size: .7rem;
+      font-weight: 600;
+      color: var(--ink-lt);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
     @media (max-width:899px) { .map-mode-active .filter-collapse-handle { display:flex; } }
 
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
@@ -404,6 +411,7 @@
   <!-- Slim summary bar shown when scroll-collapsed -->
   <div class="filter-summary-bar" id="filter-summary-bar">
     <span id="summary-text">Today · 5 PM</span>
+    <span class="summary-expand">&#8681; Show filters</span>
   </div>
   <!-- Mobile map handle -->
   <div class="filter-collapse-handle" id="filter-handle">
