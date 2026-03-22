@@ -54,14 +54,12 @@
     .filter-summary-bar {
       display: none;
       align-items: center;
-      justify-content: space-between;
-      padding: .45rem 1.5rem;
+      justify-content: center;
+      padding: .55rem 1rem;
       cursor: pointer;
       background: var(--timebar-bg);
-      position: relative;
     }
 
-    /* Centered logo */
     .summary-logo {
       font-family: 'Playfair Display', serif;
       font-style: italic;
@@ -69,39 +67,10 @@
       font-weight: 600;
       color: var(--header-accent);
       text-decoration: none;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      white-space: nowrap;
-    }
-    .summary-logo:hover { opacity: .85; }
-
-    /* Left: filter state */
-    .summary-filter-state {
-      font-size: .72rem;
-      font-weight: 500;
-      color: rgba(250,246,239,.7);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 35%;
-    }
-
-    /* Right: expand hint */
-    .summary-filters-right {
-      display: flex;
-      align-items: center;
-    }
-    .summary-expand {
-      font-size: .62rem;
-      color: rgba(250,246,239,.45);
-      white-space: nowrap;
     }
     
-    .filter-summary-bar:hover { background:var(--cream-dk); }
-    .summary-text { font-size:.75rem; font-weight:600; color:var(--ink-lt); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .summary-text strong { color:var(--ink); }
-    .summary-expand { font-size:.65rem; color:var(--ink-lt); opacity:.5; flex-shrink:0; white-space:nowrap; }
+    .summary-logo:hover { opacity: .85; }
+    .filter-summary-bar:hover { filter: brightness(1.08); }
 
     /* Filter expandable wrapper */
     .filter-expandable { overflow:hidden; max-height:600px; opacity:1; }
@@ -406,11 +375,7 @@
 <div class="filters-wrap" id="filters-wrap">
   <!-- Slim summary bar shown when scroll-collapsed -->
   <div class="filter-summary-bar" id="filter-summary-bar">
-    <span class="summary-filter-state" id="summary-text">Sat · 5 PM</span>
     <a href="/" class="summary-logo"><em>Golden</em> Hour</a>
-    <span class="summary-filters-right">
-      <span class="summary-expand">Filters ▴</span>
-    </span>
   </div>
   <!-- Mobile map handle -->
   <div class="filter-collapse-handle" id="filter-handle">
