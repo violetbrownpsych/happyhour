@@ -663,9 +663,9 @@ function init(){
   window.addEventListener('scroll', throttle(function(){
     checkScrollCollapse();
     if(document.querySelector('.collapsible-panel.open')){
-      positionPanels();
+      closeAllPanels();
     }
-  }, 16), {passive:true});
+  }, 50), {passive:true});
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
   new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
