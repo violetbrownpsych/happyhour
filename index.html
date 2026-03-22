@@ -74,7 +74,7 @@
     .filter-summary-bar:hover { filter: brightness(1.08); }
 
     /* Filter expandable wrapper */
-    .filter-expandable { overflow:hidden; max-height:600px; opacity:1; }
+    .filter-expandable { overflow:hidden; max-height:600px; opacity:1; transition: max-height .25s ease, opacity .2s ease; }
     .filters-wrap.scroll-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
     .filters-wrap.scroll-collapsed .filter-summary-bar { display:flex; }
     @media (max-width:899px) {
