@@ -64,10 +64,12 @@
 
     /* ── STICKY FILTERS ─────────────────────────────────────── */
     .filters-wrap { 
+      position: sticky;
+      top: 0;
+      z-index: 100;
       background:var(--cream); 
       border-bottom:1.5px solid var(--cream-dk); 
       box-shadow:0 2px 12px var(--shadow); 
-      overflow: hidden;
     }
 
     /* Scroll-collapse summary bar — visible only when collapsed */
@@ -629,7 +631,7 @@ function init(){
   var header = document.querySelector('header');
   var timebar = document.querySelector('.time-bar');
   var fw = document.getElementById('filters-wrap');
-  filterBarFullHeight = (header ? header.offsetHeight : 0) + (timebar ? timebar.offsetHeight : 0) + (fw ? fw.offsetHeight : 0);
+  filterBarFullHeight = fw ? fw.offsetHeight : 0;
   }
 
 // ── SCROLL COLLAPSE ────────────────────────────────────────
@@ -652,7 +654,7 @@ function checkScrollCollapse(){
   } else {
     scrolled = window.scrollY || window.pageYOffset || 0;
   }
-  
+
   var threshold = filterBarFullHeight;
 
   var scrollingDown = scrolled > lastScrollY;
