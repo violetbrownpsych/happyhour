@@ -612,8 +612,11 @@ function checkScrollCollapse(){
 function checkSlimHeader(){
   var header = document.querySelector('header');
   var slim = document.getElementById('slim-header');
-  if(!header || !slim) return;
-  if((window.scrollY || 0) >= header.offsetHeight){
+  var fw = document.getElementById('filters-wrap');
+  if(!header || !slim || !fw) return;
+  // Use same threshold as filter collapse so both happen simultaneously
+  var threshold = filterBarFullHeight || fw.offsetHeight;
+  if((window.scrollY || 0) >= threshold){
     slim.classList.add('visible');
   } else {
     slim.classList.remove('visible');
