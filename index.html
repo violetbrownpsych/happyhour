@@ -58,7 +58,7 @@
     .summary-expand { font-size:.65rem; color:var(--ink-lt); opacity:.5; flex-shrink:0; white-space:nowrap; }
 
     /* Filter expandable wrapper */
-    .filter-expandable { overflow:hidden; max-height:600px; transition:max-height .28s ease, opacity .22s ease; opacity:1; }
+    .filter-expandable { overflow:hidden; max-height:600px; opacity:1; }
     .filters-wrap.scroll-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
     .filters-wrap.scroll-collapsed .filter-summary-bar { display:flex; }
     @media (max-width:899px) {
@@ -499,7 +499,7 @@ var VENUES=[], activeDays='today', activeTime='pick', sliderValue=17;
 var activeNeighborhoods=new Set(), activeDealTags=new Set(), activeVibeTags=new Set(), searchQuery='';
 var mapMode=false, mapInitialized=false, filterCollapsed=false;
 var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
-var scrollCollapsed=false, forcedOpen=false;
+var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0;
 var filterBarFullHeight = 0;
 
 // ── LOAD ───────────────────────────────────────────────────
