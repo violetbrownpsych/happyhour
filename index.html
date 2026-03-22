@@ -600,7 +600,11 @@ function checkScrollCollapse(){
   var scrollingDown = scrolled > lastScrollY;
   lastScrollY = scrolled;
 
-  if(!scrollCollapsed) filterBarFullHeight = fw.offsetHeight;
+  if(!scrollCollapsed){
+    var header = document.querySelector('header');
+    var timebar = document.querySelector('.time-bar');
+    filterBarFullHeight = (header ? header.offsetHeight : 0) + (timebar ? timebar.offsetHeight : 0);
+  }
   var threshold = filterBarFullHeight || fw.offsetHeight;
 
   if(scrollingDown && scrolled > threshold && !forcedOpen && !scrollCollapsed){
