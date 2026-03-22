@@ -151,9 +151,9 @@
     }
     #map-toggle-btn { display: none; }
     .search-row { padding: .2rem 1rem .1rem; }
-    .filter-row { padding: .05rem 1rem; gap: .25rem; }
+    .filter-row { padding: .05rem 1rem; gap: .2rem; }
     .pill { padding: .2rem .3rem; font-size: .72rem; }
-    .filter-row-label { min-width: 2rem; font-size: .58rem; }
+    .filter-row-label { min-width: 1.5rem; font-size: .58rem; }
     #time-pills { display: none; }
     #day-filters { padding-bottom: .3rem; margin-bottom: 0; }
     #time-pills-mobile { margin-top: .2rem; }
@@ -480,7 +480,7 @@
       <button class="pill" id="tpill-m-morning" data-time="morning">Morning</button>
       <button class="pill" id="tpill-m-lunch" data-time="lunch">Lunch</button>
       <button class="pill" id="tpill-m-hh" data-time="hh">HH</button>
-      <button class="pill" id="tpill-m-late" data-time="late">Late Night</button>
+      <button class="pill" id="tpill-m-late" data-time="late">Late Nite</button>
     </div>
     <div class="filter-row" id="time-pills">
       <span class="filter-row-label">Time</span>
@@ -489,7 +489,7 @@
       <button class="pill" id="tpill-morning" data-time="morning">Morning</button>
       <button class="pill" id="tpill-lunch" data-time="lunch">Lunch</button>
       <button class="pill pill-pick pick-active" id="tpill-pick" data-time="pick">← Pick a time →</button>
-      <button class="pill" id="tpill-late" data-time="late">Late Night</button>
+      <button class="pill" id="tpill-late" data-time="late">Late Nite</button>
     </div>
     <div class="slider-row" id="slider-row">
       <div class="slider-outer"><div class="track-container"><div class="track-line" id="slider-track">
@@ -712,7 +712,7 @@ function updateFilterSummary(){
   } else if(activeTime === 'any'){
     parts.push('Any Time');
   } else {
-    var tl = {now:'Happening Now', morning:'Morning', lunch:'Lunch', late:'Late Night', hh:'Happy Hour'};
+    var tl = {now:'Happening Now', morning:'Morning', lunch:'Lunch', late:'Late Nite', hh:'Happy Hour'};
     parts.push(tl[activeTime] || activeTime);
   }
   activeNeighborhoods.forEach(function(n){parts.push(n);});
