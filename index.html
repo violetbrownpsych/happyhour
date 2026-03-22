@@ -814,21 +814,19 @@ function toggleMapMode(){
   document.body.classList.toggle('map-mode-active',mapMode);
   var btn=document.getElementById('map-toggle-btn'),fab=document.getElementById('fab');
   if(mapMode){
-    btn.innerHTML='List view'; btn.classList.add('active'); fab.innerHTML='List';
-    if(window.innerWidth<900){filterCollapsed=true;document.getElementById('filters-wrap').classList.add('map-collapsed');document.getElementById('handle-label').textContent='Show Filters';}
+    btn.innerHTML='&#128203; List view'; btn.classList.add('active'); fab.innerHTML='&#128506; Map';
     if(window.innerWidth<900){
-      // force filter bar height recalculation for mobile map positioning
-      updateContentHeight();
       filterCollapsed=true;
       document.getElementById('filters-wrap').classList.add('map-collapsed');
+      positionPanels();
+      updateContentHeight();
     }
     initMapOnce();updateContentHeight();
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());},300);
   } else {
-    btn.innerHTML='Map view'; btn.classList.remove('active'); fab.innerHTML='Map';
+    btn.innerHTML='&#128506; Map view'; btn.classList.remove('active'); fab.innerHTML='&#128203; List';
     filterCollapsed=false;
     document.getElementById('filters-wrap').classList.remove('map-collapsed');
-    document.getElementById('handle-label').textContent='Filters';
     document.body.classList.remove('map-mode-active');
     render();
   }
