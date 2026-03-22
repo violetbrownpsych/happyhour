@@ -606,40 +606,6 @@ function checkScrollCollapse(){
   }
 }
 
-  // In desktop map mode, only use list panel scroll — ignore window.scrollY
-  // because body overflow:hidden makes it unreliable
-  var scrolled;
-  if(mapMode && window.innerWidth >= 900){
-    scrolled = lp ? lp.scrollTop : 0;
-  } else {
-    scrolled = window.scrollY || window.pageYOffset || 0;
-  }
-
-  // Cache full height while expanded
-  if(!scrollCollapsed){
-    filterBarFullHeight = fw.offsetHeight;
-  }
-  var threshold = filterBarFullHeight || fw.offsetHeight;
-
-  if(scrolled > threshold && !forcedOpen){
-    if(!scrollCollapsed){
-      scrollCollapsed = true;
-      fw.classList.add('scroll-collapsed');
-      updateFilterSummary();
-      positionPanels();
-      updateContentHeight();
-    }
-  } else if(scrolled <= threshold){
-    forcedOpen = false;
-    if(scrollCollapsed){
-      scrollCollapsed = false;
-      fw.classList.remove('scroll-collapsed');
-      positionPanels();
-      updateContentHeight();
-    }
-  }
-}
-
 function updateFilterSummary(){
   var parts = [];
   if(activeDays === 'today'){
