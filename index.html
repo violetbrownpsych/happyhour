@@ -162,13 +162,23 @@
     #time-pills-mobile { display: flex; }
     #slider-row { display: none; }
     #tpill-m-hh { background: rgba(196,98,45,.08); }
-    #tpill-m-late { background: rgba(93, 151, 62, 0.18); }
+    #tpill-m-late { background: rgba(60, 101, 37, 0.18); }
     #tpill-m-hh.time-active, #tpill-m-hh.time-active-now { background: var(--green); color: var(--cream); }
     #tpill-m-late.time-active { background: var(--green); color: var(--cream); }
-    .pill:focus:not(.time-active):not(.time-active-now):not(.pick-active):not(.day-active):not(.today-active) {
+    .pill:hover, .pill:focus {
       outline: none;
-      border-color: var(--cream-dk);
-      color: var(--ink-lt);
+      border-color: var(--cream-dk) !important;
+      color: var(--ink-lt) !important;
+    }
+
+    .pill.time-active:focus,
+    .pill.time-active-now:focus,
+    .pill.pick-active:focus,
+    .pill.day-active:focus,
+    .pill.today-active:focus,
+    .pill.tag-active:focus {
+      border-color: inherit !important;
+      color: inherit !important;
     }
   }
 
