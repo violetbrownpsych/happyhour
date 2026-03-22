@@ -1012,9 +1012,9 @@ function updateAllBadges(){document.querySelectorAll('.card').forEach(function(c
 function throttle(fn,ms){var last=0;return function(){var now=Date.now();if(now-last>=ms){last=now;fn();}};}
 function positionPanels(){
   var fw = document.getElementById('filters-wrap');
-  var sb = document.getElementById('filter-summary-bar');
   if(!fw) return;
-  var h = fw.offsetHeight;
+  var rect = fw.getBoundingClientRect();
+  var h = rect.bottom;
   document.querySelectorAll('.collapsible-panel').forEach(function(p){
     p.style.top = h + 'px';
   });
