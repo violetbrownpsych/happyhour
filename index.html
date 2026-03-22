@@ -623,6 +623,41 @@ var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
 var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0, lastScrollY=0;
 var scrollRaf = null;
 
+var VIBE_COLORS = {
+  'Wine Bar':        '#722F37',
+  'Natural Wine':    '#8B1A4A',
+  'Cocktail Bar':    '#4A2060',
+  'Brewery/Taproom': '#C17F24',
+  'Pub/Dive':        '#1E5F9E',
+  'Hotel Bar':       '#2A4A6A',
+  'Rooftop':         '#2A4A6A',
+  'Restaurant':      '#2D6A2D',
+  'American':        '#7A3A18',
+  'Mexican':         '#8B4513',
+  'Italian':         '#5C3A1E',
+  'Japanese':        '#1E4D5A',
+  'French':          '#3A5C28',
+  'Mediterranean':   '#2D6A2D'
+};
+
+var VIBE_PRIORITY = [
+  'Wine Bar','Natural Wine','Cocktail Bar','Brewery/Taproom',
+  'Pub/Dive','Hotel Bar','Rooftop','Restaurant','American',
+  'Mexican','Italian','Japanese','French','Mediterranean'
+];
+
+function getAccentColor(venue){
+  if(venue.accentColor) return venue.accentColor;
+  for(var i=0;i<VIBE_PRIORITY.length;i++){
+    if(venue.vibe.indexOf(VIBE_PRIORITY[i])>=0){
+      return VIBE_COLORS[VIBE_PRIORITY[i]];
+    }
+  }
+  var fallback = ['#1E5F9E','#722F37','#4A2060','#C17F24','#2D6A2D',
+    '#8B1A4A','#1E4D5A','#8B4513','#5C3A1E','#3A5C28','#7A3A18','#2A4A6A'];
+  return fallback[Math.floor(Math.random() * fallback.length)];
+}
+
 // ── LOAD ───────────────────────────────────────────────────
 function loadData(){
   Papa.parse(CSV_URL,{download:true,header:true,skipEmptyLines:true,comments:'#',
@@ -648,7 +683,7 @@ function parseRows(data){
       dealTags:r.dealTags?r.dealTags.split('|').map(function(t){return t.trim();}).filter(Boolean):[],
       vibe:r.vibe?r.vibe.split('|').map(function(t){return t.trim();}).filter(Boolean):[],
       website:r.website?r.website.trim():'', mapsUrl:r.mapsUrl?r.mapsUrl.trim():'',
-      accentColor:r.accentColor?r.accentColor.trim():'#3A5C28',
+      accentColor:r.accentColor?r.accentColor.trim():'',
       lat:parseFloat(r.lat)||null, lng:parseFloat(r.lng)||null,
       verified:r.verified?r.verified.trim():''
     };
@@ -834,7 +869,7 @@ function updateContentHeight(){
 }
 
 function createMarker(v){
-  var icon=L.divIcon({className:'',html:'<div class="map-pin" style="background:'+v.accentColor+'"></div>',iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-32]});
+  var icon=L.divIcon({className:'',html:'<div class="map-pin" style="background:'+getAccentColor(v)+'"></div>',iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-32]});
   var m=L.marker([v.lat,v.lng],{icon:icon}).bindPopup(buildPopupHTML(v),{maxWidth:240});
   m.on('click',function(){openQV(v.name);});
   return m;
@@ -843,7 +878,7 @@ function createMarker(v){
 function buildPopupHTML(v){
   var vl=v.verified?'<div class="popup-verified">&#10003; Verified by '+v.verified+'</div>':'';
   var badge=buildBadgeHTML(v);
-  return '<div class="popup-accent" style="background:'+v.accentColor+'"></div>'+
+  return '<div class="popup-accent" style="background:'+getAccentColor(v)+'"></div>'+
     '<div class="popup-inner">'+
       '<div class="popup-name">'+v.name+'</div>'+
       '<div class="popup-hours">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</div>'+
@@ -922,7 +957,7 @@ function setupQV(){
 
 function openQV(name){
   var v=VENUES.find(function(x){return x.name===name;});if(!v)return;
-  document.getElementById('qv-accent').style.background=v.accentColor;
+  document.getElementById('qv-accent').style.background=getAccentColor(v);
   var badge=buildBadgeHTML(v);
   var verLine=v.verified?'<div class="qv-verified">&#10003; Verified by '+v.verified+'</div>':'';
   var deals=v.deals.map(function(d){return '<div class="qv-deal-item"><span class="qv-deal-dot"></span><span>'+d+'</span></div>';}).join('');
@@ -969,10 +1004,10 @@ function openQV(name){
         var isFocus=(venue.name===v.name);
         var sz=isFocus?36:24;
         var pinClass=isFocus?'map-pin qv-focus':'map-pin';
-        var icon=L.divIcon({className:'',html:'<div class="'+pinClass+'" style="background:'+venue.accentColor+'"></div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz],popupAnchor:[0,-sz-2]});
+        var icon=L.divIcon({className:'',html:'<div class="'+pinClass+'" style="background:'+getAccentColor(venue)+'"></div>',iconSize:[sz,sz],iconAnchor:[sz/2,sz],popupAnchor:[0,-sz-2]});
         var marker=L.marker([venue.lat,venue.lng],{icon:icon});
         marker.bindPopup(
-          '<div class="popup-accent" style="background:'+venue.accentColor+'"></div>'+
+          '<div class="popup-accent" style="background:'+getAccentColor(venue)+'"></div>'+
           '<div class="popup-inner">'+
             '<div class="popup-name">'+venue.name+'</div>'+
             '<div class="popup-hours">'+formatTime(venue.startTime)+' - '+formatTime(venue.endTime)+'</div>'+
@@ -1157,7 +1192,7 @@ function renderCards(venues){
     var mapLink=v.mapsUrl?'<a class="card-link" href="'+v.mapsUrl+'" target="_blank" rel="noopener">Map &#8599;</a>':'';
     var siteLink=v.website?'<a class="card-link" href="'+v.website+'" target="_blank" rel="noopener">Website &#8599;</a>':'';
     return '<div class="card" data-name="'+v.name+'" style="animation-delay:'+(i*.04)+'s">'+
-      '<div style="height:5px;background:'+v.accentColor+'"></div>'+
+      '<div style="height:5px;background:'+getAccentColor(v)+'"></div>'+
       '<div class="card-body">'+
         '<div class="card-header"><div class="venue-name">'+v.name+'</div><div class="badge-slot">'+buildBadgeHTML(v)+'</div></div>'+
         '<div class="neighborhood">'+v.neighborhoods[0]+', '+v.city+'</div>'+
