@@ -48,23 +48,22 @@
     .dev-banner strong { font-weight:600; }
 
     .slim-header {
+      display: none;  /* not flex */
       position: sticky;
       top: 0;
       z-index: 101;
       background: var(--timebar-bg);
-      display: flex;
       align-items: center;
       justify-content: center;
       padding: .55rem 1rem;
-      max-height: 0;
-      overflow: hidden;
+      transition: opacity .15s ease;
       opacity: 0;
-      transition: max-height .2s ease, opacity .15s ease;  /* add this */
     }
     .slim-header.visible {
-      max-height: 48px;
+      display: flex;
       opacity: 1;
     }
+
     .slim-logo {
       font-family: 'Playfair Display', serif;
       font-style: italic;
@@ -393,11 +392,11 @@
   </a>
 </header>
 
+<div class="time-bar">It's currently <span id="live-time"></span> — <span id="live-day"></span></div>
+
 <div class="slim-header" id="slim-header">
   <a href="/" class="slim-logo"><em>Golden</em> Hour</a>
 </div>
-
-<div class="time-bar">It's currently <span id="live-time"></span> — <span id="live-day"></span></div>
 
 <div class="dev-banner" id="dev-banner" style="display:none">
   <strong>Dev mode:</strong> CSV not loaded — showing sample data.
