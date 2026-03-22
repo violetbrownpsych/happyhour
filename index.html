@@ -486,15 +486,14 @@
     <div class="slider-row" id="slider-row">
       <div class="slider-outer"><div class="track-container"><div class="track-line" id="slider-track">
         <div class="tick tick-even" style="left:0%"><span class="tick-label">2 PM</span></div>
-        <div class="tick tick-odd"  style="left:14.29%"></div>
-        <div class="tick tick-even" style="left:28.57%"><span class="tick-label">4 PM</span></div>
-        <div class="tick tick-odd"  style="left:42.86%"></div>
-        <div class="tick tick-even" style="left:57.14%"><span class="tick-label">6 PM</span></div>
-        <div class="tick tick-odd"  style="left:71.43%"></div>
-        <div class="tick tick-even" style="left:85.71%"><span class="tick-label">8 PM</span></div>
-        <div class="tick tick-even" style="left:100%"><span class="tick-label">9 PM</span></div>
+        <div class="tick tick-odd"  style="left:16.67%"></div>
+        <div class="tick tick-even" style="left:33.33%"><span class="tick-label">4 PM</span></div>
+        <div class="tick tick-odd"  style="left:50%"></div>
+        <div class="tick tick-even" style="left:66.67%"><span class="tick-label">6 PM</span></div>
+        <div class="tick tick-odd"  style="left:83.33%"></div>
+        <div class="tick tick-even" style="left:100%"><span class="tick-label">8 PM</span></div>
         <div class="thumb-wrap" id="slider-thumb"><div class="thumb-label-above" id="slider-label">5 PM</div><div class="thumb-dot"></div></div>
-        <input type="range" class="slider-input" id="time-slider" min="14" max="21" step="0.5" value="17" />
+        <input type="range" class="slider-input" id="time-slider" min="14" max="20" step="0.5" value="17" />
       </div></div></div>
     </div>
     <div class="collapsibles-bar">
@@ -589,7 +588,7 @@ var TIME_DEFS = {
   late:   {label:', Late Night',  test:function(s,e){return overlapsLateNight(s,e);}},
   now:    {label:', Happening Now',test:function(s,e){return isOpenNowRange(s,e);}}
 };
-var SLIDER_MIN=14, SLIDER_MAX=21;
+var SLIDER_MIN=14, SLIDER_MAX=20;
 var DAY_NAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 var DAY_FULL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var VENUES=[], activeDays='today', activeTime='pick', sliderValue=17;
@@ -1002,7 +1001,7 @@ function todayFull(){return DAY_FULL[new Date().getDay()];}
 function formatTime(t){var h=Math.floor(t/100),m=t%100;var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;return h12+(m?':'+String(m).padStart(2,'0'):'')+'  '+ampm;}
 function isOpenNowRange(s,e){var now=nowMinutes();if(e<s)return now>=s||now<=e;return now>=s&&now<=e;}
 function overlaps(vS,vE,wS,wE){return vS<=wE&&vE>=wS;}
-function overlapsLateNight(vS,vE){return vS>=2100||vE<600||vE<vS;}
+function overlapsLateNight(vS,vE){return vS>=2000||vE<600||vE<vS;}
 
 // ── PANELS ─────────────────────────────────────────────────
 function buildAreaPanel(){
