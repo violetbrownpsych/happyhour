@@ -548,6 +548,7 @@ function init(){
   new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
   render();
   setInterval(updateAllBadges,60000);
+  filterBarFullHeight = document.getElementById('filters-wrap').offsetHeight;
 }
 
 // ── SCROLL COLLAPSE ────────────────────────────────────────
@@ -556,15 +557,20 @@ function init(){
 // naturally scroll off screen). Expands once scroll comes back
 // above that same height.
 function checkScrollCollapse(){
-  var winY = window.scrollY || window.pageYOffset || 0;
-  var lp = document.getElementById('list-panel');
-  var listY = (lp && mapMode) ? lp.scrollTop : 0;
-  var scrolled = Math.max(winY, listY);
   var fw = document.getElementById('filters-wrap');
+  var lp = document.getElementById('list-panel');
   if(!fw) return;
 
-  // Cache the full height while expanded so we can use it
-  // as the expand threshold even after the bar has shrunk
+  // In desktop map mode, only use list panel scroll — ignore window.scrollY
+  // because body overflow:hidden makes it unreliable
+  var scrolled;
+  if(mapMode && window.innerWidth >= 900){
+    scrolled = lp ? lp.scrollTop : 0;
+  } else {
+    scrolled = window.scrollY || window.pageYOffset || 0;
+  }
+
+  // Cache full height while expanded
   if(!scrollCollapsed){
     filterBarFullHeight = fw.offsetHeight;
   }
