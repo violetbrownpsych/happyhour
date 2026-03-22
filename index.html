@@ -46,6 +46,21 @@
     #live-time { color:var(--header-accent); font-weight:600; }
     .dev-banner { background:#FFF8E6; border-bottom:1.5px solid #F5C97A; text-align:center; padding:.45rem 1rem; font-size:.75rem; color:#7A4F10; }
     .dev-banner strong { font-weight:600; }
+    @media (max-width:899px) {
+      .header-inner {
+        padding: 1.8rem 1.5rem 1.5rem;
+      }
+      header h1 {
+        font-size: 2.4rem;
+      }
+      header p.tagline {
+        font-size: .85rem;
+        margin-top: .5rem;
+      }
+      .logo-eyebrow {
+        margin-bottom: .3rem;
+      }
+    }
 
     /* ── STICKY FILTERS ─────────────────────────────────────── */
     .filters-wrap { 
@@ -814,7 +829,7 @@ function toggleMapMode(){
   document.body.classList.toggle('map-mode-active',mapMode);
   var btn=document.getElementById('map-toggle-btn'),fab=document.getElementById('fab');
   if(mapMode){
-    btn.innerHTML='&#128203; List view'; btn.classList.add('active'); fab.innerHTML='&#128506; Map';
+    btn.innerHTML='&#128203; List view'; btn.classList.add('active'); fab.innerHTML='&#128203; List';
     if(window.innerWidth<900){
       filterCollapsed=true;
       document.getElementById('filters-wrap').classList.add('map-collapsed');
@@ -824,7 +839,7 @@ function toggleMapMode(){
     initMapOnce();updateContentHeight();
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());},300);
   } else {
-    btn.innerHTML='&#128506; Map view'; btn.classList.remove('active'); fab.innerHTML='&#128203; List';
+    btn.innerHTML='&#128506; Map view'; btn.classList.remove('active'); fab.innerHTML='&#128506; Map';
     filterCollapsed=false;
     document.getElementById('filters-wrap').classList.remove('map-collapsed');
     document.body.classList.remove('map-mode-active');
