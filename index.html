@@ -74,8 +74,18 @@
     .filter-summary-bar:hover { filter: brightness(1.08); }
 
     /* Filter expandable wrapper */
-    .filter-expandable { overflow:hidden; max-height:600px; opacity:1; transition: max-height .25s ease, opacity .2s ease; }
-    .filters-wrap.scroll-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
+    .filter-expandable { 
+      overflow:hidden; 
+      max-height:600px; 
+      opacity:1; 
+      transition: opacity .2s ease; 
+    }
+    .filters-wrap.scroll-collapsed .filter-expandable { 
+      max-height:0; 
+      opacity:0; 
+      pointer-events:none;
+      transition: opacity .2s ease, max-height 0s .2s; /* wait .2s before snapping height */
+    }
     .filters-wrap.scroll-collapsed .filter-summary-bar { display:flex; }
     @media (max-width:899px) {
       .filters-wrap.map-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
