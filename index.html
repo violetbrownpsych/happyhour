@@ -525,8 +525,7 @@ var VENUES=[], activeDays='today', activeTime='pick', sliderValue=17;
 var activeNeighborhoods=new Set(), activeDealTags=new Set(), activeVibeTags=new Set(), searchQuery='';
 var mapMode=false, mapInitialized=false, filterCollapsed=false;
 var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
-var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0;
-var filterBarFullHeight = 0;
+var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0;
 
 // ── LOAD ───────────────────────────────────────────────────
 function loadData(){
@@ -583,6 +582,9 @@ function init(){
 // naturally scroll off screen). Expands once scroll comes back
 // above that same height.
 function checkScrollCollapse(){
+  var now = Date.now();
+  if(now - lastToggleTime < 400) return; // ignore scroll events for 400ms after toggling
+  
   var fw = document.getElementById('filters-wrap');
   var lp = document.getElementById('list-panel');
   if(!fw) return;
@@ -601,7 +603,7 @@ function checkScrollCollapse(){
 
   if(scrolled > threshold && !forcedOpen){
     if(!scrollCollapsed){
-      scrollCollapsed = true;
+      lastToggleTime = Date.now();
       fw.classList.add('scroll-collapsed');
       updateFilterSummary();
       positionPanels();
@@ -611,6 +613,7 @@ function checkScrollCollapse(){
     forcedOpen = false;
     if(scrollCollapsed){
       scrollCollapsed = false;
+      lastToggleTime = Date.now();
       fw.classList.remove('scroll-collapsed');
       positionPanels();
       updateContentHeight();
