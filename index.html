@@ -54,10 +54,11 @@
     .filter-summary-bar {
       display: none;
       align-items: center;
-      justify-content: center;
-      padding: .55rem 1rem;
+      justify-content: space-between;
+      padding: .5rem 1.5rem;
       cursor: pointer;
-      background: var(--timebar-bg);
+      background: var(--cream);
+      border-bottom: 1.5px solid var(--cream-dk);
     }
 
     .summary-logo {
@@ -375,7 +376,8 @@
 <div class="filters-wrap" id="filters-wrap">
   <!-- Slim summary bar shown when scroll-collapsed -->
   <div class="filter-summary-bar" id="filter-summary-bar">
-    <a href="/" class="summary-logo"><em>Golden</em> Hour</a>
+    <span id="summary-text">Today · 5 PM</span>
+    <span class="summary-expand">Filters ▴</span>
   </div>
   <!-- Mobile map handle -->
   <div class="filter-collapse-handle" id="filter-handle">
