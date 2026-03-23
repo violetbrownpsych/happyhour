@@ -871,7 +871,6 @@ function updateContentHeight(){
 function createMarker(v){
   var icon=L.divIcon({className:'',html:'<div class="map-pin" style="background:'+getAccentColor(v)+'"></div>',iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-32]});
   var m=L.marker([v.lat,v.lng],{icon:icon}).bindPopup(buildPopupHTML(v),{maxWidth:240});
-  m.on('click',function(){openQV(v.name);});
   return m;
 }
 
