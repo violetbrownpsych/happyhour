@@ -352,6 +352,9 @@
       animation: none !important;
       transition: none !important;
     }
+    .content-area.map-active .card {
+      animation: none !important;
+    }
     .venue-name { font-family:'Playfair Display',serif; font-size:1.12rem; font-weight:600; color:var(--ink); line-height:1.25; }
     .status-badge { flex-shrink:0; font-size:.63rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:.22rem .65rem; border-radius:99px; white-space:nowrap; transition:background-color 1s ease,color 1s ease; }
     .status-badge.soon { background:#FEF3C7; color:#92400E; }
@@ -1265,12 +1268,12 @@ var dividerActive = false;
     document.addEventListener('mouseup', function() {
       if (!isDragging) return;
       isDragging = false;
-      setTimeout(function(){ dividerActive = false; }, 150);
+      dividerActive = false;
       divider.classList.remove('dragging');
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      setTimeout(function(){ if (grid) grid.classList.remove('no-anim'); }, 200);
+      if (grid) grid.classList.remove('no-anim');
     });
   })();
 </script>
