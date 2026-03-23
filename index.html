@@ -320,7 +320,7 @@
       .content-area.map-active { 
         display: flex; 
         align-items: stretch;
-        height: calc(100vh - var(--content-top, 60px));
+        height: calc(100vh - var(--filter-bar-h, 60px));
         overflow: hidden; 
       }
       
@@ -328,10 +328,12 @@
 
       .content-area.map-active .map-panel {
         display: block;
-        position: sticky;
-        top: 0;
+        position: fixed;
+        top: var(--filter-bar-h, 200px);
+        left: 0;
         flex: 0 0 50%;
-        height: calc(100vh - var(--content-top, 200px));
+        width: 50%;
+        height: calc(100vh - var(--filter-bar-h, 200px));
         flex-shrink: 0;
       }
 
@@ -339,7 +341,7 @@
         flex: 1;
         min-width: 0;
         overflow-y: auto;
-        height: calc(100vh - var(--content-top, 200px));
+        height: calc(100vh - var(--filter-bar-h, 200px));
       }
     }
 
@@ -871,11 +873,8 @@ function initMapOnce(){
 function updateContentHeight(){
   var bar=document.getElementById('filters-wrap');if(!bar)return;
   var h=bar.getBoundingClientRect().bottom;
-  var ca=document.getElementById('content-area');
-  var caTop=ca?ca.getBoundingClientRect().top:h;
   document.documentElement.style.setProperty('--filter-bar-h',h+'px');
-  document.documentElement.style.setProperty('--content-top',caTop+'px');
-  var mp=document.getElementById('map-panel');if(mp)mp.style.top=caTop+'px';
+  var mp=document.getElementById('map-panel');if(mp)mp.style.top=h+'px';
   if(leafletMap)leafletMap.invalidateSize();
 }
 
