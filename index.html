@@ -1270,7 +1270,7 @@ var dividerActive = false;
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      if (grid) grid.classList.remove('no-anim');
+      setTimeout(function(){ if (grid) grid.classList.remove('no-anim'); }, 200);
     });
   })();
 </script>
