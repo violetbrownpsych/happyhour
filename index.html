@@ -934,10 +934,12 @@ function setupFAB(){document.getElementById('fab').addEventListener('click',togg
 function toggleMapMode(){
   mapMode=!mapMode;
   document.getElementById('content-area').classList.toggle('map-active',mapMode);
+  if(mapMode){
+    window.scrollTo({top: document.getElementById('filters-wrap').offsetTop});
+  }
   document.body.classList.toggle('map-mode-active',mapMode);
   var btn=document.getElementById('map-toggle-btn'),fab=document.getElementById('fab');
   if(mapMode){
-    window.scrollTo({top: document.getElementById('filters-wrap').offsetTop, behavior: 'smooth'});
     btn.innerHTML='&#128203; List view'; btn.classList.add('active'); fab.innerHTML='&#128203; List';
     if(window.innerWidth<900){
       filterCollapsed=true;
