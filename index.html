@@ -766,9 +766,10 @@ function checkScrollCollapse(){
     fw.classList.add('scroll-collapsed');
     var sb = document.getElementById('filter-summary-bar');
     if(sb) sb.classList.add('visible');
-    closeAllPanels(); // close any open dropdown when filter bar collapses
+    closeAllPanels();
+    updateContentHeight();
+    if(leafletMap) leafletMap.invalidateSize();
   }
-}
 
 function updateFilterSummary(){
   var parts = [];
