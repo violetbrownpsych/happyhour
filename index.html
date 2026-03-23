@@ -914,7 +914,7 @@ function flyToNeighborhood(name){
   if(b&&leafletMap&&mapMode)leafletMap.flyToBounds(b,{duration:1.2,padding:[40,40]});
 }
 
-function highlightMarker(name){
+function highlightMarker(name, scroll){
   if(highlightedVenue){
     var pm=markers[highlightedVenue];
     if(pm){var pe=pm.getElement();if(pe){var pd=pe.querySelector('.map-pin');if(pd)pd.classList.remove('highlighted');}}
@@ -925,7 +925,7 @@ function highlightMarker(name){
   var m=markers[name];
   if(m){var me=m.getElement();if(me){var md=me.querySelector('.map-pin');if(md)md.classList.add('highlighted');}}
   var c=document.querySelector('.card[data-name="'+CSS.escape(name)+'"]');
-  if(c){c.classList.add('map-highlighted');c.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  if(c){c.classList.add('map-highlighted'); if(scroll) c.scrollIntoView({behavior:'smooth',block:'nearest'});}
 }
 
 // ── MAP TOGGLE & FAB ───────────────────────────────────────
@@ -1215,8 +1215,8 @@ function renderCards(venues){
   }).join('');
   grid.querySelectorAll('.card-link').forEach(function(link){link.addEventListener('click',function(e){e.stopPropagation();});});
   grid.querySelectorAll('.card').forEach(function(card){
-    card.addEventListener('click',function(){var name=card.dataset.name;openQV(name);if(mapMode){highlightMarker(name);var v=VENUES.find(function(x){return x.name===name;});if(v&&v.lat&&leafletMap)leafletMap.panTo([v.lat,v.lng]);}});
-    card.addEventListener('mouseenter',function(){if(mapMode)highlightMarker(card.dataset.name);});
+    card.addEventListener('click',function(){var name=card.dataset.name;openQV(name);if(mapMode){highlightMarker(name, true);var v=VENUES.find(function(x){return x.name===name;});if(v&&v.lat&&leafletMap)leafletMap.panTo([v.lat,v.lng]);}});
+    card.addEventListener('mouseenter',function(){if(mapMode)highlightMarker(card.dataset.name, false);});
   });
   grid.querySelectorAll('[data-click-deal]').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();toggleSet(activeDealTags,el.dataset.clickDeal);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');render();});});
   grid.querySelectorAll('[data-click-vibe]').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();toggleSet(activeVibeTags,el.dataset.clickVibe);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});});
