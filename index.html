@@ -233,8 +233,11 @@
     .results-meta { max-width:1100px; margin:1.35rem auto .2rem; padding:0 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem; }
     .results-meta-left { display:flex; align-items:baseline; flex-wrap:wrap; gap:.5rem; }
     body.map-mode-active .results-meta {
-      margin-top: .6rem;
-      margin-bottom: .1rem;
+      margin-top: .3rem;
+      margin-bottom: 0;
+    }
+    body.map-mode-active #map-toggle-btn {
+      display: none;
     }
     .results-count { font-size:.8rem; font-weight:500; color:var(--ink-lt); }
     #results-heading { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:600; display:flex; align-items:baseline; flex-wrap:wrap; gap:0; line-height:1.4; }
