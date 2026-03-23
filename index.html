@@ -895,6 +895,7 @@ function updateMapMarkers(venues){
 
 function onMapMoved(){
   if(!leafletMap||!mapMode)return;
+  if(dividerActive)return; 
   var bounds=leafletMap.getBounds();
   renderCards(filteredVenues().filter(function(v){
     return !v.lat||!v.lng||bounds.contains([v.lat,v.lng]);
@@ -1216,6 +1217,7 @@ function updateClock(){var d=new Date(),h=d.getHours(),m=d.getMinutes();var ampm
 setInterval(updateClock,10000);
 updateClock();
 loadData();
+var dividerActive = false;
 </script>
 
 <script>
@@ -1230,6 +1232,7 @@ loadData();
 
     divider.addEventListener('mousedown', function(e) {
       isDragging = true;
+      dividerActive = true;
       divider.classList.add('dragging');
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
@@ -1258,6 +1261,7 @@ loadData();
     document.addEventListener('mouseup', function() {
       if (!isDragging) return;
       isDragging = false;
+      dividerActive = false;
       divider.classList.remove('dragging');
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       document.body.style.cursor = '';
