@@ -872,7 +872,8 @@ function updateContentHeight(){
   var bar=document.getElementById('filters-wrap');if(!bar)return;
   var h=bar.getBoundingClientRect().bottom;
   document.documentElement.style.setProperty('--filter-bar-h',h+'px');
-  var mp=document.getElementById('map-panel');if(mp)mp.style.top=h+'px';
+  var mp=document.getElementById('map-panel');
+  if(mp && window.innerWidth < 900) mp.style.top=h+'px';
   if(leafletMap)leafletMap.invalidateSize();
 }
 
