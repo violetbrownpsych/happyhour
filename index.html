@@ -952,6 +952,7 @@ function toggleMapMode(){
       updateContentHeight();
     }
     initMapOnce();updateContentHeight();
+    setTimeout(function(){updateContentHeight();},50);
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());mapReady=true;},300);
   } else {
     mapReady=false;
