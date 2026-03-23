@@ -935,9 +935,11 @@ function toggleMapMode(){
   mapMode=!mapMode;
   document.getElementById('content-area').classList.toggle('map-active',mapMode);
   if(mapMode){
-    window.scrollTo({top: document.getElementById('filters-wrap').offsetTop});
-  }
-  document.body.classList.toggle('map-mode-active',mapMode);
+      window.scrollTo({top: 0});
+      setTimeout(function(){ document.body.classList.toggle('map-mode-active', mapMode); }, 50);
+    } else {
+      document.body.classList.toggle('map-mode-active', mapMode);
+    }
   var btn=document.getElementById('map-toggle-btn'),fab=document.getElementById('fab');
   if(mapMode){
     btn.innerHTML='&#128203; List view'; btn.classList.add('active'); fab.innerHTML='&#128203; List';
