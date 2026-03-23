@@ -1267,9 +1267,6 @@ var dividerActive = false;
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
       if (grid) grid.classList.remove('no-anim');
-      if (typeof leafletMap !== 'undefined' && leafletMap) {
-        leafletMap.invalidateSize();
-      }
     });
   })();
 </script>
