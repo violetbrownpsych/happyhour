@@ -933,15 +933,13 @@ function setupMapToggle(){document.getElementById('map-toggle-btn').addEventList
 function setupFAB(){document.getElementById('fab').addEventListener('click',toggleMapMode);}
 function toggleMapMode(){
   mapMode=!mapMode;
-  document.getElementById('content-area').classList.toggle('map-active',mapMode);
-  if(mapMode){
-      window.scrollTo({top: 0});
-      setTimeout(function(){ document.body.classList.toggle('map-mode-active', mapMode); }, 50);
-    } else {
-      document.body.classList.toggle('map-mode-active', mapMode);
-    }
   var btn=document.getElementById('map-toggle-btn'),fab=document.getElementById('fab');
   if(mapMode){
+    window.scrollTo(0, 0);
+    setTimeout(function(){
+      document.getElementById('content-area').classList.add('map-active');
+      document.body.classList.add('map-mode-active');
+    }, 50);
     btn.innerHTML='&#128203; List view'; btn.classList.add('active'); fab.innerHTML='&#128203; List';
     if(window.innerWidth<900){
       filterCollapsed=true;
@@ -952,10 +950,11 @@ function toggleMapMode(){
     initMapOnce();updateContentHeight();
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());},300);
   } else {
+    document.getElementById('content-area').classList.remove('map-active');
+    document.body.classList.remove('map-mode-active');
     btn.innerHTML='&#128506; Map view'; btn.classList.remove('active'); fab.innerHTML='&#128506; Map';
     filterCollapsed=false;
     document.getElementById('filters-wrap').classList.remove('map-collapsed');
-    document.body.classList.remove('map-mode-active');
     render();
   }
 }
