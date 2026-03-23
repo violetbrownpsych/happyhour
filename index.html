@@ -893,13 +893,17 @@ function updateMapMarkers(venues){
   venues.forEach(function(v){if(!v.lat||!v.lng||markers[v.name])return;markers[v.name]=createMarker(v).addTo(leafletMap);});
 }
 
+var lastVisibleNames='';
 function onMapMoved(){
   if(!leafletMap||!mapMode)return;
-  if(dividerActive)return; 
   var bounds=leafletMap.getBounds();
-  renderCards(filteredVenues().filter(function(v){
+  var visible=filteredVenues().filter(function(v){
     return !v.lat||!v.lng||bounds.contains([v.lat,v.lng]);
-  }));
+  });
+  var names=visible.map(function(v){return v.name;}).join(',');
+  if(names===lastVisibleNames)return;
+  lastVisibleNames=names;
+  renderCards(visible);
 }
 
 function flyToNeighborhood(name){
