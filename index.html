@@ -629,6 +629,7 @@ var mapMode=false, mapInitialized=false, filterCollapsed=false;
 var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
 var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0, lastScrollY=0;
 var scrollRaf = null;
+var mapReady=false;
 
 var VIBE_COLORS = {
   'Wine Bar':        '#722F37',
@@ -902,7 +903,7 @@ function updateMapMarkers(venues){
 
 var lastVisibleNames='';
 function onMapMoved(){
-  if(!leafletMap||!mapMode)return;
+  if(!leafletMap||!mapMode||!mapReady)return;
   var bounds=leafletMap.getBounds();
   var visible=filteredVenues().filter(function(v){
     return !v.lat||!v.lng||bounds.contains([v.lat,v.lng]);
@@ -939,11 +940,10 @@ function toggleMapMode(){
   mapMode=!mapMode;
   var btn=document.getElementById('map-toggle-btn'),fab=document.getElementById('fab');
   if(mapMode){
-    window.scrollTo(0, 0);
-    setTimeout(function(){
-      document.getElementById('content-area').classList.add('map-active');
-      document.body.classList.add('map-mode-active');
-    }, 50);
+    mapReady=false;
+    document.documentElement.scrollTop=0;
+    document.getElementById('content-area').classList.add('map-active');
+    document.body.classList.add('map-mode-active');
     btn.innerHTML='&#128203; List view'; btn.classList.add('active'); fab.innerHTML='&#128203; List';
     if(window.innerWidth<900){
       filterCollapsed=true;
@@ -952,8 +952,9 @@ function toggleMapMode(){
       updateContentHeight();
     }
     initMapOnce();updateContentHeight();
-    setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());},300);
+    setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());mapReady=true;},300);
   } else {
+    mapReady=false;
     document.getElementById('content-area').classList.remove('map-active');
     document.body.classList.remove('map-mode-active');
     btn.innerHTML='&#128506; Map view'; btn.classList.remove('active'); fab.innerHTML='&#128506; Map';
