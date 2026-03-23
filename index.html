@@ -428,7 +428,9 @@
     .qv-map-wrap { width:100%; height:260px; border-radius:12px; overflow:hidden; border:1.5px solid var(--cream-dk); }
     #qv-map { width:100%; height:100%; }
     .qv-map-placeholder { width:100%; height:200px; display:flex; align-items:center; justify-content:center; background:var(--cream-dk); color:var(--ink-lt); font-size:.8rem; border-radius:12px; border:1.5px solid var(--cream-dk); }
-
+    .qv-session { margin-bottom:1rem; }
+    .qv-session-header { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.5rem; }
+    
     /* ── FAB ────────────────────────────────────────────────── */
     #fab { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:200; background:var(--green); color:var(--cream); border:none; border-radius:99px; padding:.6rem 1.5rem; font-family:'DM Sans',sans-serif; font-size:.82rem; font-weight:700; letter-spacing:.05em; box-shadow:0 4px 20px rgba(36,61,26,.35); cursor:pointer; display:flex; align-items:center; gap:.35rem; transition:background .2s,transform .15s; }
     #fab:hover { background:var(--green-lt); transform:translateX(-50%) translateY(-2px); }
@@ -680,22 +682,36 @@ function loadData(){
 }
 
 function parseRows(data){
-  return data.map(function(r){
-    return {
-      name:r.name?r.name.trim():'',
-      neighborhoods:r.neighborhood?r.neighborhood.split('|').map(function(n){return n.trim();}).filter(Boolean):[],
-      city:r.city?r.city.trim():'',
+  var grouped={};
+  var order=[];
+  data.forEach(function(r){
+    if(!r.name||!r.startTime)return;
+    var name=r.name.trim();
+    if(!grouped[name]){
+      order.push(name);
+      grouped[name]={
+        name:name,
+        neighborhoods:r.neighborhood?r.neighborhood.split('|').map(function(n){return n.trim();}).filter(Boolean):[],
+        city:r.city?r.city.trim():'',
+        dealTags:r.dealTags?r.dealTags.split('|').map(function(t){return t.trim();}).filter(Boolean):[],
+        vibe:r.vibe?r.vibe.split('|').map(function(t){return t.trim();}).filter(Boolean):[],
+        website:r.website?r.website.trim():'',
+        mapsUrl:r.mapsUrl?r.mapsUrl.trim():'',
+        accentColor:r.accentColor?r.accentColor.trim():'',
+        lat:parseFloat(r.lat)||null,
+        lng:parseFloat(r.lng)||null,
+        verified:r.verified?r.verified.trim():'',
+        sessions:[]
+      };
+    }
+    grouped[name].sessions.push({
       days:r.days?r.days.split('|').map(function(d){return d.trim();}).filter(Boolean):[],
-      startTime:parseInt(r.startTime,10), endTime:parseInt(r.endTime,10),
-      deals:r.deals?r.deals.split('|').map(function(d){return d.trim();}).filter(Boolean):[],
-      dealTags:r.dealTags?r.dealTags.split('|').map(function(t){return t.trim();}).filter(Boolean):[],
-      vibe:r.vibe?r.vibe.split('|').map(function(t){return t.trim();}).filter(Boolean):[],
-      website:r.website?r.website.trim():'', mapsUrl:r.mapsUrl?r.mapsUrl.trim():'',
-      accentColor:r.accentColor?r.accentColor.trim():'',
-      lat:parseFloat(r.lat)||null, lng:parseFloat(r.lng)||null,
-      verified:r.verified?r.verified.trim():''
-    };
-  }).filter(function(v){return v.name&&!isNaN(v.startTime);});
+      startTime:parseInt(r.startTime,10),
+      endTime:parseInt(r.endTime,10),
+      deals:r.deals?r.deals.split('|').map(function(d){return d.trim();}).filter(Boolean):[]
+    });
+  });
+  return order.map(function(name){return grouped[name];});
 }
 
 function init(){
@@ -727,7 +743,9 @@ function init(){
   filterBarFullHeight = (header ? header.offsetHeight : 0) + 
                         (timebar ? timebar.offsetHeight : 0) + 
                         (fw ? fw.offsetHeight : 0);
-  var isOpenNow = VENUES.some(function(v){return isOpenNowRange(v.startTime, v.endTime);});
+  var isOpenNow = VENUES.some(function(v){
+    return v.sessions.some(function(s){return isOpenNowRange(s.startTime, s.endTime);});
+  });
   if(isOpenNow){
     activeTime = 'now';
     setTimeMode('now');
@@ -893,7 +911,7 @@ function buildPopupHTML(v){
   return '<div class="popup-accent" style="background:'+getAccentColor(v)+'"></div>'+
     '<div class="popup-inner">'+
       '<div class="popup-name">'+v.name+'</div>'+
-      '<div class="popup-hours">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</div>'+
+      '<div class="popup-hours">'+formatTime(v.sessions[0].startTime)+' - '+formatTime(v.sessions[0].endTime)+'</div>'+
       vl+(badge?'<div style="margin:.3rem 0">'+badge+'</div>':'')+
       '<button class="popup-open-btn" onclick="openQV(\''+v.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')">See details</button>'+
     '</div>';
@@ -984,7 +1002,13 @@ function openQV(name){
   document.getElementById('qv-accent').style.background=getAccentColor(v);
   var badge=buildBadgeHTML(v);
   var verLine=v.verified?'<div class="qv-verified">&#10003; Verified by '+v.verified+'</div>':'';
-  var deals=v.deals.map(function(d){return '<div class="qv-deal-item"><span class="qv-deal-dot"></span><span>'+d+'</span></div>';}).join('');
+  var sessionsHTML=v.sessions.map(function(s){
+    var sdeals=s.deals.map(function(d){return '<div class="qv-deal-item"><span class="qv-deal-dot"></span><span>'+d+'</span></div>';}).join('');
+    return '<div class="qv-session">'+
+      '<div class="qv-session-header"><span class="qv-hours">'+formatTime(s.startTime)+' – '+formatTime(s.endTime)+'</span><span class="qv-days">'+s.days.join(' · ')+'</span></div>'+
+      '<div class="qv-deals">'+sdeals+'</div>'+
+    '</div>';
+  }).join('');
   var dTags=v.dealTags.map(function(t){return '<span class="tag-deal qv-tag-filter" data-filter-deal="'+t+'">'+t+'</span>';}).join('');
   var vTags=v.vibe.map(function(t){return '<span class="tag-vibe qv-tag-filter" data-filter-vibe="'+t+'">'+t+'</span>';}).join('');
   var webBtn=v.website?'<a class="qv-link secondary" href="'+v.website+'" target="_blank" rel="noopener">Website</a>':'';
@@ -995,11 +1019,10 @@ function openQV(name){
   document.getElementById('qv-body').innerHTML=
     '<div class="qv-name">'+v.name+'</div>'+
     '<div class="qv-neighborhood">'+v.neighborhoods[0]+', '+v.city+'</div>'+
-    '<div class="qv-hours-row"><span class="qv-hours">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span><span class="qv-days">'+v.days.join(' · ')+'</span></div>'+
     (badge?'<div style="margin-bottom:.7rem">'+badge+'</div>':'')+
     verLine+
-    '<div class="qv-section-label">Happy Hour Deals</div>'+
-    '<div class="qv-deals">'+deals+'</div>'+
+    '<div class="qv-section-label">Happy Hour Sessions</div>'+
+    sessionsHTML+
     '<div class="qv-section-label">Tags <span style="font-size:.6rem;font-weight:400;opacity:.5;letter-spacing:0;text-transform:none;">- click to filter</span></div>'+
     '<div class="qv-tags">'+dTags+vTags+'</div>'+
     '<div class="qv-links"><a class="qv-link primary" href="'+v.mapsUrl+'" target="_blank" rel="noopener">Directions</a>'+webBtn+'</div>'+
@@ -1034,7 +1057,7 @@ function openQV(name){
           '<div class="popup-accent" style="background:'+getAccentColor(venue)+'"></div>'+
           '<div class="popup-inner">'+
             '<div class="popup-name">'+venue.name+'</div>'+
-            '<div class="popup-hours">'+formatTime(venue.startTime)+' - '+formatTime(venue.endTime)+'</div>'+
+            '<div class="popup-hours">'+formatTime(venue.sessions[0].startTime)+' - '+formatTime(venue.sessions[0].endTime)+'</div>'+
             (venue.verified?'<div class="popup-verified">&#10003; Verified by '+venue.verified+'</div>':'')+
             '<button class="popup-open-btn" onclick="openQV(\''+venue.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')">See details</button>'+
           '</div>',{maxWidth:220}
@@ -1054,17 +1077,26 @@ function closeQV(){
 
 // ── STATUS BADGE ───────────────────────────────────────────
 function getBadgeState(v){
-  var today=todayAbbr();if(v.days.indexOf(today)<0)return{type:'none'};
+  var today=todayAbbr();
   var d=new Date(),nowMins=d.getHours()*60+d.getMinutes();
-  var startMins=Math.floor(v.startTime/100)*60+(v.startTime%100);
-  var endMins=Math.floor(v.endTime/100)*60+(v.endTime%100);
-  var cross=v.endTime<v.startTime,minsLeft=null;
-  if(cross){if(nowMins>=startMins)minsLeft=(1440-nowMins)+endMins;else if(nowMins<endMins)minsLeft=endMins-nowMins;}
-  else{if(nowMins>=startMins&&nowMins<endMins)minsLeft=endMins-nowMins;}
-  if(minsLeft!==null&&minsLeft>0)return{type:'ending',minsLeft:minsLeft};
-  var mu=startMins-nowMins;if(mu<0)mu+=1440;
-  if(mu<=30&&mu>0)return{type:'soon',minsLeft:mu};
-  return{type:'none'};
+  var best={type:'none'};
+  v.sessions.forEach(function(s){
+    if(s.days.indexOf(today)<0)return;
+    var startMins=Math.floor(s.startTime/100)*60+(s.startTime%100);
+    var endMins=Math.floor(s.endTime/100)*60+(s.endTime%100);
+    var cross=s.endTime<s.startTime,minsLeft=null;
+    if(cross){if(nowMins>=startMins)minsLeft=(1440-nowMins)+endMins;else if(nowMins<endMins)minsLeft=endMins-nowMins;}
+    else{if(nowMins>=startMins&&nowMins<endMins)minsLeft=endMins-nowMins;}
+    if(minsLeft!==null&&minsLeft>0){
+      if(best.type!=='ending'||minsLeft<best.minsLeft)best={type:'ending',minsLeft:minsLeft};
+      return;
+    }
+    var mu=startMins-nowMins;if(mu<0)mu+=1440;
+    if(mu<=30&&mu>0){
+      if(best.type==='none'||best.type==='soon'&&mu<best.minsLeft)best={type:'soon',minsLeft:mu};
+    }
+  });
+  return best;
 }
 function badgeColors(n){
   var G='#D6EDD0',GT='#2A6020',A='#FEF3C7',AT='#92400E',R='#FECACA',RT='#7F1D1D';
@@ -1178,12 +1210,23 @@ function blendCol(cM,cS,cE,bl){if(bl.morning>0&&bl.standard>0)return lerpHex(cM,
 function applyHeaderTheme(){var bl=getTimeBlend();var mO,sO,eO;if(bl.morning>0&&bl.standard>0){mO=bl.morning;sO=1;eO=0;}else if(bl.standard>0&&bl.evening>0){mO=0;sO=bl.standard;eO=1;}else if(bl.morning===1){mO=1;sO=1;eO=0;}else if(bl.standard===1){mO=0;sO=1;eO=0;}else{mO=0;sO=0;eO=1;}document.getElementById('hbg-morning').style.opacity=mO;document.getElementById('hbg-standard').style.opacity=sO;document.getElementById('hbg-evening').style.opacity=eO;document.getElementById('hstars-morning').style.opacity=bl.morning;document.getElementById('hstars-evening').style.opacity=bl.evening;var acc=blendCol(HT.morning.accent,HT.standard.accent,HT.evening.accent,bl);var tbg=blendCol(HT.morning.tbar,HT.standard.tbar,HT.evening.tbar,bl);document.documentElement.style.setProperty('--header-accent',acc);document.documentElement.style.setProperty('--timebar-bg',tbg);var dom=bl.morning>=bl.standard&&bl.morning>=bl.evening?'morning':bl.standard>=bl.evening?'standard':'evening';var dt=HT[dom];var d1=document.getElementById('deco-1'),d2=document.getElementById('deco-2');d1.style.background=dt.d1;d1.style.opacity=dt.d1o;d2.style.background=dt.d2;d2.style.opacity=dt.d2o;}
 
 // ── FILTERING ──────────────────────────────────────────────
-function venueMatchesDay(v){if(activeDays==='today')return v.days.indexOf(todayAbbr())>=0;return [...activeDays].some(function(d){return v.days.indexOf(d)>=0;});}
-function venueMatchesTime(v){if(activeTime==='any')return true;if(activeTime==='pick'){var t=sliderTo24hr(sliderValue);if(v.endTime<v.startTime)return t>=v.startTime||t<=v.endTime;return t>=v.startTime&&t<=v.endTime;}var def=TIME_DEFS[activeTime];return def?def.test(v.startTime,v.endTime):true;}
+function venueMatchesDay(v){
+  return v.sessions.some(function(s){
+    if(activeDays==='today')return s.days.indexOf(todayAbbr())>=0;
+    return [...activeDays].some(function(d){return s.days.indexOf(d)>=0;});
+  });
+}
+function venueMatchesTime(v){
+  if(activeTime==='any')return true;
+  return v.sessions.some(function(s){
+    if(activeTime==='pick'){var t=sliderTo24hr(sliderValue);if(s.endTime<s.startTime)return t>=s.startTime||t<=s.endTime;return t>=s.startTime&&t<=s.endTime;}
+    var def=TIME_DEFS[activeTime];return def?def.test(s.startTime,s.endTime):true;
+  });
+}
 function venueMatchesNeighborhood(v){if(!activeNeighborhoods.size)return true;return v.neighborhoods.some(function(n){return activeNeighborhoods.has(n);});}
 function venueMatchesDealTags(v){if(!activeDealTags.size)return true;return [...activeDealTags].every(function(t){return v.dealTags.indexOf(t)>=0;});}
 function venueMatchesVibe(v){if(!activeVibeTags.size)return true;return [...activeVibeTags].every(function(t){return v.vibe.indexOf(t)>=0;});}
-function venueMatchesSearch(v){if(!searchQuery)return true;var q=searchQuery.toLowerCase();return v.name.toLowerCase().indexOf(q)>=0||v.neighborhoods.some(function(n){return n.toLowerCase().indexOf(q)>=0;})||v.city.toLowerCase().indexOf(q)>=0||v.deals.some(function(d){return d.toLowerCase().indexOf(q)>=0;})||v.dealTags.some(function(t){return t.toLowerCase().indexOf(q)>=0;})||v.vibe.some(function(t){return t.toLowerCase().indexOf(q)>=0;});}
+function venueMatchesSearch(v){if(!searchQuery)return true;var q=searchQuery.toLowerCase();return v.name.toLowerCase().indexOf(q)>=0||v.neighborhoods.some(function(n){return n.toLowerCase().indexOf(q)>=0;})||v.city.toLowerCase().indexOf(q)>=0||v.sessions.some(function(s){return s.deals.some(function(d){return d.toLowerCase().indexOf(q)>=0;});})||v.dealTags.some(function(t){return t.toLowerCase().indexOf(q)>=0;})||v.vibe.some(function(t){return t.toLowerCase().indexOf(q)>=0;});}
 function filteredVenues(){return VENUES.filter(function(v){return venueMatchesDay(v)&&venueMatchesTime(v)&&venueMatchesNeighborhood(v)&&venueMatchesDealTags(v)&&venueMatchesVibe(v)&&venueMatchesSearch(v);});}
 
 function buildHeading(){var dayText=activeDays==='today'?('on '+todayFull()):('on '+[...activeDays].join(' · '));var timeText='';if(activeTime==='pick')timeText=' at '+fmtSlider(sliderValue);else if(activeTime!=='any'){var def=TIME_DEFS[activeTime];if(def)timeText=def.label;}document.getElementById('results-heading').innerHTML='<span class="h-label">Happy Hours</span><span class="h-day"> '+dayText+'</span>'+(timeText?'<span class="h-time">'+timeText+'</span>':'');}
@@ -1210,7 +1253,11 @@ function renderCards(venues){
   if(!venues.length){grid.innerHTML='<div class="empty"><div class="empty-icon">&#127378;</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';return;}
   var sorted=[...venues].sort(function(a,b){var sa=getBadgeState(a),sb=getBadgeState(b);var rank=function(s){return s.type==='ending'?0:s.type==='soon'?1:2;};if(rank(sa)!==rank(sb))return rank(sa)-rank(sb);if(sa.type==='ending'&&sb.type==='ending')return sb.minsLeft-sa.minsLeft;return 0;});
   grid.innerHTML=sorted.map(function(v,i){
-    var deals=v.deals.map(function(d){return '<div class="deal-item"><span class="deal-dot"></span><span>'+d+'</span></div>';}).join('');
+    var sessionsHTML=v.sessions.map(function(s){
+      var sdeals=s.deals.map(function(d){return '<div class="deal-item"><span class="deal-dot"></span><span>'+d+'</span></div>';}).join('');
+      return '<div class="hours-row"><span class="hours-text">'+formatTime(s.startTime)+' – '+formatTime(s.endTime)+'</span><span class="days-text">'+s.days.join(' · ')+'</span></div>'+
+      '<div class="deals">'+sdeals+'</div>';
+    }).join('<div style="height:.5rem"></div>');
     var dtHTML=v.dealTags.map(function(t){return '<span class="tag-deal'+(activeDealTags.has(t)?' tag-active':'')+'" data-click-deal="'+t+'">'+t+'</span>';}).join('');
     var vtHTML=v.vibe.map(function(t){return '<span class="tag-vibe'+(activeVibeTags.has(t)?' tag-active':'')+'" data-click-vibe="'+t+'">'+t+'</span>';}).join('');
     var mapLink=v.mapsUrl?'<a class="card-link" href="'+v.mapsUrl+'" target="_blank" rel="noopener">Map &#8599;</a>':'';
@@ -1220,16 +1267,15 @@ function renderCards(venues){
       '<div class="card-body">'+
         '<div class="card-header"><div class="venue-name">'+v.name+'</div><div class="badge-slot">'+buildBadgeHTML(v)+'</div></div>'+
         '<div class="neighborhood">'+v.neighborhoods[0]+', '+v.city+'</div>'+
-        '<div class="hours-row"><span class="hours-text">'+formatTime(v.startTime)+' - '+formatTime(v.endTime)+'</span><span class="days-text">'+v.days.join(' · ')+'</span></div>'+
-        '<div class="deals">'+deals+'</div>'+
+        sessionsHTML+
       '</div>'+
       '<div class="card-footer"><div class="tags">'+dtHTML+vtHTML+'</div><div class="card-links">'+mapLink+siteLink+'</div></div>'+
     '</div>';
   }).join('');
   grid.querySelectorAll('.card-link').forEach(function(link){link.addEventListener('click',function(e){e.stopPropagation();});});
   grid.querySelectorAll('.card').forEach(function(card){
-    card.addEventListener('click',function(){var name=card.dataset.name;openQV(name);if(mapMode){highlightMarker(name, true);var v=VENUES.find(function(x){return x.name===name;});if(v&&v.lat&&leafletMap)leafletMap.panTo([v.lat,v.lng]);}});
-    card.addEventListener('mouseenter',function(){if(mapMode)highlightMarker(card.dataset.name, false);});
+    card.addEventListener('click',function(){var name=card.dataset.name;openQV(name);if(mapMode){highlightMarker(name,true);var v=VENUES.find(function(x){return x.name===name;});if(v&&v.lat&&leafletMap)leafletMap.panTo([v.lat,v.lng]);}});
+    card.addEventListener('mouseenter',function(){if(mapMode)highlightMarker(card.dataset.name,false);});
   });
   grid.querySelectorAll('[data-click-deal]').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();toggleSet(activeDealTags,el.dataset.clickDeal);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');render();});});
   grid.querySelectorAll('[data-click-vibe]').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();toggleSet(activeVibeTags,el.dataset.clickVibe);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});});
