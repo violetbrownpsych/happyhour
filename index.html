@@ -727,10 +727,14 @@ function init(){
   filterBarFullHeight = (header ? header.offsetHeight : 0) + 
                         (timebar ? timebar.offsetHeight : 0) + 
                         (fw ? fw.offsetHeight : 0);
-  if(window.innerWidth < 900){
+  var isOpenNow = VENUES.some(function(v){return isOpenNowRange(v.startTime, v.endTime);});
+  if(isOpenNow){
+    activeTime = 'now';
+    setTimeMode('now');
+  } else {
     activeTime = 'any';
     setTimeMode('any');
-    }
+  }
   }
 
 // ── SCROLL COLLAPSE ────────────────────────────────────────
