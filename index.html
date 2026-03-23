@@ -328,11 +328,9 @@
 
       .content-area.map-active .map-panel {
         display: block;
-        position: fixed;
-        top: var(--filter-bar-h, 200px);
-        left: 0;
+        position: sticky;
+        top: 0;
         flex: 0 0 50%;
-        width: 50%;
         height: calc(100vh - var(--filter-bar-h, 200px));
         flex-shrink: 0;
       }
@@ -957,6 +955,7 @@ function toggleMapMode(){
     setTimeout(function(){updateContentHeight();},50);
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();},100);
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());mapReady=true;},300);
+    setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();},600);
   } else {
     mapReady=false;
     document.getElementById('content-area').classList.remove('map-active');
