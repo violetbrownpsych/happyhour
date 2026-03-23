@@ -1261,7 +1261,7 @@ var dividerActive = false;
     document.addEventListener('mouseup', function() {
       if (!isDragging) return;
       isDragging = false;
-      dividerActive = false;
+      setTimeout(function(){ dividerActive = false; }, 150);
       divider.classList.remove('dragging');
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       document.body.style.cursor = '';
