@@ -6,6 +6,8 @@
   <title>Pours — Twin Cities Happy Hours</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#3A5C28" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <style>
@@ -1381,6 +1383,9 @@ var dividerActive = false;
   })();
 </script>
 
+<script>
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+</script>
 
 </body>
 </html>
