@@ -1175,7 +1175,7 @@ function todayFull(){
   return DAY_FULL[d.getDay()];
 }
 function formatTime(t){var h=Math.floor(t/100),m=t%100;var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;return h12+(m?':'+String(m).padStart(2,'0'):'')+'  '+ampm;}
-function isOpenNowRange(s,e){var now=nowMinutes();if(e<s)return now>=s||now<=e;return now>=s&&now<=e;}
+function isOpenNowRange(s,e){var now=nowMinutes();if(e<s)return now>=s||now<e;return now>=s&&now<e;}
 function overlaps(vS,vE,wS,wE){return vS<=wE&&vE>=wS;}
 function overlapsLateNight(vS,vE){return vS>=2000||vE<600||vE<vS;}
 
@@ -1265,7 +1265,9 @@ function venueMatchesDay(v){
 function venueMatchesTime(v){
   if(activeTime==='any')return true;
   return v.sessions.some(function(s){
-    if(activeTime==='pick'){var t=sliderTo24hr(sliderValue);if(s.endTime<s.startTime)return t>=s.startTime||t<=s.endTime;return t>=s.startTime&&t<=s.endTime;}
+    if(activeTime==='pick'){var t=sliderTo24hr(sliderValue);
+      if(s.endTime<s.startTime)return t>=s.startTime||t<s.endTime;
+        return t>=s.startTime&&t<s.endTime;}
     var def=TIME_DEFS[activeTime];return def?def.test(s.startTime,s.endTime):true;
   });
 }
