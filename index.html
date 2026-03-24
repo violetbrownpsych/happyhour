@@ -584,6 +584,7 @@
 var CSV_URL   = 'happyhours.csv';
 var TILE_URL  = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
+var CITY_TIMEZONE = 'America/Chicago';
 
 var NEIGHBORHOOD_BOUNDS = {
   'Northeast':            [[44.978,-93.278],[45.010,-93.238]],
@@ -1156,9 +1157,19 @@ function positionPanels(){
 function mkPill(l,attr,val){var b=document.createElement('button');b.className='pill';b.dataset[attr]=val;b.textContent=l;return b;}
 function toggleSet(s,v){s.has(v)?s.delete(v):s.add(v);}
 function syncPills(c,attr,aS,aV){c.querySelectorAll('[data-'+attr+']').forEach(function(b){var v=b.dataset[attr];b.classList.toggle('tag-active',v===aV?aS.size===0:aS.has(v));});}
-function nowMinutes(){var d=new Date();return d.getHours()*100+d.getMinutes();}
-function todayAbbr(){return DAY_NAMES[new Date().getDay()];}
-function todayFull(){return DAY_FULL[new Date().getDay()];}
+function nowMinutes(){
+  var d=new Date();
+  var central=new Date(d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
+  return central.getHours()*100+central.getMinutes();
+}
+function todayAbbr(){
+  var d=new Date(new Date().toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
+  return DAY_NAMES[d.getDay()];
+}
+function todayFull(){
+  var d=new Date(new Date().toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
+  return DAY_FULL[d.getDay()];
+}
 function formatTime(t){var h=Math.floor(t/100),m=t%100;var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;return h12+(m?':'+String(m).padStart(2,'0'):'')+'  '+ampm;}
 function isOpenNowRange(s,e){var now=nowMinutes();if(e<s)return now>=s||now<=e;return now>=s&&now<=e;}
 function overlaps(vS,vE,wS,wE){return vS<=wE&&vE>=wS;}
@@ -1325,7 +1336,14 @@ function renderCards(venues){
 }
 
 document.getElementById('search').addEventListener('input',function(e){searchQuery=e.target.value.trim();render();});
-function updateClock(){var d=new Date(),h=d.getHours(),m=d.getMinutes();var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;document.getElementById('live-time').textContent=h12+':'+String(m).padStart(2,'0')+' '+ampm;document.getElementById('live-day').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});}
+function updateClock(){
+  var d=new Date();
+  var central=new Date(d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
+  var h=central.getHours(),m=central.getMinutes();
+  var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;
+  document.getElementById('live-time').textContent=h12+':'+String(m).padStart(2,'0')+' '+ampm;
+  document.getElementById('live-day').textContent=central.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+}
 setInterval(updateClock,10000);
 updateClock();
 loadData();
