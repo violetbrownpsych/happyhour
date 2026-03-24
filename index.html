@@ -1110,7 +1110,9 @@ function closeQV(){
 // ── STATUS BADGE ───────────────────────────────────────────
 function getBadgeState(v){
   var today=todayAbbr();
-  var d=new Date(),nowMins=d.getHours()*60+d.getMinutes();
+  var d=new Date();
+  var cityTime=new Date(d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
+  var nowMins=cityTime.getHours()*60+cityTime.getMinutes();
   var best={type:'none'};
   v.sessions.forEach(function(s){
     if(s.days.indexOf(today)<0)return;
@@ -1159,8 +1161,8 @@ function toggleSet(s,v){s.has(v)?s.delete(v):s.add(v);}
 function syncPills(c,attr,aS,aV){c.querySelectorAll('[data-'+attr+']').forEach(function(b){var v=b.dataset[attr];b.classList.toggle('tag-active',v===aV?aS.size===0:aS.has(v));});}
 function nowMinutes(){
   var d=new Date();
-  var central=new Date(d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
-  return central.getHours()*100+central.getMinutes();
+  var cityTime=new Date(d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
+  return cityTime.getHours()*100+cityTime.getMinutes();
 }
 function todayAbbr(){
   var d=new Date(new Date().toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
@@ -1338,11 +1340,12 @@ function renderCards(venues){
 document.getElementById('search').addEventListener('input',function(e){searchQuery=e.target.value.trim();render();});
 function updateClock(){
   var d=new Date();
-  var central=new Date(d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
-  var h=central.getHours(),m=central.getMinutes();
+  var cityTime=new Date(d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
+  var h=cityTime.getHours(),m=cityTime.getMinutes();
   var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;
-  document.getElementById('live-time').textContent=h12+':'+String(m).padStart(2,'0')+' '+ampm;
-  document.getElementById('live-day').textContent=central.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  var tzAbbr=d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE,timeZoneName:'short'}).split(' ').pop();
+  document.getElementById('live-time').textContent=h12+':'+String(m).padStart(2,'0')+' '+ampm+' '+tzAbbr;
+  document.getElementById('live-day').textContent=cityTime.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
 }
 setInterval(updateClock,10000);
 updateClock();
