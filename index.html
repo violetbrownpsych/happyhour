@@ -1002,13 +1002,22 @@ function openQV(name){
   document.getElementById('qv-accent').style.background=getAccentColor(v);
   var badge=buildBadgeHTML(v);
   var verLine=v.verified?'<div class="qv-verified">&#10003; Verified by '+v.verified+'</div>':'';
-  var sessionsHTML=v.sessions.map(function(s){
-    var sdeals=s.deals.map(function(d){return '<div class="qv-deal-item"><span class="qv-deal-dot"></span><span>'+d+'</span></div>';}).join('');
-    return '<div class="qv-session">'+
-      '<div class="qv-session-header"><span class="qv-hours">'+formatTime(s.startTime)+' – '+formatTime(s.endTime)+'</span><span class="qv-days">'+s.days.join(' · ')+'</span></div>'+
-      '<div class="qv-deals">'+sdeals+'</div>'+
-    '</div>';
-  }).join('');
+  var sessionsHTML=(function(){
+    var groups=[];
+    v.sessions.forEach(function(s){
+      var key=s.deals.join('|');
+      var existing=groups.find(function(g){return g.key===key;});
+      if(existing){existing.sessions.push(s);}
+      else{groups.push({key:key,sessions:[s],deals:s.deals});}
+    });
+    return groups.map(function(g){
+      var timesHTML=g.sessions.map(function(s){
+        return '<div class="qv-session-header"><span class="qv-hours">'+formatTime(s.startTime)+' – '+formatTime(s.endTime)+'</span><span class="qv-days">'+s.days.join(' · ')+'</span></div>';
+      }).join('');
+      var dealsHTML=g.deals.map(function(d){return '<div class="qv-deal-item"><span class="qv-deal-dot"></span><span>'+d+'</span></div>';}).join('');
+      return '<div class="qv-session">'+timesHTML+'<div class="qv-deals">'+dealsHTML+'</div></div>';
+    }).join('');
+  })();
   var dTags=v.dealTags.map(function(t){return '<span class="tag-deal qv-tag-filter" data-filter-deal="'+t+'">'+t+'</span>';}).join('');
   var vTags=v.vibe.map(function(t){return '<span class="tag-vibe qv-tag-filter" data-filter-vibe="'+t+'">'+t+'</span>';}).join('');
   var webBtn=v.website?'<a class="qv-link secondary" href="'+v.website+'" target="_blank" rel="noopener">Website</a>':'';
@@ -1253,11 +1262,22 @@ function renderCards(venues){
   if(!venues.length){grid.innerHTML='<div class="empty"><div class="empty-icon">&#127378;</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';return;}
   var sorted=[...venues].sort(function(a,b){var sa=getBadgeState(a),sb=getBadgeState(b);var rank=function(s){return s.type==='ending'?0:s.type==='soon'?1:2;};if(rank(sa)!==rank(sb))return rank(sa)-rank(sb);if(sa.type==='ending'&&sb.type==='ending')return sb.minsLeft-sa.minsLeft;return 0;});
   grid.innerHTML=sorted.map(function(v,i){
-    var sessionsHTML=v.sessions.map(function(s){
-      var sdeals=s.deals.map(function(d){return '<div class="deal-item"><span class="deal-dot"></span><span>'+d+'</span></div>';}).join('');
-      return '<div class="hours-row"><span class="hours-text">'+formatTime(s.startTime)+' – '+formatTime(s.endTime)+'</span><span class="days-text">'+s.days.join(' · ')+'</span></div>'+
-      '<div class="deals">'+sdeals+'</div>';
-    }).join('<div style="height:.5rem"></div>');
+    var sessionsHTML=(function(){
+      var groups=[];
+      v.sessions.forEach(function(s){
+        var key=s.deals.join('|');
+        var existing=groups.find(function(g){return g.key===key;});
+        if(existing){existing.sessions.push(s);}
+        else{groups.push({key:key,sessions:[s],deals:s.deals});}
+      });
+      return groups.map(function(g){
+        var timesHTML=g.sessions.map(function(s){
+          return '<div class="hours-row"><span class="hours-text">'+formatTime(s.startTime)+' – '+formatTime(s.endTime)+'</span><span class="days-text">'+s.days.join(' · ')+'</span></div>';
+        }).join('');
+        var dealsHTML=g.deals.map(function(d){return '<div class="deal-item"><span class="deal-dot"></span><span>'+d+'</span></div>';}).join('');
+        return timesHTML+'<div class="deals">'+dealsHTML+'</div>';
+      }).join('<div style="height:.5rem"></div>');
+    })();
     var dtHTML=v.dealTags.map(function(t){return '<span class="tag-deal'+(activeDealTags.has(t)?' tag-active':'')+'" data-click-deal="'+t+'">'+t+'</span>';}).join('');
     var vtHTML=v.vibe.map(function(t){return '<span class="tag-vibe'+(activeVibeTags.has(t)?' tag-active':'')+'" data-click-vibe="'+t+'">'+t+'</span>';}).join('');
     var mapLink=v.mapsUrl?'<a class="card-link" href="'+v.mapsUrl+'" target="_blank" rel="noopener">Map &#8599;</a>':'';
