@@ -541,6 +541,7 @@
 <div class="filter-summary-bar" id="filter-summary-bar">
   <span id="summary-text">Today · 5 PM</span>
   <span class="summary-expand">&#8681; Show filters</span>
+  <span id="summary-time"></span>
 </div>
 
 <div class="results-meta">
@@ -1346,6 +1347,8 @@ function updateClock(){
   var tzAbbr=d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE,timeZoneName:'short'}).split(' ').pop();
   document.getElementById('live-time').textContent=h12+':'+String(m).padStart(2,'0')+' '+ampm+' '+tzAbbr;
   document.getElementById('live-day').textContent=cityTime.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  var st=document.getElementById('summary-time');
+  if(st)st.textContent=h12+':'+String(m).padStart(2,'0')+' '+ampm+' '+tzAbbr;
 }
 setInterval(updateClock,10000);
 updateClock();
