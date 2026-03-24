@@ -413,18 +413,12 @@
     .qv-verified { display:inline-flex; align-items:center; gap:.35rem; font-size:.75rem; font-weight:600; color:var(--green-lt); background:#EAF0E4; border:1px solid var(--vibe-tag-border); border-radius:8px; padding:.35rem .7rem; margin-bottom:1.1rem; }
     .qv-links { display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:1.2rem; }
     .qv-link { display:inline-flex; align-items:center; gap:.3rem; padding:.38rem .9rem; border-radius:99px; font-size:.78rem; font-weight:600; text-decoration:none; transition:all .15s; }
-    .qv-link.primary { 
-      background: rgba(90,74,58,.08);
-      color: var(--ink-lt);
-      border: 1.5px solid var(--ink-lt);
+    .qv-link.primary, .qv-link.secondary { 
+      background: rgba(196,98,45,.10);
+      color: var(--sienna);
+      border: 1.5px solid rgba(196,98,45,.35);
     }
-    .qv-link.primary:hover { background: rgba(90,74,58,.15); }
-    .qv-link.secondary { 
-      background: rgba(90,74,58,.08);
-      color: var(--ink-lt);
-      border: 1.5px solid var(--ink-lt);
-    }
-    .qv-link.secondary:hover { background: rgba(90,74,58,.15); }
+    .qv-link.primary:hover, .qv-link.secondary:hover { background: rgba(196,98,45,.18); }
     .qv-map-wrap { width:100%; height:260px; border-radius:12px; overflow:hidden; border:1.5px solid var(--cream-dk); }
     #qv-map { width:100%; height:100%; }
     .qv-map-placeholder { width:100%; height:200px; display:flex; align-items:center; justify-content:center; background:var(--cream-dk); color:var(--ink-lt); font-size:.8rem; border-radius:12px; border:1.5px solid var(--cream-dk); }
