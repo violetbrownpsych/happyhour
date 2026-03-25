@@ -1046,6 +1046,7 @@ function toggleMapMode(){
   mapMode=!mapMode;
   var fab=document.getElementById('fab');
   if(mapMode){
+    fab.innerHTML='📋 List';
     mapReady=false;
     document.documentElement.scrollTop=0;
     document.getElementById('content-area').classList.add('map-active');
@@ -1062,6 +1063,7 @@ function toggleMapMode(){
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();updateMapMarkers(filteredVenues());mapReady=true;},300);
     setTimeout(function(){if(leafletMap)leafletMap.invalidateSize();},600);
   } else {
+    fab.innerHTML='🗺️ Map';
     mapReady=false;
     document.getElementById('content-area').classList.remove('map-active');
     document.body.classList.remove('map-mode-active');
