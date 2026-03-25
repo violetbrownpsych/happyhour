@@ -154,11 +154,8 @@
       gap: .5rem;
       flex-shrink: 0;
     }
-    .summary-heading #results-heading {
-      font-size: 1rem;
-    }
 
-    #results-heading { font-family:'Playfair Display',serif; font-size:1rem; font-weight:600; display:flex; align-items:baseline; flex-wrap:wrap; gap:0; line-height:1.4; }
+    #results-heading { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:600; display:flex; align-items:baseline; flex-wrap:wrap; gap:0; line-height:1.4; }
     .h-label { font-family:'Playfair Display',serif; font-weight:600; color:var(--ink); }
     .h-day { font-family:'Playfair Display',serif; font-style:italic; color:var(--sienna); margin-left:.28em; }
     .h-time { font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:400; color:var(--ink-lt); margin-left:.3em; }
@@ -825,19 +822,6 @@ function checkScrollCollapse(){
 
 function updateFilterSummary(){
   var parts = [];
-  if(activeDays === 'today'){
-    parts.push(todayFull().substring(0,3));
-  } else if(activeDays instanceof Set){
-    parts.push([...activeDays].join(' · '));
-  }
-  if(activeTime === 'pick'){
-    parts.push(fmtSlider(sliderValue));
-  } else if(activeTime === 'any'){
-    parts.push('Any Time');
-  } else {
-    var tl = {now:'Happening Now', morning:'Morning', lunch:'Lunch', late:'Late Night', hh:'Happy Hour'};
-    parts.push(tl[activeTime] || activeTime);
-  }
   activeNeighborhoods.forEach(function(n){parts.push(n);});
   activeDealTags.forEach(function(t){parts.push(t);});
   activeVibeTags.forEach(function(t){parts.push(t);});
