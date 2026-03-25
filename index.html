@@ -125,6 +125,41 @@
       padding: .5rem 1.5rem;
     }
 
+    /* Styling for the compact text version */
+.summary-compact {
+  display: none; /* Hidden by default */
+  font-family: 'DM Sans', sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--ink-lt);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* MOBILE FIX: Swap the headers and hide the "9 spots" */
+@media (max-width: 600px) {
+  /* 1. Hide the big "Happy Hours" heading */
+  #results-heading { 
+    display: none !important; 
+  }
+
+  /* 2. Show the "Tue • 5pm" summary */
+  #summary-compact { 
+    display: block !important; 
+  }
+
+  /* 3. Get rid of the "9 spots" count on the right */
+  #summary-time { 
+    display: none !important; 
+  }
+
+  /* 4. Ensure the center button stays centered in the gap */
+  .filter-summary-bar {
+    grid-template-columns: 1fr auto 1fr !important;
+    padding: .5rem 1rem !important; /* Slightly tighter padding for mobile */
+  }
+}
+
     /* Filter expandable wrapper */
     .filter-expandable { 
       overflow:hidden; 
@@ -582,9 +617,18 @@
 <div class="filter-summary-bar" id="filter-summary-bar">
   <div class="summary-heading" id="summary-heading">
     <h2 id="results-heading"><span class="h-label">Happy Hours</span><span class="h-day"> on Tuesday</span></h2>
-    <span class="results-count" id="results-count"></span>
+    <div id="summary-compact" class="summary-compact"></div>
   </div>
-  <span class="summary-expand"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg>Change filters</span>
+
+  <span class="summary-expand">
+    <svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6">
+      <line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/>
+      <line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/>
+      <line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/>
+    </svg>
+    Change filters
+  </span>
+
   <span id="summary-time" style="text-align:right;font-size:.78rem;font-weight:500;color:var(--ink-lt);white-space:nowrap;"></span>
 </div>
 
@@ -855,13 +899,40 @@ function checkScrollCollapse(){
   }
 }
 
-function updateFilterSummary(){
+function updateFilterSummary() {
+  // 1. Get the current values (In R, this is like pulling values from a vector)
+  var day = (activeDay === 'today') ? todayAbbr() : activeDay;
+  var timeStr = (activeTime === 'now') ? 'Now' : formatTime(activeTime);
+  var count = filteredVenues().length;
+
+  // 2. Update the Desktop Heading (The fancy Playfair font)
+  var rh = document.getElementById('results-heading');
+  if (rh) {
+    rh.innerHTML = '<span class="h-label">Happy Hours</span><span class="h-day"> on ' + day + '</span>';
+  }
+
+  // 3. Update the Mobile Compact Summary (The "Tues • 5pm" look)
+  var sc = document.getElementById('summary-compact');
+  if (sc) {
+    sc.textContent = day + ' • ' + timeStr;
+  }
+
+  // 4. Update the "9 spots" count (Hidden on mobile via CSS)
+  var st = document.getElementById('summary-time');
+  if (st) {
+    st.textContent = count + ' spots';
+  }
+
+  // 5. Your existing logic for Tags (Neighborhoods, Vibes, etc.)
   var parts = [];
-  activeNeighborhoods.forEach(function(n){parts.push(n);});
-  activeDealTags.forEach(function(t){parts.push(t);});
-  activeVibeTags.forEach(function(t){parts.push(t);});
+  activeNeighborhoods.forEach(function(n) { parts.push(n); });
+  activeDealTags.forEach(function(t) { parts.push(t); });
+  activeVibeTags.forEach(function(t) { parts.push(t); });
+
   var el = document.getElementById('summary-text');
-  if(el) el.textContent = parts.join(' · ');
+  if (el) {
+    el.textContent = parts.join(' · ');
+  }
 }
 
 function setupScrollCollapse(){
