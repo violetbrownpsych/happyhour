@@ -248,20 +248,7 @@
     font-size: .8rem !important;
   }
   .expand-prefix { display: none; }
-  .filter-row-wrap {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: .2rem 1rem .1rem;
-    border-bottom: 1px solid var(--cream-dk);
-  }
-  .filter-row-wrap .filter-row-label {
-    display: block;
-    margin-bottom: .2rem;
-    font-weight: 700;
-    opacity: 1;
-  }
   .collapsibles-bar { border-top: none; }
-  #time-wrap-mobile { display: flex; }
 }
 
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
@@ -272,24 +259,6 @@
     #search::placeholder { color:var(--ink-lt); opacity:.7; }
     .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.2rem; align-items:center; }
     .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; margin-right:.2rem; white-space:nowrap; min-width:2.8rem; }
-    .filter-row-wrap {
-      display: flex;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-    .filter-row-wrap > .filter-row-label {
-      min-width: 2.8rem;
-      flex-shrink: 0;
-      margin-right: .2rem;
-    }
-    .filter-row-wrap > .filter-row {
-      flex: 1;
-      padding: .3rem 0;
-      max-width: none;
-      margin: 0;
-    }
     .pill { display:inline-flex; align-items:center; padding:.27rem .45rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-size:.78rem; font-weight:500; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; user-select:none; white-space:nowrap; }
     .pill:hover { border-color:var(--green); color:var(--green); }
     .pill.day-active   { background:var(--amber);  border-color:var(--amber);  color:#fff; }
@@ -306,7 +275,6 @@
       min-width: 5.8rem;
       justify-content: center;
     }
-    #time-wrap-mobile { display: none; }
     .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
     .slider-outer { padding:0 10px; }
     .track-container { position:relative; padding:26px 0 26px; }
@@ -595,25 +563,21 @@
         <input type="text" id="search" placeholder="Search venues, neighborhoods, deals…" autocomplete="off" />
       </div>
     </div>
-    <div class="filter-row-wrap" id="day-wrap-mobile">
+    <div class="filter-row" id="day-filters">
       <span class="filter-row-label">Day</span>
-      <div class="filter-row" id="day-filters">
-        <button class="pill today-active" data-day="today">Today</button>
-        <button class="pill" data-day="Mon">Mon</button><button class="pill" data-day="Tue">Tue</button>
-        <button class="pill" data-day="Wed">Wed</button><button class="pill" data-day="Thu">Thu</button>
-        <button class="pill" data-day="Fri">Fri</button><button class="pill" data-day="Sat">Sat</button>
-        <button class="pill" data-day="Sun">Sun</button>
-      </div>
+      <button class="pill today-active" data-day="today">Today</button>
+      <button class="pill" data-day="Mon">Mon</button><button class="pill" data-day="Tue">Tue</button>
+      <button class="pill" data-day="Wed">Wed</button><button class="pill" data-day="Thu">Thu</button>
+      <button class="pill" data-day="Fri">Fri</button><button class="pill" data-day="Sat">Sat</button>
+      <button class="pill" data-day="Sun">Sun</button>
     </div>
-    <div class="filter-row-wrap" id="time-wrap-mobile">
+    <div class="filter-row" id="time-pills-mobile">
       <span class="filter-row-label">Time</span>
-      <div class="filter-row" id="time-pills-mobile">
-        <button class="pill" id="tpill-m-now" data-time="now">Now</button>
-        <button class="pill" id="tpill-m-morning" data-time="morning">Morning</button>
-        <button class="pill" id="tpill-m-lunch" data-time="lunch">Lunch</button>
-        <button class="pill" id="tpill-m-hh" data-time="hh">Happy Hour</button>
-        <button class="pill" id="tpill-m-late" data-time="late">Late Night</button>
-      </div>
+      <button class="pill" id="tpill-m-now" data-time="now">Now</button>
+      <button class="pill" id="tpill-m-morning" data-time="morning">Morning</button>
+      <button class="pill" id="tpill-m-lunch" data-time="lunch">Lunch</button>
+      <button class="pill" id="tpill-m-hh" data-time="hh">Happy Hour</button>
+      <button class="pill" id="tpill-m-late" data-time="late">Late Night</button>
     </div>
     <div class="filter-row" id="time-pills">
       <span class="filter-row-label">Time</span>
