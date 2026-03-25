@@ -127,8 +127,8 @@
 
     /* Filter expandable wrapper */
     .filter-expandable { 
-      overflow:hidden; 
-      max-height:600px; 
+      overflow:visible; 
+      max-height:1500px; 
       opacity:1; 
       transition: opacity .25s ease, max-height .25s ease; 
     }
@@ -1502,4 +1502,14 @@ var dividerActive = false;
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      if (grid) grid.classList.remove('n
+      if (grid) grid.classList.remove('no-anim');
+    });
+  })();
+</script>
+
+<script>
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+</script>
+
+</body>
+</html>
