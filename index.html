@@ -814,21 +814,17 @@ function init(){
   setupCollapsibles(); setupDayFilters(); setupTimePills(); setupSlider();
   setupFAB(); setupQV();
   setupScrollCollapse(); setupQVSwipe();
-  positionPanels();
-  window.addEventListener('resize',function(){positionPanels();updateContentHeight();});
+  window.addEventListener('resize',function(){updateContentHeight();});
   window.addEventListener('scroll', function(){
     if(scrollRaf) return;
     scrollRaf = requestAnimationFrame(function(){
       scrollRaf = null;
       checkScrollCollapse();
-      if(document.querySelector('.collapsible-panel.open')){
-        positionPanels();
-      }
     });
   }, {passive:true});
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
-  new ResizeObserver(function(){positionPanels();updateContentHeight();}).observe(document.getElementById('filters-wrap'));
+  new ResizeObserver(function(){updateContentHeight();}).observe(document.getElementById('filters-wrap'));
   render();
   setInterval(updateAllBadges,60000);
   setInterval(applyHeaderTheme,60000);
@@ -927,9 +923,6 @@ function setupScrollCollapse(){
       var fw = document.getElementById('filters-wrap');
       if(fw.classList.contains('map-collapsed')){
         fw.classList.remove('map-collapsed');
-        // don't remove visible — summary bar should stay
-        // just re-show the filters
-        positionPanels();
         updateContentHeight();
       } else {
         forcedOpen = true;
@@ -937,7 +930,6 @@ function setupScrollCollapse(){
         lastToggleTime = Date.now();
         fw.classList.remove('scroll-collapsed');
         bar.classList.remove('visible');
-        positionPanels();
         updateContentHeight();
       }
     });
@@ -1076,7 +1068,6 @@ function toggleMapMode(){
     if(window.innerWidth<900){
       filterCollapsed=true;
       document.getElementById('filters-wrap').classList.add('map-collapsed');
-      positionPanels();
       updateContentHeight();
     }
     initMapOnce();updateContentHeight();
@@ -1228,16 +1219,6 @@ function updateAllBadges(){document.querySelectorAll('.card').forEach(function(c
 
 // ── HELPERS ────────────────────────────────────────────────
 function throttle(fn,ms){var last=0;return function(){var now=Date.now();if(now-last>=ms){last=now;fn();}};}
-function positionPanels(){
-  var fw = document.getElementById('filters-wrap');
-  if(!fw) return;
-  var h = fw.getBoundingClientRect().bottom;
-  document.querySelectorAll('.collapsible-panel').forEach(function(p){
-    p.style.top = '0';
-    p.style.transform = 'translateY(' + h + 'px)';
-  });
-  document.documentElement.style.setProperty('--filter-bar-h', h + 'px');
-}
 function mkPill(l,attr,val){var b=document.createElement('button');b.className='pill';b.dataset[attr]=val;b.textContent=l;return b;}
 function toggleSet(s,v){s.has(v)?s.delete(v):s.add(v);}
 function syncPills(c,attr,aS,aV){c.querySelectorAll('[data-'+attr+']').forEach(function(b){var v=b.dataset[attr];b.classList.toggle('tag-active',v===aV?aS.size===0:aS.has(v));});}
@@ -1268,7 +1249,7 @@ function buildAreaPanel(){
     var nh=[...new Set(VENUES.filter(function(v){return v.city===city;}).flatMap(function(v){return v.neighborhoods;}))].sort();
     var ct=document.createElement('button');ct.className='city-toggle open';ct.dataset.city=city;ct.innerHTML=city+' <span class="city-chevron">&#9662;</span>';c.appendChild(ct);
     var pd=document.createElement('div');pd.className='city-pills';pd.dataset.cityPills=city;nh.forEach(function(n){pd.appendChild(mkPill(n,'neighborhood',n));});c.appendChild(pd);
-    ct.addEventListener('click',function(e){e.stopPropagation();var o=ct.classList.contains('open');ct.classList.toggle('open',!o);pd.classList.toggle('collapsed',o);positionPanels();});
+    ct.addEventListener('click',function(e){e.stopPropagation();var o=ct.classList.contains('open');ct.classList.toggle('open',!o);pd.classList.toggle('collapsed',o);});
   });
   c.addEventListener('click',function(e){
     var btn=e.target.closest('[data-neighborhood]');if(!btn)return;
@@ -1282,7 +1263,7 @@ function buildAreaPanel(){
 }
 function buildDealPanel(){var c=document.getElementById('deal-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.dealTags;}))].sort();if(!all.length)return;var ab=mkPill('All','deal','all');ab.classList.add('tag-active');c.appendChild(ab);all.forEach(function(t){c.appendChild(mkPill(t,'deal',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-deal]');if(!btn)return;var val=btn.dataset.deal;if(val==='all')activeDealTags.clear();else toggleSet(activeDealTags,val);syncPills(c,'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');render();});}
 function buildVibePanel(){var c=document.getElementById('vibe-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.vibe;}))].sort();if(!all.length)return;var ab=mkPill('All','vibe','all');ab.classList.add('tag-active');c.appendChild(ab);all.forEach(function(t){c.appendChild(mkPill(t,'vibe',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-vibe]');if(!btn)return;var val=btn.dataset.vibe;if(val==='all')activeVibeTags.clear();else toggleSet(activeVibeTags,val);syncPills(c,'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});}
-function setupCollapsibles(){document.addEventListener('click',function(e){if(!e.target.closest('.collapsible-toggle')&&!e.target.closest('.collapsible-panel')&&!e.target.closest('.city-toggle')&&!e.target.closest('.qv-sheet'))closeAllPanels();});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.addEventListener('click',function(e){e.stopPropagation();var pid=t.dataset.panel,panel=document.getElementById(pid);var isOpen=panel.classList.contains('open');closeAllPanels();if(!isOpen){panel.classList.add('open');t.classList.add('open');positionPanels();}});});}
+function setupCollapsibles(){document.addEventListener('click',function(e){if(!e.target.closest('.collapsible-toggle')&&!e.target.closest('.collapsible-panel')&&!e.target.closest('.city-toggle')&&!e.target.closest('.qv-sheet'))closeAllPanels();});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.addEventListener('click',function(e){e.stopPropagation();var pid=t.dataset.panel,panel=document.getElementById(pid);var isOpen=panel.classList.contains('open');closeAllPanels();if(!isOpen){panel.classList.add('open');t.classList.add('open');}});});}
 function closeAllPanels(){document.querySelectorAll('.collapsible-panel').forEach(function(p){p.classList.remove('open');});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.classList.remove('open');});}
 function setupDayFilters(){document.getElementById('day-filters').addEventListener('click',function(e){var btn=e.target.closest('[data-day]');if(!btn)return;var day=btn.dataset.day;if(day==='today'){activeDays='today';}else{if(activeDays==='today')activeDays=new Set();if(activeDays.has(day))activeDays.delete(day);else activeDays.add(day);if(activeDays.size===0)activeDays='today';}syncDayPills();render();});}
 function syncDayPills(){document.querySelectorAll('[data-day]').forEach(function(btn){var day=btn.dataset.day;btn.classList.remove('today-active','day-active');if(day==='today'&&activeDays==='today')btn.classList.add('today-active');else if(day!=='today'&&activeDays!=='today'&&activeDays.has(day))btn.classList.add('day-active');});}
@@ -1428,7 +1409,6 @@ function renderCards(venues){
   });
   grid.querySelectorAll('[data-click-deal]').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();toggleSet(activeDealTags,el.dataset.clickDeal);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');render();});});
   grid.querySelectorAll('[data-click-vibe]').forEach(function(el){el.addEventListener('click',function(e){e.stopPropagation();toggleSet(activeVibeTags,el.dataset.clickVibe);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});});
-  positionPanels();
 }
 
 document.getElementById('search').addEventListener('input',function(e){searchQuery=e.target.value.trim();render();});
