@@ -184,7 +184,7 @@
       color: var(--ink-lt);
     }
     .filter-summary-bar .summary-heading h2 {
-      font-size: .85rem;
+      font-size: .72rem;
     }
     .filter-summary-bar .results-count {
       font-size: .68rem;
@@ -1360,7 +1360,8 @@ function updateClock(){
   document.getElementById('live-time').textContent=h12+':'+String(m).padStart(2,'0')+' '+ampm+' '+tzAbbr;
   document.getElementById('live-day').textContent=cityTime.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   var st=document.getElementById('summary-time');
-  if(st)st.textContent='Local time: '+h12+':'+String(m).padStart(2,'0')+' '+ampm+' '+tzAbbr;
+  var timeStr=h12+':'+String(m).padStart(2,'0')+' '+ampm+' '+tzAbbr;
+  if(st)st.textContent=window.innerWidth<900?'Local: '+timeStr:'Local time: '+timeStr;
 }
 setInterval(updateClock,10000);
 updateClock();
