@@ -893,7 +893,7 @@ function updateFilterSummary(){
   if(sc) {
     var line1 = compactParts[0] || '';               // day
     var line2 = compactParts.slice(1).join(' · ');   // time + any filter tags
-    sc.innerHTML = line1 + (line2 ? '<br>' + line2 : '');
+    sc.innerHTML = '<span style="color:var(--sienna)">' + line1 + '</span>' + (line2 ? '<br>' + line2 : '');
   }
 }
 
@@ -1417,7 +1417,13 @@ function updateClock(){
   document.getElementById('live-day').textContent=cityTime.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   var st=document.getElementById('summary-time');
   var timeStr=h12+':'+String(m).padStart(2,'0')+' '+ampm+' '+tzAbbr;
-  if(st)st.textContent=window.innerWidth<900?'Local: '+timeStr:'Local time: '+timeStr;
+  if(st) {
+    if(window.innerWidth < 900) {
+      st.innerHTML = 'Local time:<br>' + timeStr;
+    } else {
+      st.textContent = 'Local time: ' + timeStr;
+    }
+  }
 }
 setInterval(updateClock,10000);
 updateClock();
