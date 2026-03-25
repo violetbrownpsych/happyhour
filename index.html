@@ -77,9 +77,9 @@
     /* Scroll-collapse summary bar — visible only when collapsed */
     .filter-summary-bar {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      gap: 1rem;
+      gap: .2rem;
       padding: 0;
       cursor: pointer;
       background: var(--cream);
@@ -92,6 +92,17 @@
       opacity: 0;
       transition: opacity .25s ease;
       pointer-events: none;
+    }
+
+    .summary-top-row { width: 100%; }
+    .summary-bottom-row { 
+      width: 100%; 
+      display: grid; 
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    .summary-bottom-row #summary-time {
+      justify-self: end;
     }
 
     .filter-summary-bar.visible { 
@@ -187,20 +198,9 @@
       border-color: var(--cream-dk);
       color: var(--ink-lt);
     }
-    .filter-summary-bar .summary-heading h2 {
-      font-size: .72rem;
-    }
-    .filter-summary-bar .results-count {
-      font-size: .68rem;
-    }
-    .filter-summary-bar .summary-expand {
-      font-size: .68rem;
-    }
+
     #summary-time {
       font-size: .65rem !important;
-    }
-    .filter-summary-bar {
-      gap: .4rem;
     }
   }
 
@@ -1287,7 +1287,7 @@ function filteredVenues(){return VENUES.filter(function(v){return venueMatchesDa
 
 function buildHeading(){
   var dayText=activeDays==='today'?('on '+todayFull()):('on '+[...activeDays].join(' · '));
-  document.getElementById('results-heading').innerHTML='<span class="h-label">Happy Hours</span><br><span class="h-day"> '+dayText+'</span>';
+  document.getElementById('results-heading').innerHTML='<span class="h-label">Happy Hours</span><span class="h-day"> '+dayText+'</span>';
   var timeText='';
   if(activeTime==='pick')timeText=' at '+fmtSlider(sliderValue);
   else if(activeTime==='now')timeText='Happening Now';
