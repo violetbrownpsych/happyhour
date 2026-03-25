@@ -248,6 +248,17 @@
     font-size: .8rem !important;
   }
   .expand-prefix { display: none; }
+  .filter-row-wrap {
+    padding: .2rem 1rem .1rem;
+    border-bottom: 1px solid var(--cream-dk);
+  }
+  .filter-row-wrap .filter-row {
+    padding: .1rem 0;
+  }
+  .filter-row-wrap .filter-row-label {
+    display: block;
+    margin-bottom: .2rem;
+  }
 }
 
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
@@ -562,21 +573,25 @@
         <input type="text" id="search" placeholder="Search venues, neighborhoods, deals…" autocomplete="off" />
       </div>
     </div>
-    <div class="filter-row" id="day-filters">
+    <div class="filter-row-wrap">
       <span class="filter-row-label">Day</span>
-      <button class="pill today-active" data-day="today">Today</button>
-      <button class="pill" data-day="Mon">Mon</button><button class="pill" data-day="Tue">Tue</button>
-      <button class="pill" data-day="Wed">Wed</button><button class="pill" data-day="Thu">Thu</button>
-      <button class="pill" data-day="Fri">Fri</button><button class="pill" data-day="Sat">Sat</button>
-      <button class="pill" data-day="Sun">Sun</button>
+      <div class="filter-row" id="day-filters">
+        <button class="pill today-active" data-day="today">Today</button>
+        <button class="pill" data-day="Mon">Mon</button><button class="pill" data-day="Tue">Tue</button>
+        <button class="pill" data-day="Wed">Wed</button><button class="pill" data-day="Thu">Thu</button>
+        <button class="pill" data-day="Fri">Fri</button><button class="pill" data-day="Sat">Sat</button>
+        <button class="pill" data-day="Sun">Sun</button>
+      </div>
     </div>
-    <div class="filter-row" id="time-pills-mobile">
+    <div class="filter-row-wrap">
       <span class="filter-row-label">Time</span>
-      <button class="pill" id="tpill-m-now" data-time="now">Now</button>
-      <button class="pill" id="tpill-m-morning" data-time="morning">Morning</button>
-      <button class="pill" id="tpill-m-lunch" data-time="lunch">Lunch</button>
-      <button class="pill" id="tpill-m-hh" data-time="hh">Happy Hour</button>
-      <button class="pill" id="tpill-m-late" data-time="late">Late Night</button>
+      <div class="filter-row" id="time-pills-mobile">
+        <button class="pill" id="tpill-m-now" data-time="now">Now</button>
+        <button class="pill" id="tpill-m-morning" data-time="morning">Morning</button>
+        <button class="pill" id="tpill-m-lunch" data-time="lunch">Lunch</button>
+        <button class="pill" id="tpill-m-hh" data-time="hh">Happy Hour</button>
+        <button class="pill" id="tpill-m-late" data-time="late">Late Night</button>
+      </div>
     </div>
     <div class="filter-row" id="time-pills">
       <span class="filter-row-label">Time</span>
