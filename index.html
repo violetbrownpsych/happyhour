@@ -175,81 +175,78 @@
     .results-count { content: ' · '; font-size:.78rem; font-weight:500; color:var(--ink-lt); }
 
   @media (max-width:899px) {
-  .filters-wrap.map-collapsed ~ .filter-summary-bar { 
-    max-height: 110px;
-    opacity: 1;
-    pointer-events: auto;
-    padding: .35rem 1.5rem;
+    .filters-wrap.map-collapsed ~ .filter-summary-bar { 
+      max-height: 110px;
+      opacity: 1;
+      pointer-events: auto;
+      padding: .35rem 1.5rem;
+    }
+    .search-row { padding: .2rem 1rem .1rem; }
+    .filter-row { 
+      padding: .05rem 1rem; 
+      gap: .1rem; 
+    }
+    .pill { padding: .2rem .08rem; }
+    .filter-row-label { min-width:0; font-size:.65rem; opacity:.9; color:var(--ink); }
+    #time-pills { display: none; }
+    #time-wrap-mobile { display: flex; }
+    .filter-row-wrap {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: .3rem 1rem .1rem;
+      gap: .2rem;
+    }
+    .filter-row-wrap .filter-row {
+      padding: 0;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: visible;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+    }
+    .filter-row-wrap .filter-row::-webkit-scrollbar { display: none; }
+    .track-container { padding: 4px 0 8px; }
+    .collapsibles-bar { margin-top: .1rem; border-top: none; }
+    #slider-row { display: none; }
+    .pill:hover:not(.time-active):not(.time-active-now):not(.pick-active):not(.day-active):not(.today-active) {
+      border-color: var(--cream-dk);
+      color: var(--ink-lt);
+    }
+    .filter-summary-bar #results-heading {
+      font-size: .8rem;
+    }
+    .filter-summary-bar .results-count {
+      font-size: .65rem;
+    }
+    .filter-summary-bar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    .summary-heading { display: none; }
+    .summary-compact {
+      display: block;
+      grid-column: 1;
+      grid-row: 1;
+      font-size: .85rem;   
+      line-height: 1.4;
+      white-space: normal;
+      padding-right: .5rem;
+    }
+    .summary-expand {
+      grid-column: 2;
+      grid-row: 1;           
+      justify-self: center;
+      font-size: .85rem;
+    }
+    #summary-time {
+      grid-column: 3;
+      grid-row: 1;
+      justify-self: end;
+      font-size: .8rem !important;
+    }
+    .expand-prefix { display: none; }
   }
-  .search-row { padding: .2rem 1rem .1rem; }
-  .filter-row { 
-    padding: .05rem 1rem; 
-    gap: .1rem; 
-  }
-  .pill { padding: .2rem .08rem; }
-  .filter-row-label { min-width: 0; font-size: .65rem; opacity: .8; color: var(--ink); }
-  #time-pills { display: none; }
-  #day-filters { 
-    padding-bottom: .3rem; 
-    margin-bottom: 0;
-    overflow-x: auto;
-    overflow-y: visible;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
-  }
-  #day-filters::-webkit-scrollbar { display: none; }
-  #time-pills-mobile { 
-    display: flex;
-    margin-top: .2rem;
-    overflow-x: auto;
-    overflow-y: visible;
-    flex-wrap: nowrap;
-    scrollbar-width: none;
-  }
-  #time-pills-mobile::-webkit-scrollbar { display: none; }
-  .track-container { padding: 4px 0 8px; }
-  .collapsibles-bar { margin-top: .1rem; }
-  #slider-row { display: none; }
-  .pill:hover:not(.time-active):not(.time-active-now):not(.pick-active):not(.day-active):not(.today-active) {
-    border-color: var(--cream-dk);
-    color: var(--ink-lt);
-  }
-  .filter-summary-bar #results-heading {
-    font-size: .8rem;
-  }
-  .filter-summary-bar .results-count {
-    font-size: .65rem;
-  }
-  .filter-summary-bar {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-  }
-  .summary-heading { display: none; }
-  .summary-compact {
-    display: block;
-    grid-column: 1;
-    grid-row: 1;
-    font-size: .85rem;   
-    line-height: 1.4;
-    white-space: normal;
-    padding-right: .5rem;
-  }
-  .summary-expand {
-    grid-column: 2;
-    grid-row: 1;           
-    justify-self: center;
-    font-size: .85rem;
-  }
-  #summary-time {
-    grid-column: 3;
-    grid-row: 1;
-    justify-self: end;
-    font-size: .8rem !important;
-  }
-  .expand-prefix { display: none; }
-  .collapsibles-bar { border-top: none; }
-}
 
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
     .search-wrap { position:relative; max-width:420px; }
@@ -258,7 +255,11 @@
     #search:focus { border-color:var(--green); }
     #search::placeholder { color:var(--ink-lt); opacity:.7; }
     .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.2rem; align-items:center; }
-    .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; margin-right:.2rem; white-space:nowrap; min-width:2.8rem; width:100%; margin-bottom:.15rem; }
+    .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; white-space:nowrap; }
+    .filter-row-wrap { max-width:1100px; margin:0 auto; padding:.2rem 1.5rem; display:flex; align-items:center; gap:.5rem; }
+    .filter-row-wrap .filter-row-label { min-width:2.8rem; flex-shrink:0; }
+    .filter-row-wrap .filter-row { flex:1; padding:.3rem 0; max-width:none; margin:0; }
+    #time-wrap-mobile { display:none; }
     .pill { display:inline-flex; align-items:center; padding:.27rem .45rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-size:.78rem; font-weight:500; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; user-select:none; white-space:nowrap; }
     .pill:hover { border-color:var(--green); color:var(--green); }
     .pill.day-active   { background:var(--amber);  border-color:var(--amber);  color:#fff; }
@@ -563,21 +564,25 @@
         <input type="text" id="search" placeholder="Search venues, neighborhoods, deals…" autocomplete="off" />
       </div>
     </div>
-    <div class="filter-row" id="day-filters">
+    <div class="filter-row-wrap" id="day-wrap">
       <span class="filter-row-label">Day</span>
-      <button class="pill today-active" data-day="today">Today</button>
-      <button class="pill" data-day="Mon">Mon</button><button class="pill" data-day="Tue">Tue</button>
-      <button class="pill" data-day="Wed">Wed</button><button class="pill" data-day="Thu">Thu</button>
-      <button class="pill" data-day="Fri">Fri</button><button class="pill" data-day="Sat">Sat</button>
-      <button class="pill" data-day="Sun">Sun</button>
+      <div class="filter-row" id="day-filters">
+        <button class="pill today-active" data-day="today">Today</button>
+        <button class="pill" data-day="Mon">Mon</button><button class="pill" data-day="Tue">Tue</button>
+        <button class="pill" data-day="Wed">Wed</button><button class="pill" data-day="Thu">Thu</button>
+        <button class="pill" data-day="Fri">Fri</button><button class="pill" data-day="Sat">Sat</button>
+        <button class="pill" data-day="Sun">Sun</button>
+      </div>
     </div>
-    <div class="filter-row" id="time-pills-mobile">
+    <div class="filter-row-wrap" id="time-wrap-mobile">
       <span class="filter-row-label">Time</span>
-      <button class="pill" id="tpill-m-now" data-time="now">Now</button>
-      <button class="pill" id="tpill-m-morning" data-time="morning">Morning</button>
-      <button class="pill" id="tpill-m-lunch" data-time="lunch">Lunch</button>
-      <button class="pill" id="tpill-m-hh" data-time="hh">Happy Hour</button>
-      <button class="pill" id="tpill-m-late" data-time="late">Late Night</button>
+      <div class="filter-row" id="time-pills-mobile">
+        <button class="pill" id="tpill-m-now" data-time="now">Now</button>
+        <button class="pill" id="tpill-m-morning" data-time="morning">Morning</button>
+        <button class="pill" id="tpill-m-lunch" data-time="lunch">Lunch</button>
+        <button class="pill" id="tpill-m-hh" data-time="hh">Happy Hour</button>
+        <button class="pill" id="tpill-m-late" data-time="late">Late Night</button>
+      </div>
     </div>
     <div class="filter-row" id="time-pills">
       <span class="filter-row-label">Time</span>
