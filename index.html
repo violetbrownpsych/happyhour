@@ -260,9 +260,8 @@
     font-weight: 700;
     opacity: 1;
   }
-  .collapsibles-bar {
-    border-top: none;
-  }
+  .collapsibles-bar { border-top: none; }
+  #day-wrap-mobile, #time-wrap-mobile { display: flex; }
 }
 
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
@@ -283,6 +282,7 @@
     .filter-row-wrap > .filter-row-label {
       min-width: 2.8rem;
       flex-shrink: 0;
+      margin-right: .2rem;
     }
     .filter-row-wrap > .filter-row {
       flex: 1;
@@ -306,6 +306,7 @@
       min-width: 5.8rem;
       justify-content: center;
     }
+    #day-wrap-mobile, #time-wrap-mobile { display: none; }
     .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
     .slider-outer { padding:0 10px; }
     .track-container { position:relative; padding:26px 0 26px; }
@@ -594,7 +595,7 @@
         <input type="text" id="search" placeholder="Search venues, neighborhoods, deals…" autocomplete="off" />
       </div>
     </div>
-    <div class="filter-row-wrap">
+    <div class="filter-row-wrap" id="day-wrap-mobile">
       <span class="filter-row-label">Day</span>
       <div class="filter-row" id="day-filters">
         <button class="pill today-active" data-day="today">Today</button>
@@ -604,7 +605,7 @@
         <button class="pill" data-day="Sun">Sun</button>
       </div>
     </div>
-    <div class="filter-row-wrap">
+    <div class="filter-row-wrap" id="time-wrap-mobile">
       <span class="filter-row-label">Time</span>
       <div class="filter-row" id="time-pills-mobile">
         <button class="pill" id="tpill-m-now" data-time="now">Now</button>
