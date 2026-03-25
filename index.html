@@ -92,14 +92,17 @@
       transition: opacity .25s ease;
       pointer-events: none;
     }
-    .summary-top-row { justify-self: start; }
+    .summary-top-row { justify-self: start; min-width: 0; }
     .summary-bottom-row { 
       justify-self: end;
       display: flex;
       align-items: center;
       gap: .5rem;
     }
-    .summary-bottom-row #summary-time { white-space: nowrap; }
+    .summary-bottom-row #summary-time {
+      justify-self: end;
+      margin-left: auto;
+    }
 
     .filter-summary-bar.visible { 
       max-height: 100px;
@@ -170,7 +173,7 @@
 
   @media (max-width:899px) {
     .filters-wrap.map-collapsed ~ .filter-summary-bar { 
-      max-height: 90px;
+      max-height: 110px;
       opacity: 1;
       pointer-events: auto;
       padding: .5rem 1.5rem;
