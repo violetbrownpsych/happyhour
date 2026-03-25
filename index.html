@@ -92,16 +92,11 @@
       transition: opacity .25s ease;
       pointer-events: none;
     }
-    .summary-top-row { justify-self: start; min-width: 0; }
-    .summary-bottom-row { 
-      justify-self: end;
+    .summary-heading {
       display: flex;
-      align-items: center;
-      gap: .5rem;
-    }
-    .summary-bottom-row #summary-time {
-      justify-self: end;
-      margin-left: auto;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
     }
 
     .filter-summary-bar.visible { 
@@ -158,13 +153,6 @@
       text-transform: uppercase;
     }
 
-    .summary-heading {
-      display: flex;
-      align-items: baseline;
-      gap: .5rem;
-      flex-shrink: 0;
-    }
-
     #results-heading { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:600; display:flex; align-items:baseline; flex-wrap:wrap; gap:0; line-height:1.4; }
     .h-label { font-family:'Playfair Display',serif; font-weight:600; color:var(--ink); }
     .h-day { font-family:'Playfair Display',serif; font-style:italic; color:var(--sienna); margin-left:.28em; }
@@ -203,15 +191,22 @@
       font-size: .65rem;
     }
     .filter-summary-bar {
-      display: flex;
-      flex-wrap: wrap;
-    }
-    .summary-top-row { flex: 1 1 100%; }
-    .summary-bottom-row { 
-      flex: 1 1 100%;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
+      grid-template-rows: auto auto;
       align-items: center;
+    }
+    .summary-heading {
+      grid-column: 1 / -1;
+    }
+    .summary-expand {
+      grid-row: 2;
+      justify-self: center;
+    }
+    #summary-time {
+      grid-row: 2;
+      justify-self: end;
+      font-size: .65rem !important;
     }
   }
 
@@ -572,17 +567,12 @@
 <div class="collapsible-panel" id="panel-vibe"><div class="collapsible-panel-inner" id="vibe-pills"></div></div>
 
 <div class="filter-summary-bar" id="filter-summary-bar">
-  <div class="summary-top-row">
-    <div class="summary-heading" id="summary-heading">
-      <h2 id="results-heading"><span class="h-label">Happy Hours</span><span class="h-day"> on Tuesday</span></h2>
-      <span class="results-count" id="results-count"></span>
-    </div>
+  <div class="summary-heading" id="summary-heading">
+    <h2 id="results-heading"><span class="h-label">Happy Hours</span><span class="h-day"> on Tuesday</span></h2>
+    <span class="results-count" id="results-count"></span>
   </div>
-  <div class="summary-bottom-row">
-    <span style="flex:1"></span>
-    <span class="summary-expand"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg>Change filters</span>
-    <span id="summary-time" style="flex:1;text-align:right;font-size:.78rem;font-weight:500;color:var(--ink-lt);white-space:nowrap;"></span>
-  </div>
+  <span class="summary-expand"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg>Change filters</span>
+  <span id="summary-time" style="text-align:right;font-size:.78rem;font-weight:500;color:var(--ink-lt);white-space:nowrap;"></span>
 </div>
 
 <div class="combo-warning" id="combo-warning" style="display:none"><div class="combo-inner">⚠️ <span id="combo-text"></span></div></div>
