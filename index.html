@@ -182,8 +182,16 @@
       padding: .35rem 1.5rem;
     }
     .search-row { padding: .2rem 1rem .1rem; }
-    .filter-row { padding: .05rem 1rem; gap: .1rem; }
-    .pill { padding: .2rem .08rem; font-size: .68rem; }
+    .filter-row { 
+      padding: .05rem 1rem; 
+      gap: .1rem; 
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filter-row::-webkit-scrollbar { display: none; }
+    .pill { padding: .2rem .08rem; }
     .filter-row-label { min-width: 0; font-size: .58rem; margin-right: -.3rem; }
     #time-pills { display: none; }
     #day-filters { padding-bottom: .3rem; margin-bottom: 0; }
@@ -195,9 +203,6 @@
     .pill:hover:not(.time-active):not(.time-active-now):not(.pick-active):not(.day-active):not(.today-active) {
       border-color: var(--cream-dk);
       color: var(--ink-lt);
-    }
-    #summary-time {
-      font-size: .65rem !important;
     }
     .filter-summary-bar #results-heading {
       font-size: .8rem;
@@ -258,10 +263,6 @@
     }
     #time-pills .pill {
       min-width: 5.8rem;
-      justify-content: center;
-    }
-    #time-pills-mobile .pill {
-      min-width: 4.5rem;
       justify-content: center;
     }
     .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
