@@ -139,8 +139,6 @@
       transition: opacity .15s ease, max-height .15s ease;
     }
 
-    #time-pills-mobile { display: none; }
-
     @media (max-width:899px) {
       .filters-wrap.map-collapsed .filter-expandable { max-height:0; opacity:0; pointer-events:none; }
     }
@@ -174,80 +172,6 @@
     .h-time { font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:400; color:var(--ink-lt); margin-left:.3em; }
     .results-count { content: ' · '; font-size:.78rem; font-weight:500; color:var(--ink-lt); }
 
-  @media (max-width:899px) {
-    .filters-wrap.map-collapsed ~ .filter-summary-bar { 
-      max-height: 110px;
-      opacity: 1;
-      pointer-events: auto;
-      padding: .35rem 1.5rem;
-    }
-    .search-row { padding: .2rem 1rem .1rem; }
-    .filter-row { 
-      padding: .05rem 1rem; 
-      gap: .1rem; 
-    }
-    .pill { padding: .2rem .08rem; }
-    .filter-row-label { min-width:0; font-size:.65rem; opacity:.9; color:var(--ink); }
-    #time-pills { display: none; }
-    #time-wrap-mobile { display: flex; }
-    .filter-row-wrap {
-      flex-direction: column;
-      align-items: flex-start;
-      padding: .3rem 1rem .1rem;
-      gap: .2rem;
-    }
-    .filter-row-wrap .filter-row {
-      padding: 0;
-      width: 100%;
-      overflow-x: auto;
-      overflow-y: visible;
-      flex-wrap: nowrap;
-      scrollbar-width: none;
-    }
-    .filter-row-wrap .filter-row::-webkit-scrollbar { display: none; }
-    .track-container { padding: 4px 0 8px; }
-    .collapsibles-bar { margin-top: .1rem; border-top: none; }
-    #slider-row { display: none; }
-    .pill:hover:not(.time-active):not(.time-active-now):not(.pick-active):not(.day-active):not(.today-active) {
-      border-color: var(--cream-dk);
-      color: var(--ink-lt);
-    }
-    .filter-summary-bar #results-heading {
-      font-size: .8rem;
-    }
-    .filter-summary-bar .results-count {
-      font-size: .65rem;
-    }
-    .filter-summary-bar {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-    }
-    .summary-heading { display: none; }
-    .summary-compact {
-      display: block;
-      grid-column: 1;
-      grid-row: 1;
-      font-size: .85rem;   
-      line-height: 1.4;
-      white-space: normal;
-      padding-right: .5rem;
-    }
-    .summary-expand {
-      grid-column: 2;
-      grid-row: 1;           
-      justify-self: center;
-      font-size: .85rem;
-    }
-    #summary-time {
-      grid-column: 3;
-      grid-row: 1;
-      justify-self: end;
-      font-size: .8rem !important;
-    }
-    .expand-prefix { display: none; }
-  }
-
     .search-row { max-width:1100px; margin:0 auto; padding:.85rem 1.5rem .45rem; }
     .search-wrap { position:relative; max-width:420px; }
     .search-wrap svg { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; }
@@ -256,10 +180,10 @@
     #search::placeholder { color:var(--ink-lt); opacity:.7; }
     .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.2rem; align-items:center; }
     .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; white-space:nowrap; }
-    .filter-row-wrap { max-width:1100px; margin:0 auto; padding:.2rem 1.5rem; display:flex; align-items:center; gap:.5rem; }
-    .filter-row-wrap .filter-row-label { min-width:2.8rem; flex-shrink:0; }
-    .filter-row-wrap .filter-row { flex:1; padding:.3rem 0; max-width:none; margin:0; }
+    .filter-row-wrap { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem .15rem; display:flex; flex-direction:column; align-items:flex-start; gap:.3rem; }
+    .filter-row-wrap .filter-row { width:100%; padding:.05rem 0; max-width:none; margin:0; }
     #time-wrap-mobile { display:none; }
+    #time-wrap { display:flex; }
     .pill { display:inline-flex; align-items:center; padding:.27rem .45rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-size:.78rem; font-weight:500; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; user-select:none; white-space:nowrap; }
     .pill:hover { border-color:var(--green); color:var(--green); }
     .pill.day-active   { background:var(--amber);  border-color:var(--amber);  color:#fff; }
@@ -528,6 +452,78 @@
       .grid { padding-left:1rem; padding-right:1rem; }
       .filter-summary-bar { padding:.5rem 1rem; }
     }
+
+    @media (max-width:899px) {
+      .filters-wrap.map-collapsed ~ .filter-summary-bar { 
+        max-height: 110px;
+        opacity: 1;
+        pointer-events: auto;
+        padding: .35rem 1.5rem;
+      }
+      .search-row { padding: .2rem 1rem .1rem; }
+      .filter-row { 
+        padding: .05rem 1rem; 
+        gap: .1rem; 
+      }
+      .pill { padding: .2rem .08rem; }
+      .filter-row-label { min-width:0; font-size:.65rem; opacity:.9; color:var(--ink); }
+      #time-wrap { display: none; }
+      #time-wrap-mobile { display: flex; }
+      #time-pills-mobile { display: flex; }
+      .filter-row-wrap {
+        padding: .3rem 1rem .1rem;
+      }
+      .filter-row-wrap .filter-row {
+        padding: 0;
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: visible;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+      }
+      .filter-row-wrap .filter-row::-webkit-scrollbar { display: none; }
+      .track-container { padding: 4px 0 8px; }
+      .collapsibles-bar { margin-top: .1rem; border-top: none; }
+      #slider-row { display: none; }
+      .pill:hover:not(.time-active):not(.time-active-now):not(.pick-active):not(.day-active):not(.today-active) {
+        border-color: var(--cream-dk);
+        color: var(--ink-lt);
+      }
+      .filter-summary-bar #results-heading {
+        font-size: .8rem;
+      }
+      .filter-summary-bar .results-count {
+        font-size: .65rem;
+      }
+      .filter-summary-bar {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+      }
+      .summary-heading { display: none; }
+      .summary-compact {
+        display: block;
+        grid-column: 1;
+        grid-row: 1;
+        font-size: .85rem;   
+        line-height: 1.4;
+        white-space: normal;
+        padding-right: .5rem;
+      }
+      .summary-expand {
+        grid-column: 2;
+        grid-row: 1;           
+        justify-self: center;
+        font-size: .85rem;
+      }
+      #summary-time {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+        font-size: .8rem !important;
+      }
+      .expand-prefix { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -584,14 +580,16 @@
         <button class="pill" id="tpill-m-late" data-time="late">Late Night</button>
       </div>
     </div>
-    <div class="filter-row" id="time-pills">
+    <div class="filter-row-wrap" id="time-wrap">
       <span class="filter-row-label">Time</span>
+      <div class="filter-row" id="time-pills">
       <button class="pill" id="tpill-any" data-time="any">Any Time</button>
       <button class="pill" id="tpill-now" data-time="now">Happening Now</button>
       <button class="pill" id="tpill-morning" data-time="morning">Morning</button>
       <button class="pill" id="tpill-lunch" data-time="lunch">Lunch</button>
       <button class="pill pill-pick pick-active" id="tpill-pick" data-time="pick">← Pick a time →</button>
       <button class="pill" id="tpill-late" data-time="late">Late Night</button>
+      </div>
     </div>
     <div class="slider-row" id="slider-row">
       <div class="slider-outer"><div class="track-container"><div class="track-line" id="slider-track">
@@ -654,12 +652,12 @@
 
 <footer>
   <p>Made with 🥂 in the Twin Cities &nbsp;·&nbsp; <a href="/" id="footer-home">Pours</a></p>
-  <p>Know a spot? <a href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p>
+  <p>Know a spot? <a href="/cdn-cgi/l/email-protection#86dfc9d3d4c3cbc7cfcac6e3fee7ebf6eae3a8e5e9eb">Send us a tip!</a></p>
   <p>© 2026 Pours. All rights reserved.</p>
   <a href="/tos">Terms of Service</a>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var CSV_URL   = 'happyhours.csv';
 var TILE_URL  = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
@@ -1509,14 +1507,4 @@ var dividerActive = false;
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
-      if (grid) grid.classList.remove('no-anim');
-    });
-  })();
-</script>
-
-<script>
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
-</script>
-
-</body>
-</html>
+      if (grid) grid.classList.remove('n
