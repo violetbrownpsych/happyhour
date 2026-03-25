@@ -78,7 +78,7 @@
     .filter-summary-bar {
       display: flex;
       align-items: center;
-      justify-content: content;
+      justify-content: center;
       gap: 1rem;
       padding: 0;
       cursor: pointer;
@@ -95,14 +95,14 @@
     }
 
     .filter-summary-bar.visible { 
-      max-height: 48px;
+      max-height: 64px;
       opacity: 1;
       pointer-events: auto;
       padding: .5rem 1.5rem;
     }
 
     .filters-wrap.scroll-collapsed .filter-summary-bar { 
-      max-height: 48px;
+      max-height: 64px;
       opacity: 1;
       pointer-events: auto;
       padding: .5rem 1.5rem;
@@ -147,14 +147,30 @@
       letter-spacing: .08em;
       text-transform: uppercase;
     }
+
+    .summary-heading {
+      display: flex;
+      align-items: baseline;
+      gap: .5rem;
+      flex-shrink: 0;
+    }
+    .summary-heading #results-heading {
+      font-size: 1rem;
+    }
+
+    #results-heading { font-family:'Playfair Display',serif; font-size:1rem; font-weight:600; display:flex; align-items:baseline; flex-wrap:wrap; gap:0; line-height:1.4; }
+    .h-label { font-family:'Playfair Display',serif; font-weight:600; color:var(--ink); }
+    .h-day { font-family:'Playfair Display',serif; font-style:italic; color:var(--sienna); margin-left:.28em; }
+    .h-time { font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:400; color:var(--ink-lt); margin-left:.3em; }
+    .results-count { font-size:.78rem; font-weight:500; color:var(--ink-lt); }
+
   @media (max-width:899px) {
     .filters-wrap.map-collapsed ~ .filter-summary-bar { 
-      max-height: 48px;
+      max-height: 64px;
       opacity: 1;
       pointer-events: auto;
       padding: .5rem 1.5rem;
     }
-    #map-toggle-btn { display: none; }
     .search-row { padding: .2rem 1rem .1rem; }
     .filter-row { padding: .05rem 1rem; gap: .15rem; }
     .pill { padding: .2rem .18rem; font-size: .68rem; }
@@ -232,20 +248,10 @@
     .city-pills.collapsed { display:none; }
 
     /* ── RESULTS META ───────────────────────────────────────── */
-    .results-meta { max-width:1100px; margin:.6rem auto .2rem; padding:0 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem; }
-    .results-meta-left { display:flex; align-items:baseline; flex-wrap:wrap; gap:.5rem; }
     body.map-mode-active .active-chips {
       margin-top: .15rem;
       margin-bottom: .15rem;
     }
-    .results-count { font-size:.8rem; font-weight:500; color:var(--ink-lt); }
-    #results-heading { font-family:'Playfair Display',serif; font-size:1.35rem; font-weight:600; display:flex; align-items:baseline; flex-wrap:wrap; gap:0; line-height:1.4; }
-    .h-label { font-family:'Playfair Display',serif; font-weight:600; color:var(--ink); }
-    .h-day   { font-family:'Playfair Display',serif; font-style:italic; color:var(--sienna); margin-left:.28em; }
-    .h-time  { font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:400; color:var(--ink-lt); margin-left:.3em; }
-    #map-toggle-btn { display:inline-flex; align-items:center; gap:.35rem; padding:.3rem .9rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-family:'DM Sans',sans-serif; font-size:.78rem; font-weight:600; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; white-space:nowrap; }
-    #map-toggle-btn:hover { border-color:var(--green); color:var(--green); }
-    #map-toggle-btn.active { background:var(--cream); border-color:var(--cream-dk); color:var(--ink-lt); }
     .combo-warning { max-width:1100px; margin:.35rem auto .1rem; padding:0 1.5rem; }
     .combo-inner { display:inline-flex; align-items:center; gap:.4rem; background:#FEF3E2; border:1px solid #F5C97A; border-radius:8px; padding:.32rem .75rem; font-size:.78rem; color:#7A4F10; }
     .active-chips { max-width:1100px; margin:.45rem auto .65rem; padding:0 1.5rem; display:flex; flex-wrap:wrap; gap:.3rem; min-height:.5rem; }
@@ -539,20 +545,17 @@
 <div class="collapsible-panel" id="panel-vibe"><div class="collapsible-panel-inner" id="vibe-pills"></div></div>
 
 <div class="filter-summary-bar" id="filter-summary-bar">
-  <div style="display:flex;align-items:center;gap:.6rem;margin:0 auto;">
-    <span id="summary-text">Today · 5 PM</span>
+  <div class="summary-heading" id="summary-heading">
+    <h2 id="results-heading"><span class="h-label">Happy Hours</span><span class="h-day"> on Tuesday</span></h2>
+    <span class="results-count" id="results-count"></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:.6rem;">
+    <span id="summary-text">Happening Now</span>
     <span class="summary-expand"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg>Change filters</span>
   </div>
   <span id="summary-time" style="font-size:.78rem;font-weight:500;color:var(--ink-lt);white-space:nowrap;"></span>
 </div>
 
-<div class="results-meta">
-  <div class="results-meta-left">
-    <h2 id="results-heading"><span class="h-label">Happy Hours</span><span class="h-day"> on Friday</span><span class="h-time"> at 5 PM</span></h2>
-    <span class="results-count" id="results-count"></span>
-  </div>
-  <button id="map-toggle-btn">🗺️ Map view</button>
-</div>
 <div class="combo-warning" id="combo-warning" style="display:none"><div class="combo-inner">⚠️ <span id="combo-text"></span></div></div>
 <div class="active-chips" id="active-chips"></div>
 
@@ -743,7 +746,7 @@ function init(){
   applyHeaderTheme();
   buildAreaPanel(); buildDealPanel(); buildVibePanel();
   setupCollapsibles(); setupDayFilters(); setupTimePills(); setupSlider();
-  setupMapToggle(); setupFAB(); setupQV();
+  setupFAB(); setupQV();
   setupScrollCollapse(); setupQVSwipe();
   positionPanels();
   window.addEventListener('resize',function(){positionPanels();updateContentHeight();});
@@ -985,17 +988,15 @@ function highlightMarker(name, scroll){
 }
 
 // ── MAP TOGGLE & FAB ───────────────────────────────────────
-function setupMapToggle(){document.getElementById('map-toggle-btn').addEventListener('click',toggleMapMode);}
 function setupFAB(){document.getElementById('fab').addEventListener('click',toggleMapMode);}
 function toggleMapMode(){
   mapMode=!mapMode;
-  var btn=document.getElementById('map-toggle-btn'),fab=document.getElementById('fab');
+  var fab=document.getElementById('fab');
   if(mapMode){
     mapReady=false;
     document.documentElement.scrollTop=0;
     document.getElementById('content-area').classList.add('map-active');
     document.body.classList.add('map-mode-active');
-    btn.innerHTML='&#128203; List view'; btn.classList.add('active'); fab.innerHTML='&#128203; List';
     if(window.innerWidth<900){
       filterCollapsed=true;
       document.getElementById('filters-wrap').classList.add('map-collapsed');
@@ -1011,7 +1012,6 @@ function toggleMapMode(){
     mapReady=false;
     document.getElementById('content-area').classList.remove('map-active');
     document.body.classList.remove('map-mode-active');
-    btn.innerHTML='&#128506; Map view'; btn.classList.remove('active'); fab.innerHTML='&#128506; Map';
     filterCollapsed=false;
     document.getElementById('filters-wrap').classList.remove('map-collapsed');
     render();
@@ -1280,7 +1280,16 @@ function venueMatchesVibe(v){if(!activeVibeTags.size)return true;return [...acti
 function venueMatchesSearch(v){if(!searchQuery)return true;var q=searchQuery.toLowerCase();return v.name.toLowerCase().indexOf(q)>=0||v.neighborhoods.some(function(n){return n.toLowerCase().indexOf(q)>=0;})||v.city.toLowerCase().indexOf(q)>=0||v.sessions.some(function(s){return s.deals.some(function(d){return d.toLowerCase().indexOf(q)>=0;});})||v.dealTags.some(function(t){return t.toLowerCase().indexOf(q)>=0;})||v.vibe.some(function(t){return t.toLowerCase().indexOf(q)>=0;});}
 function filteredVenues(){return VENUES.filter(function(v){return venueMatchesDay(v)&&venueMatchesTime(v)&&venueMatchesNeighborhood(v)&&venueMatchesDealTags(v)&&venueMatchesVibe(v)&&venueMatchesSearch(v);});}
 
-function buildHeading(){var dayText=activeDays==='today'?('on '+todayFull()):('on '+[...activeDays].join(' · '));var timeText='';if(activeTime==='pick')timeText=' at '+fmtSlider(sliderValue);else if(activeTime!=='any'){var def=TIME_DEFS[activeTime];if(def)timeText=def.label;}document.getElementById('results-heading').innerHTML='<span class="h-label">Happy Hours</span><span class="h-day"> '+dayText+'</span>'+(timeText?'<span class="h-time">'+timeText+'</span>':'');}
+function buildHeading(){
+  var dayText=activeDays==='today'?('on '+todayFull()):('on '+[...activeDays].join(' · '));
+  document.getElementById('results-heading').innerHTML='<span class="h-label">Happy Hours</span><span class="h-day"> '+dayText+'</span>';
+  var timeText='';
+  if(activeTime==='pick')timeText=' at '+fmtSlider(sliderValue);
+  else if(activeTime==='now')timeText='Happening Now';
+  else if(activeTime!=='any'){var def=TIME_DEFS[activeTime];if(def)timeText=def.label;}
+  var st=document.getElementById('summary-text');
+  if(st)st.textContent=timeText;
+}
 function updateComboWarning(){var el=document.getElementById('combo-warning'),txt=document.getElementById('combo-text');var msg='';if(activeTime==='now'){var today=todayAbbr();if(activeDays!=='today'&&activeDays instanceof Set&&!activeDays.has(today))msg='"Happening Now" shows what\'s open at this moment - today is '+todayFull()+'. You may see zero results for other days.';}txt.textContent=msg;el.style.display=msg?'block':'none';}
 function renderChips(){var c=document.getElementById('active-chips');c.innerHTML='';function add(label,attr,val){var chip=document.createElement('div');chip.className='chip';chip.innerHTML=label+' <span class="chip-x" data-r="'+attr+'" data-v="'+val+'">&times;</span>';c.appendChild(chip);}activeNeighborhoods.forEach(function(n){add(n,'neighborhood',n);});activeDealTags.forEach(function(t){add(t,'deal',t);});activeVibeTags.forEach(function(t){add(t,'vibe',t);});c.querySelectorAll('[data-r]').forEach(function(x){x.addEventListener('click',function(){var attr=x.dataset.r,val=x.dataset.v;if(attr==='neighborhood'){activeNeighborhoods.delete(val);syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');updateBadge('badge-area',activeNeighborhoods.size,'panel-area');}if(attr==='deal'){activeDealTags.delete(val);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');}if(attr==='vibe'){activeVibeTags.delete(val);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');}render();});});}
 
@@ -1288,7 +1297,8 @@ function renderChips(){var c=document.getElementById('active-chips');c.innerHTML
 function render(){
   var venues=filteredVenues();
   buildHeading();updateComboWarning();renderChips();updateFilterSummary();
-  document.getElementById('results-count').textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'No spots found';
+  var rc=document.getElementById('results-count');
+if(rc)rc.textContent=venues.length?'· '+venues.length+' spot'+(venues.length!==1?'s':''):'· No spots found';
   if(mapMode){
     updateMapMarkers(venues);
     var bounds=leafletMap&&leafletMap.getBounds();
