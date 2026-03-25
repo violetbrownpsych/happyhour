@@ -176,10 +176,10 @@
     .search-wrap { position:relative; max-width:420px; }
     .search-wrap svg { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; }
     #search { width:100%; padding:.52rem .9rem .52rem 2.5rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:#fff; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .18s; }
-    #search:focus { border-color:var(--green); }
+      c.querySelectorAll('[data-r]').forEach(function(x){x.addEventListener('click',function(e){e.stopPropagation();var attr=x.dataset.r,val=x.dataset.v;if(attr==='neighborhood'){activeNeighborhoods.delete(val);syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');updateBadge('badge-area',activeNeighborhoods.size,'panel-area');}if(attr==='deal'){activeDealTags.delete(val);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');}if(attr==='vibe'){activeVibeTags.delete(val);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');}render();});});
     #search::placeholder { color:var(--ink-lt); opacity:.7; }
     .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.2rem; align-items:center; }
-    .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; white-space:nowrap; }
+    .filter-row-label { font-size:.65rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink) !important; opacity:1 !important; white-space:nowrap; min-width:0; }
     .filter-row-wrap { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem .15rem; display:flex; flex-direction:column; align-items:flex-start; gap:.3rem; }
     .filter-row-wrap .filter-row { width:100%; padding:.05rem 0; max-width:none; margin:0; }
     #time-wrap-mobile { display:none; }
@@ -200,6 +200,10 @@
       min-width: 5.8rem;
       justify-content: center;
     }
+    /* Active states for collapsible panel pills (neighborhood / deals / vibe) */
+    #area-pills .pill.tag-active { background:var(--green-lt); border-color:var(--green-lt); color:var(--cream); }
+    #deal-pills .pill.tag-active { background:var(--sienna);  border-color:var(--sienna);  color:#fff; }
+    #vibe-pills .pill.tag-active { background:var(--green-lt); border-color:var(--green-lt); color:#fff; }
     .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
     .slider-outer { padding:0 10px; }
     .track-container { position:relative; padding:26px 0 26px; }
@@ -462,7 +466,7 @@
         gap: .1rem; 
       }
       .pill { padding: .2rem .55rem; }
-      .filter-row-label { min-width:0; font-size:.65rem; opacity:.9; color:var(--ink); }
+      /* filter-row-label uses same styles across breakpoints for consistency, defined above */
       #time-wrap { display: none; }
       #time-wrap-mobile { display: flex; }
       #time-pills-mobile { display: flex; }
@@ -1244,7 +1248,6 @@ function overlapsLateNight(vS,vE){return vS>=2000||vE<600||vE<vS;}
 function buildAreaPanel(){
   var c=document.getElementById('area-pills');
   var cities=[...new Set(VENUES.map(function(v){return v.city;}))].sort();
-  var ab=mkPill('All Neighborhoods','neighborhood','all');ab.classList.add('tag-active');c.appendChild(ab);
   cities.forEach(function(city){
     var nh=[...new Set(VENUES.filter(function(v){return v.city===city;}).flatMap(function(v){return v.neighborhoods;}))].sort();
     var ct=document.createElement('button');ct.className='city-toggle open';ct.dataset.city=city;ct.innerHTML=city+' <span class="city-chevron">&#9662;</span>';c.appendChild(ct);
@@ -1252,12 +1255,13 @@ function buildAreaPanel(){
     ct.addEventListener('click',function(e){e.stopPropagation();var o=ct.classList.contains('open');ct.classList.toggle('open',!o);pd.classList.toggle('collapsed',o);});
   });
   c.addEventListener('click',function(e){
-    var btn=e.target.closest('[data-neighborhood]');if(!btn)return;
+    var btn=e.target.closest('[data-neighborhood]');
+    if(!btn) return;
     var val=btn.dataset.neighborhood;
-    if(val==='all')activeNeighborhoods.clear();else toggleSet(activeNeighborhoods,val);
+    toggleSet(activeNeighborhoods,val);
     syncPills(c,'neighborhood',activeNeighborhoods,'all');
     updateBadge('badge-area',activeNeighborhoods.size,'panel-area');
-    if(mapMode&&activeNeighborhoods.size===1)flyToNeighborhood([...activeNeighborhoods][0]);
+    if(mapMode && activeNeighborhoods.size===1) flyToNeighborhood([...activeNeighborhoods][0]);
     render();
   });
 }
