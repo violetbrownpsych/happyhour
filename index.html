@@ -182,8 +182,8 @@
       padding: .35rem 1.5rem;
     }
     .search-row { padding: .2rem 1rem .1rem; }
-    .filter-row { padding: .05rem 1rem; gap: .15rem; }
-    .pill { padding: .2rem .18rem; font-size: .68rem; }
+    .filter-row { padding: .05rem 1rem; gap: .1rem; }
+    .pill { padding: .2rem .08rem; font-size: .68rem; }
     .filter-row-label { min-width: 0; font-size: .58rem; margin-right: -.3rem; }
     #time-pills { display: none; }
     #day-filters { padding-bottom: .3rem; margin-bottom: 0; }
@@ -242,9 +242,9 @@
     #search { width:100%; padding:.52rem .9rem .52rem 2.5rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:#fff; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .18s; }
     #search:focus { border-color:var(--green); }
     #search::placeholder { color:var(--ink-lt); opacity:.7; }
-    .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; }
+    .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.2rem; align-items:center; }
     .filter-row-label { font-size:.62rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-lt); opacity:.5; margin-right:.2rem; white-space:nowrap; min-width:2.8rem; }
-    .pill { display:inline-flex; align-items:center; padding:.27rem .76rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-size:.78rem; font-weight:500; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; user-select:none; white-space:nowrap; }
+    .pill { display:inline-flex; align-items:center; padding:.27rem .45rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-size:.78rem; font-weight:500; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; user-select:none; white-space:nowrap; }
     .pill:hover { border-color:var(--green); color:var(--green); }
     .pill.day-active   { background:var(--amber);  border-color:var(--amber);  color:#fff; }
     .pill.today-active { background:var(--amber);  border-color:var(--amber);  color:#fff; }
@@ -252,7 +252,18 @@
     .pill.time-active-now { background:var(--sienna); border-color:var(--sienna); color:#fff; }
     .pill.pick-active  { background:var(--amber);  border-color:var(--amber);  color:#fff; }
     .pill-pick { border-style:dashed; }
-    .pill.tag-active   { background:var(--sienna); border-color:var(--sienna); color:#fff; }
+    #day-filters .pill {
+      min-width: 3rem;
+      justify-content: center;
+    }
+    #time-pills .pill {
+      min-width: 5.8rem;
+      justify-content: center;
+    }
+    #time-pills-mobile .pill {
+      min-width: 4.5rem;
+      justify-content: center;
+    }
     .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
     .slider-outer { padding:0 10px; }
     .track-container { position:relative; padding:26px 0 26px; }
