@@ -97,6 +97,18 @@
       flex-direction: column;
       align-items: flex-start;
       min-width: 0;
+      grid-column: 1;
+    }
+
+    .summary-expand {
+      grid-column: 2;
+      justify-self: center;
+      white-space: nowrap;
+    }
+    #summary-time {
+      grid-column: 3;
+      justify-self: end;
+      text-align: right;
     }
 
     .filter-summary-bar.visible { 
@@ -146,6 +158,7 @@
     }
     .filter-collapse-btn:hover { color: var(--ink); }
     .summary-expand {
+      white-space: nowrap;
       font-size: .8rem;
       font-weight: 600;
       color: var(--ink-lt);
@@ -157,7 +170,7 @@
     .h-label { font-family:'Playfair Display',serif; font-weight:600; color:var(--ink); }
     .h-day { font-family:'Playfair Display',serif; font-style:italic; color:var(--sienna); margin-left:.28em; }
     .h-time { font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:400; color:var(--ink-lt); margin-left:.3em; }
-    .results-count { font-size:.78rem; font-weight:500; color:var(--ink-lt); }
+    .results-count { content: ' · '; font-size:.78rem; font-weight:500; color:var(--ink-lt); }
 
   @media (max-width:899px) {
     .filters-wrap.map-collapsed ~ .filter-summary-bar { 
@@ -1304,7 +1317,7 @@ function render(){
   var venues=filteredVenues();
   buildHeading();updateComboWarning();renderChips();updateFilterSummary();
   var rc=document.getElementById('results-count');
-if(rc)rc.textContent=venues.length?'· '+venues.length+' spot'+(venues.length!==1?'s':''):'· No spots found';
+if(rc)rc.textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'No spots found';
   if(mapMode){
     updateMapMarkers(venues);
     var bounds=leafletMap&&leafletMap.getBounds();
