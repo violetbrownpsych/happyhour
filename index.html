@@ -1001,6 +1001,8 @@ function initMapOnce(){
 function updateContentHeight(){
   var bar=document.getElementById('filters-wrap');if(!bar)return;
   var h=bar.getBoundingClientRect().bottom;
+  var sb=document.getElementById('filter-summary-bar');
+  if(sb){var sbh=sb.getBoundingClientRect().bottom;if(sbh>h)h=sbh;}
   document.documentElement.style.setProperty('--filter-bar-h',h+'px');
   var mp=document.getElementById('map-panel');
   if(mp && window.innerWidth < 900) mp.style.top=h+'px';
