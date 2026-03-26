@@ -1385,9 +1385,14 @@ function renderCards(venues){
   if(!venues.length){grid.innerHTML='<div class="empty"><div class="empty-icon">&#127378;</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';return;}
   var sorted=[...venues].sort(function(a,b){var sa=getBadgeState(a),sb=getBadgeState(b);var rank=function(s){return s.type==='ending'?0:s.type==='soon'?1:2;};if(rank(sa)!==rank(sb))return rank(sa)-rank(sb);if(sa.type==='ending'&&sb.type==='ending')return sb.minsLeft-sa.minsLeft;return 0;});
   grid.innerHTML=sorted.map(function(v,i){
+    var displaySessions=activeTime==='any'?v.sessions:v.sessions.filter(function(s){
+      if(activeDays==='today')return s.days.indexOf(todayAbbr())>=0;
+      return [...activeDays].some(function(d){return s.days.indexOf(d)>=0;});
+    });
+    if(!displaySessions.length)displaySessions=v.sessions;
     var sessionsHTML=(function(){
       var groups=[];
-      v.sessions.forEach(function(s){
+      displaySessions.forEach(function(s){
         var key=s.deals.join('|');
         var existing=groups.find(function(g){return g.key===key;});
         if(existing){existing.sessions.push(s);}
