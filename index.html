@@ -681,7 +681,9 @@ var NEIGHBORHOOD_BOUNDS = {
   'Powderhorn':           [[44.920,-93.270],[44.950,-93.240]],
   'Grand Avenue':         [[44.930,-93.160],[44.950,-93.130]],
   'Macalester-Groveland': [[44.930,-93.165],[44.950,-93.140]],
-  'University':           [[44.970,-93.235],[44.992,-93.210]]
+  'University':           [[44.970,-93.235],[44.992,-93.210]],
+  'Kingfield':            [[44.920,-93.300],[44.940,-93.270]],
+  'West Maka Ska':       [[44.940,-93.330],[44.960,-93.300]]
 };
 var MAP_CENTER = [44.960,-93.240], MAP_ZOOM = 12;
 
@@ -1248,7 +1250,7 @@ function todayFull(){
   return DAY_FULL[d.getDay()];
 }
 function formatTime(t){var h=Math.floor(t/100),m=t%100;var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;return h12+(m?':'+String(m).padStart(2,'0'):'')+'  '+ampm;}
-function isOpenNowRange(s,e){var now=nowMinutes();if(e<s)return now>=s||now<e;return now>=s&&now<e;}
+function isOpenNowRange(s,e){var now=nowMinutes();if(e===0)return now>=s;if(e<s)return now>=s||now<e;return now>=s&&now<e;}
 function overlaps(vS,vE,wS,wE){return vS<=wE&&vE>=wS;}
 function overlapsLateNight(vS,vE){return vS>=2000||vE<600||vE<vS;}
 
