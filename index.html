@@ -176,14 +176,13 @@
     .search-wrap { position:relative; max-width:420px; }
     .search-wrap svg { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); opacity:.4; pointer-events:none; }
     #search { width:100%; padding:.52rem .9rem .52rem 2.5rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:#fff; font-family:'DM Sans',sans-serif; font-size:.85rem; color:var(--ink); outline:none; transition:border-color .18s; }
-      c.querySelectorAll('[data-r]').forEach(function(x){x.addEventListener('click',function(e){e.stopPropagation();var attr=x.dataset.r,val=x.dataset.v;if(attr==='neighborhood'){activeNeighborhoods.delete(val);syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');updateBadge('badge-area',activeNeighborhoods.size,'panel-area');}if(attr==='deal'){activeDealTags.delete(val);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');}if(attr==='vibe'){activeVibeTags.delete(val);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');}render();});});
     #search::placeholder { color:var(--ink-lt); opacity:.7; }
     .filter-row { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem; display:flex; flex-wrap:wrap; gap:.2rem; align-items:center; }
     .filter-row-label { font-size:.65rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--ink) !important; opacity:1 !important; white-space:nowrap; min-width:0; }
     .filter-row-wrap { max-width:1100px; margin:0 auto; padding:.3rem 1.5rem .15rem; display:flex; flex-direction:column; align-items:flex-start; gap:.3rem; }
     .filter-row-wrap .filter-row { width:100%; padding:.05rem 0; max-width:none; margin:0; }
-    #time-wrap-mobile { display:none; }
-    #time-wrap { display:flex; }
+    #time-wrap-mobile { display:none; border-top:1px solid var(--cream-dk); margin-top:.15rem; }
+    #time-wrap { display:flex; border-top:1px solid var(--cream-dk); margin-top:.15rem; }
     .pill { display:inline-flex; align-items:center; padding:.27rem .45rem; border-radius:99px; border:1.5px solid var(--cream-dk); background:var(--cream); font-size:.78rem; font-weight:500; color:var(--ink-lt); cursor:pointer; transition:all .15s ease; user-select:none; white-space:nowrap; }
     .pill:hover { border-color:var(--green); color:var(--green); }
     .pill.day-active   { background:var(--amber);  border-color:var(--amber);  color:#fff; }
@@ -215,7 +214,7 @@
     .thumb-wrap { position:absolute; top:50%; transform:translate(-50%,-50%); pointer-events:none; display:flex; flex-direction:column; align-items:center; gap:3px; }
     .thumb-label-above { font-size:.7rem; font-weight:700; color:var(--green); white-space:nowrap; background:var(--cream); padding:.08rem .32rem; border-radius:4px; border:1px solid var(--cream-dk); box-shadow:0 1px 4px rgba(36,61,26,.08); }
     .thumb-dot { width:20px; height:20px; border-radius:50%; background:var(--green); border:2.5px solid #fff; box-shadow:0 1px 6px rgba(36,61,26,.3); }
-    input[type=range].slider-input { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); width:100%; height:44px; opacity:0; cursor:grab; margin:0; -webkit-appearance:none; z-index:2; }
+    input[type=range].slider-input { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); width:100%; height:44px; opacity:0; cursor:grab; margin:0; -webkit-appearance:none; appearance:none; z-index:2; }
     input[type=range].slider-input:active { cursor:grabbing; }
     .collapsibles-bar { max-width:1100px; margin:0 auto; padding:.3rem 0 0; display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--cream-dk); margin-top:.15rem; }
     .collapsible { position:relative; flex:0 0 auto; }
@@ -446,6 +445,12 @@
     #footer-home { color:var(--amber); font-weight:700; font-family:'DM Sans',sans-serif; font-style:normal; text-decoration:none; }
     #footer-home:hover { text-decoration:underline; }
 
+    @media (min-width:900px) {
+      .search-row, .filter-row-wrap, .collapsibles-bar { max-width:none; margin:0; }
+      #time-wrap, .collapsibles-bar, .filter-collapse-btn { border-top:none; position:relative; }
+      #time-wrap::before, .collapsibles-bar::before, .filter-collapse-btn::before { content:''; position:absolute; top:0; left:1.5rem; right:1.5rem; height:1px; background:var(--cream-dk); }
+    }
+
     @media (max-width:600px) {
       .filter-row,.slider-row { padding-left:1rem; padding-right:1rem; }
       .collapsible-panel-inner { padding:.65rem 1rem .75rem; }
@@ -483,7 +488,7 @@
       }
       .filter-row-wrap .filter-row::-webkit-scrollbar { display: none; }
       .track-container { padding: 4px 0 8px; }
-      .collapsibles-bar { margin-top: .1rem; border-top: none; }
+      .collapsibles-bar { margin-top: .1rem; }
       #slider-row { display: none; }
       .pill:hover:not(.time-active):not(.time-active-now):not(.pick-active):not(.day-active):not(.today-active) {
         border-color: var(--cream-dk);
@@ -1353,7 +1358,7 @@ function buildHeading(){
   if(st)st.textContent=timeText;
 }
 function updateComboWarning(){var el=document.getElementById('combo-warning'),txt=document.getElementById('combo-text');var msg='';if(activeTime==='now'){var today=todayAbbr();if(activeDays!=='today'&&activeDays instanceof Set&&!activeDays.has(today))msg='"Happening Now" shows what\'s open at this moment - today is '+todayFull()+'. You may see zero results for other days.';}txt.textContent=msg;el.style.display=msg?'block':'none';}
-function renderChips(){var c=document.getElementById('active-chips');c.innerHTML='';function add(label,attr,val){var chip=document.createElement('div');chip.className='chip';chip.innerHTML=label+' <span class="chip-x" data-r="'+attr+'" data-v="'+val+'">&times;</span>';c.appendChild(chip);}activeNeighborhoods.forEach(function(n){add(n,'neighborhood',n);});activeDealTags.forEach(function(t){add(t,'deal',t);});activeVibeTags.forEach(function(t){add(t,'vibe',t);});c.querySelectorAll('[data-r]').forEach(function(x){x.addEventListener('click',function(){var attr=x.dataset.r,val=x.dataset.v;if(attr==='neighborhood'){activeNeighborhoods.delete(val);syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');updateBadge('badge-area',activeNeighborhoods.size,'panel-area');}if(attr==='deal'){activeDealTags.delete(val);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');}if(attr==='vibe'){activeVibeTags.delete(val);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');}render();});});}
+function renderChips(){var c=document.getElementById('active-chips');c.innerHTML='';function add(label,attr,val){var chip=document.createElement('div');chip.className='chip';chip.innerHTML=label+' <span class="chip-x" data-r="'+attr+'" data-v="'+val+'">&times;</span>';c.appendChild(chip);}activeNeighborhoods.forEach(function(n){add(n,'neighborhood',n);});activeDealTags.forEach(function(t){add(t,'deal',t);});activeVibeTags.forEach(function(t){add(t,'vibe',t);});c.querySelectorAll('[data-r]').forEach(function(x){x.addEventListener('click',function(e){e.stopPropagation();var attr=x.dataset.r,val=x.dataset.v;if(attr==='neighborhood'){activeNeighborhoods.delete(val);syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');updateBadge('badge-area',activeNeighborhoods.size,'panel-area');}if(attr==='deal'){activeDealTags.delete(val);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');}if(attr==='vibe'){activeVibeTags.delete(val);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');}render();});});}
 
 // ── RENDER ─────────────────────────────────────────────────
 function render(){
