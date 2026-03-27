@@ -908,8 +908,8 @@ function updateFilterSummary(){
   var compactParts = [];
   if(activeDays === 'today'){
     compactParts.push(todayFull().substring(0,3));
-  } else if(activeDays instanceof Set){
-    compactParts.push([...activeDays].join(' · '));
+  } else {
+    compactParts.push(activeDays);
   }
   if(activeTime === 'pick'){
     compactParts.push(fmtSlider(sliderValue));
@@ -1279,8 +1279,8 @@ function buildDealPanel(){var c=document.getElementById('deal-pills');var all=[.
 function buildVibePanel(){var c=document.getElementById('vibe-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.vibe;}))].sort();if(!all.length)return;var ab=mkPill('All','vibe','all');ab.classList.add('tag-active');c.appendChild(ab);all.forEach(function(t){c.appendChild(mkPill(t,'vibe',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-vibe]');if(!btn)return;var val=btn.dataset.vibe;if(val==='all')activeVibeTags.clear();else toggleSet(activeVibeTags,val);syncPills(c,'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});}
 function setupCollapsibles(){document.addEventListener('click',function(e){if(!e.target.closest('.collapsible-toggle')&&!e.target.closest('.collapsible-panel')&&!e.target.closest('.city-toggle')&&!e.target.closest('.qv-sheet'))closeAllPanels();});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.addEventListener('click',function(e){e.stopPropagation();var pid=t.dataset.panel,panel=document.getElementById(pid);var isOpen=panel.classList.contains('open');closeAllPanels();if(!isOpen){panel.classList.add('open');t.classList.add('open');}});});}
 function closeAllPanels(){document.querySelectorAll('.collapsible-panel').forEach(function(p){p.classList.remove('open');});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.classList.remove('open');});}
-function setupDayFilters(){document.getElementById('day-filters').addEventListener('click',function(e){var btn=e.target.closest('[data-day]');if(!btn)return;var day=btn.dataset.day;if(day==='today'){activeDays='today';}else{if(activeDays==='today')activeDays=new Set();if(activeDays.has(day))activeDays.delete(day);else activeDays.add(day);if(activeDays.size===0)activeDays='today';}syncDayPills();render();});}
-function syncDayPills(){document.querySelectorAll('[data-day]').forEach(function(btn){var day=btn.dataset.day;btn.classList.remove('today-active','day-active');if(day==='today'&&activeDays==='today')btn.classList.add('today-active');else if(day!=='today'&&activeDays!=='today'&&activeDays.has(day))btn.classList.add('day-active');});}
+function setupDayFilters(){document.getElementById('day-filters').addEventListener('click',function(e){var btn=e.target.closest('[data-day]');if(!btn)return;var day=btn.dataset.day;if(day==='today'||activeDays===day){activeDays='today';}else{activeDays=day;}syncDayPills();render();});}
+function syncDayPills(){document.querySelectorAll('[data-day]').forEach(function(btn){var day=btn.dataset.day;btn.classList.remove('today-active','day-active');if(day==='today'&&activeDays==='today')btn.classList.add('today-active');else if(day!=='today'&&activeDays===day)btn.classList.add('day-active');});}
 function setupTimePills(){
   document.getElementById('time-pills').addEventListener('click',function(e){
     var btn=e.target.closest('[data-time]');
@@ -1335,7 +1335,7 @@ function applyHeaderTheme(){var bl=getTimeBlend();var mO,sO,eO;if(bl.morning>0&&
 function venueMatchesDay(v){
   return v.sessions.some(function(s){
     if(activeDays==='today')return s.days.indexOf(todayAbbr())>=0;
-    return [...activeDays].some(function(d){return s.days.indexOf(d)>=0;});
+    return s.days.indexOf(activeDays)>=0;
   });
 }
 function venueMatchesTime(v){
@@ -1354,7 +1354,7 @@ function venueMatchesSearch(v){if(!searchQuery)return true;var q=searchQuery.toL
 function filteredVenues(){return VENUES.filter(function(v){return venueMatchesDay(v)&&venueMatchesTime(v)&&venueMatchesNeighborhood(v)&&venueMatchesDealTags(v)&&venueMatchesVibe(v)&&venueMatchesSearch(v);});}
 
 function buildHeading(){
-  var dayText=activeDays==='today'?('on '+todayFull()):('on '+[...activeDays].join(' · '));
+  var dayText=activeDays==='today'?('on '+todayFull()):('on '+DAY_FULL[DAY_NAMES.indexOf(activeDays)]);
   document.getElementById('results-heading').innerHTML='<span class="h-label">Happy Hours</span><span class="h-day"> '+dayText+'</span>';
   var timeText='';
   if(activeTime==='pick')timeText=' at '+fmtSlider(sliderValue);
@@ -1363,7 +1363,7 @@ function buildHeading(){
   var st=document.getElementById('summary-text');
   if(st)st.textContent=timeText;
 }
-function updateComboWarning(){var el=document.getElementById('combo-warning'),txt=document.getElementById('combo-text');var msg='';if(activeTime==='now'){var today=todayAbbr();if(activeDays!=='today'&&activeDays instanceof Set&&!activeDays.has(today))msg='"Happening Now" shows what\'s open at this moment - today is '+todayFull()+'. You may see zero results for other days.';}txt.textContent=msg;el.style.display=msg?'block':'none';}
+function updateComboWarning(){var el=document.getElementById('combo-warning'),txt=document.getElementById('combo-text');var msg='';if(activeTime==='now'){var today=todayAbbr();if(activeDays!=='today'&&activeDays!==today)msg='"Happening Now" shows what\'s open at this moment - today is '+todayFull()+'. You may see zero results for other days.';}txt.textContent=msg;el.style.display=msg?'block':'none';}
 function renderChips(){var c=document.getElementById('active-chips');c.innerHTML='';function add(label,attr,val){var chip=document.createElement('div');chip.className='chip';chip.innerHTML=label+' <span class="chip-x" data-r="'+attr+'" data-v="'+val+'">&times;</span>';c.appendChild(chip);}activeNeighborhoods.forEach(function(n){add(n,'neighborhood',n);});activeDealTags.forEach(function(t){add(t,'deal',t);});activeVibeTags.forEach(function(t){add(t,'vibe',t);});c.querySelectorAll('[data-r]').forEach(function(x){x.addEventListener('click',function(e){e.stopPropagation();var attr=x.dataset.r,val=x.dataset.v;if(attr==='neighborhood'){activeNeighborhoods.delete(val);syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');updateBadge('badge-area',activeNeighborhoods.size,'panel-area');}if(attr==='deal'){activeDealTags.delete(val);syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');}if(attr==='vibe'){activeVibeTags.delete(val);syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');}render();});});}
 
 // ── RENDER ─────────────────────────────────────────────────
@@ -1389,7 +1389,7 @@ function renderCards(venues){
   grid.innerHTML=sorted.map(function(v,i){
     var displaySessions=v.sessions.filter(function(s){
       if(activeDays==='today')return s.days.indexOf(todayAbbr())>=0;
-      return [...activeDays].some(function(d){return s.days.indexOf(d)>=0;});
+      return s.days.indexOf(activeDays)>=0;
     });
     if(!displaySessions.length)displaySessions=v.sessions;
     var sessionsHTML=(function(){
