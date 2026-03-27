@@ -365,6 +365,7 @@
     .venue-name { font-family:'Playfair Display',serif; font-size:1.12rem; font-weight:600; color:var(--ink); line-height:1.25; }
     .status-badge { flex-shrink:0; font-size:.63rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:.22rem .65rem; border-radius:99px; white-space:nowrap; transition:background-color 1s ease,color 1s ease; }
     .status-badge.soon { background:#FEF3C7; color:#92400E; }
+    .status-badge.ended { background:#ECECEC; color:#888; }
     .neighborhood { margin-top:.3rem; font-size:.74rem; font-weight:500; color:var(--ink-lt); }
     .neighborhood::before { content:'📍 '; }
     .hours-row { margin-top:.8rem; display:flex; align-items:baseline; gap:.45rem; flex-wrap:wrap; }
@@ -1202,8 +1203,10 @@ function getBadgeState(v){
   var cityTime=new Date(d.toLocaleString('en-US',{timeZone:CITY_TIMEZONE}));
   var nowMins=cityTime.getHours()*60+cityTime.getMinutes();
   var best={type:'none'};
+  var hasTodaySessions=false;
   v.sessions.forEach(function(s){
     if(s.days.indexOf(today)<0)return;
+    hasTodaySessions=true;
     var startMins=Math.floor(s.startTime/100)*60+(s.startTime%100);
     var endMins=Math.floor(s.endTime/100)*60+(s.endTime%100);
     var cross=s.endTime<s.startTime,minsLeft=null;
@@ -1213,11 +1216,10 @@ function getBadgeState(v){
       if(best.type!=='ending'||minsLeft<best.minsLeft)best={type:'ending',minsLeft:minsLeft};
       return;
     }
-    var mu=startMins-nowMins;if(mu<0)mu+=1440;
-    if(mu<=30&&mu>0){
-      if(best.type==='none'||best.type==='soon'&&mu<best.minsLeft)best={type:'soon',minsLeft:mu};
-    }
+    var mu=startMins-nowMins;
+    if(mu>0&&(best.type==='none'||best.type==='soon'&&mu<best.minsLeft))best={type:'soon',minsLeft:mu};
   });
+  if(best.type==='none'&&hasTodaySessions)return{type:'ended'};
   return best;
 }
 function badgeColors(n){
@@ -1229,7 +1231,7 @@ function badgeColors(n){
   return{bg:R,color:RT};
 }
 function fmtMins(n){if(n<60)return n+' '+(n===1?'min':'mins');var h=Math.floor(n/60),m=n%60;return h+' '+(h===1?'hr':'hrs')+(m>0?' '+m+' '+(m===1?'min':'mins'):'');}
-function buildBadgeHTML(v){var s=getBadgeState(v);if(s.type==='none')return'';if(s.type==='soon')return '<span class="status-badge soon">Starts in '+fmtMins(s.minsLeft)+'</span>';var c=badgeColors(s.minsLeft);return '<span class="status-badge" style="background:'+c.bg+';color:'+c.color+'">Ends in '+fmtMins(s.minsLeft)+'</span>';}
+function buildBadgeHTML(v){if(activeDays!=='today'&&activeDays!==todayAbbr())return'';var s=getBadgeState(v);if(s.type==='none')return'';if(s.type==='ended')return'<span class="status-badge ended">Ended today</span>';if(s.type==='soon')return'<span class="status-badge soon">Starts in '+fmtMins(s.minsLeft)+'</span>';var c=badgeColors(s.minsLeft);return'<span class="status-badge" style="background:'+c.bg+';color:'+c.color+'">Ends in '+fmtMins(s.minsLeft)+'</span>';}
 function updateAllBadges(){document.querySelectorAll('.card').forEach(function(card){var v=VENUES.find(function(x){return x.name===card.dataset.name;});if(!v)return;var slot=card.querySelector('.badge-slot');if(slot)slot.innerHTML=buildBadgeHTML(v);});}
 
 // ── HELPERS ────────────────────────────────────────────────
@@ -1385,8 +1387,14 @@ if(rc)rc.textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':
 
 function renderCards(venues){
   var grid=document.getElementById('grid');
-  if(!venues.length){grid.innerHTML='<div class="empty"><div class="empty-icon">&#127378;</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';return;}
-  var sorted=[...venues].sort(function(a,b){var sa=getBadgeState(a),sb=getBadgeState(b);var rank=function(s){return s.type==='ending'?0:s.type==='soon'?1:2;};if(rank(sa)!==rank(sb))return rank(sa)-rank(sb);if(sa.type==='ending'&&sb.type==='ending')return sb.minsLeft-sa.minsLeft;return 0;});
+  if(!venues.length){
+    var isToday=activeDays==='today'||activeDays===todayAbbr();
+    var allEnded=isToday&&VENUES.filter(venueMatchesDay).every(function(v){return getBadgeState(v).type==='ended';});
+    if(allEnded){grid.innerHTML='<div class="empty"><div class="empty-icon">&#127867;</div><h3>Happy hours have wrapped up for the day</h3><p>Check back tomorrow — or try a different day or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';}
+    else{grid.innerHTML='<div class="empty"><div class="empty-icon">&#127378;</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';}
+    return;
+  }
+  var sorted=[...venues].sort(function(a,b){var sa=getBadgeState(a),sb=getBadgeState(b);var rank=function(s){return s.type==='ending'?0:s.type==='soon'?1:s.type==='ended'?3:2;};if(rank(sa)!==rank(sb))return rank(sa)-rank(sb);if(sa.type==='ending'&&sb.type==='ending')return sb.minsLeft-sa.minsLeft;if(sa.type==='soon'&&sb.type==='soon')return sa.minsLeft-sb.minsLeft;return 0;});
   grid.innerHTML=sorted.map(function(v,i){
     var displaySessions=v.sessions.filter(function(s){
       if(activeDays==='today')return s.days.indexOf(todayAbbr())>=0;
