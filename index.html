@@ -598,7 +598,7 @@
       <button class="pill" id="tpill-now" data-time="now">Happening Now</button>
       <button class="pill" id="tpill-morning" data-time="morning">Morning</button>
       <button class="pill" id="tpill-lunch" data-time="lunch">Lunch</button>
-      <button class="pill pill-pick pick-active" id="tpill-pick" data-time="pick">← Pick a time →</button>
+      <button class="pill pill-pick" id="tpill-pick" data-time="pick">← Pick a time →</button>
       <button class="pill" id="tpill-late" data-time="late">Late Night</button>
       </div>
     </div>
@@ -842,14 +842,13 @@ function init(){
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
   new ResizeObserver(function(){updateContentHeight();}).observe(document.getElementById('filters-wrap'));
-  render();
   setInterval(updateAllBadges,60000);
   setInterval(applyHeaderTheme,60000);
   var header = document.querySelector('header');
   var timebar = document.querySelector('.time-bar');
   var fw = document.getElementById('filters-wrap');
-  filterBarFullHeight = (header ? header.offsetHeight : 0) + 
-                        (timebar ? timebar.offsetHeight : 0) + 
+  filterBarFullHeight = (header ? header.offsetHeight : 0) +
+                        (timebar ? timebar.offsetHeight : 0) +
                         (fw ? fw.offsetHeight : 0);
   var isOpenNow = VENUES.some(function(v){
     return v.sessions.some(function(s){return isOpenNowRange(s.startTime, s.endTime);});
