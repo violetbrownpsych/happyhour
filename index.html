@@ -30,8 +30,8 @@
       background-image:
         linear-gradient(to right, rgba(44,24,8,.80) 0%, transparent 10%, transparent 90%, rgba(44,24,8,.80) 100%),
         radial-gradient(ellipse 100% 80% at 50% 40%, rgba(0,0,0,.05) 0%, rgba(0,0,0,.52) 100%),
-        url('wood-background2-seamless.jpg');
-      background-size: auto, auto, 560px;
+        url('wood-background-seamless.jpg');
+      background-size: auto, auto, 1423px;
       background-repeat: no-repeat, no-repeat, repeat;
     }
     body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.42;
@@ -423,8 +423,8 @@
         inset 0 0 60px rgba(32,12,1,.26),
         5px 11px 32px rgba(0,0,0,.65);
 
-      filter: var(--torn-fn) drop-shadow(5px 11px 22px rgba(0,0,0,0.65));
-      clip-path: inset(0% -50% -50% -50%); /* THIS IS THE MOST IMPORTANT CHANGE */
+      filter: var(--torn-fn) drop-shadow(5px 11px 22px rgba(0,0,0,0.35));
+      clip-path: inset(-8% -50% -50% -50%);
     }
     /* stacked papers: real sibling divs with explicit bg-colors from JS, grain texture matches card-bg */
     .card-stack-1, .card-stack-2 {
@@ -439,20 +439,19 @@
     }
     .card-stack-1 {
       z-index:-2;
-      transform:rotate(-5.2deg) translate(-11px, 9px);
-      filter: saturate(.6) var(--torn-fn) drop-shadow(3px 8px 16px rgba(0,0,0,.45));
+      transform:rotate(-4deg) translate(-12px, 7px);
+      filter: brightness(.95) var(--torn-fn) drop-shadow(2px 5px 10px rgba(0,0,0,.25));
     }
     .card-stack-2 {
       z-index:-3;
-      transform:rotate(4.1deg) translate(13px, 14px);
-      filter: saturate(.45) var(--torn-fn) drop-shadow(2px 5px 10px rgba(0,0,0,.35));
+      transform:rotate(5deg) translate(-5px, 3px);
+      filter: brightness(.92) var(--torn-fn) drop-shadow(2px 4px 9px rgba(0,0,0,.20));
     }
     /* push pin — gritty metallic */
     .card-pin {
-      position:absolute; top:-14px; left:50%; transform:translateX(-50%);
-      width:20px; height:20px; border-radius:50%; z-index:10; pointer-events:none;
-      background:radial-gradient(circle at 30% 28%, #b4b4aa 0%, #767668 28%, #3e3e36 56%, #1e1e18 82%, #111110 100%);
-      box-shadow:2px 4px 9px rgba(0,0,0,.92), 0 0 0 1px rgba(0,0,0,.5), inset 0 1px 2px rgba(190,185,140,.18);
+      position:absolute; top:-3px; left:50%; transform:translateX(-50%);
+      width:22px; height:auto; z-index:10; pointer-events:none;
+      filter:drop-shadow(1px 3px 4px rgba(0,0,0,.7));
     }
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
     .card-body { padding:1.2rem 1.3rem; flex:1; }
@@ -1714,13 +1713,13 @@ function renderCards(venues){
     var siteLink=v.website?'<a class="card-link" href="'+v.website+'" target="_blank" rel="noopener">Website &#8599;</a>':'';
     var verifiedHTML=v.verified?'<span class="card-verified">Verified '+fmtVerifiedDate(v.verified)+'</span>':'';
     var cardColor = getAccentColor(v);
-    var stackColor1 = darkenColor(cardColor, 0.99);
-    var stackColor2 = darkenColor(cardColor, 0.97);
+    var stackColor1 = darkenColor(cardColor, 1.0);
+    var stackColor2 = darkenColor(cardColor, 1.0);
     return '<div class="card" data-name="'+v.name+'" style="animation-delay:'+(i*.04)+'s">'+
       '<div class="card-bg" style="background-color:'+cardColor+'"></div>'+
       '<div class="card-stack-1" style="background-color:'+stackColor1+'"></div>'+
       '<div class="card-stack-2" style="background-color:'+stackColor2+'"></div>'+
-      '<div class="card-pin"></div>'+
+      '<img class="card-pin" src="pin-image.png" alt="" />'+
       '<div class="card-body">'+
         '<div class="card-header"><div class="venue-name">'+v.name+'</div><div class="badge-slot">'+buildBadgeHTML(v)+'</div></div>'+
         '<div class="neighborhood">'+v.neighborhoods[0]+', '+v.city+'</div>'+

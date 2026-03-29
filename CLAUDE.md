@@ -22,14 +22,17 @@ No automated tests. Test by opening `index.html` in a browser at localhost. Key 
 
 ## File structure
 ```
-index.html        — all CSS, HTML, and JS (single file, ~1600 lines)
-happyhours.csv    — venue data (pipe-delimited multi-value fields)
-sw.js             — service worker
-manifest.json     — PWA manifest
-icon-192.png      — app icon
-icon-512.png      — app icon (large)
-tos.html          — terms of service page
-handoff.md        — design handoff notes for current redesign session
+index.html                   — all CSS, HTML, and JS (single file, ~1800 lines)
+happyhours.csv               — venue data (pipe-delimited multi-value fields)
+sw.js                        — service worker
+manifest.json                — PWA manifest
+icon-192.png                 — app icon
+icon-512.png                 — app icon (large)
+tos.html                     — terms of service page
+handoff.md                   — design handoff notes for current redesign session
+wood-background.png          — original wood photo (source, not used directly)
+wood-background-seamless.jpg — vertically seamless tiled version used as body background
+pin-image.png                — brass thumbtack photo (transparent bg) used as card pin
 ```
 
 ## Coding style
@@ -61,9 +64,16 @@ handoff.md        — design handoff notes for current redesign session
 - Card grid uses CSS Grid with `auto-fill, minmax(290px, 1fr)`.
 - Pill active states use no `box-shadow` (flat) to distinguish from inactive (subtle shadow).
 
+### Fonts
+- **Bebas Neue** — `POURS` header, card `.venue-name`, QV `.qv-name`
+- **Special Elite** — card `.deal-item`, QV `.qv-deal-item` (typewriter feel)
+- **Archivo Narrow** — `.status-badge`, `.neighborhood`, `.hours-text`, `.days-text`, `.card-link`, `.card-verified`, tags, QV hours/days/neighborhood
+- **DM Sans** — UI chrome, filter bar, pills, body text
+- **Playfair Display** — results heading
+
 ### Key CSS variables (current dark/noir theme)
 ```css
---bg: #111111              /* page background */
+--bg: #111111              /* defined but body bg is now a wood image — see body styles */
 --bg-filter: #1A1A1A       /* filter bar */
 --bg-elevated: #242424     /* dropdown panels */
 --cream: #FAF6EF           /* header bg, card-adjacent light surfaces */
@@ -74,6 +84,9 @@ handoff.md        — design handoff notes for current redesign session
 --filter-dim:  rgba(245,240,232,.42)   /* dim text on dark filter bar */
 --filter-border: rgba(245,240,232,.11) /* borders on dark filter bar */
 ```
+
+### Body background
+Wood photo (`wood-background-seamless.jpg`) tiled at 1423px, with a left/right edge fade and radial vignette gradient layered on top. `background-color: #2C1808` is the fallback. Do not use `background-attachment: fixed` — causes iOS issues and makes cards feel detached from the wood.
 
 ### CSV data format
 ```
