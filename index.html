@@ -19,7 +19,7 @@
       --radius:14px; --header-accent:#D4953A; --timebar-bg:#060f1e;
       --deal-tag-bg:#FDF0E8; --deal-tag-border:#E8C4A0; --deal-tag-text:#7A3A18;
       --vibe-tag-bg:#EAF0E4; --vibe-tag-border:#B8CCA8; --vibe-tag-text:#2E4A22;
-      --bg:#060f1e; --bg-filter:#0d1a00; --bg-elevated:#182e00;
+      --bg:#060f1e; --bg-filter:#0d1e36; --bg-elevated:#122540;
       --filter-text:rgba(245,240,232,.82); --filter-dim:rgba(245,240,232,.62); --filter-border:rgba(245,240,232,.11);
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -376,7 +376,7 @@
     }
     .venue-name { font-family:'Anton',sans-serif; font-size:1.45rem; font-weight:400; color:var(--ink); line-height:1.05; letter-spacing:.02em; }
     .status-badge { flex-shrink:0; font-size:.63rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:.22rem .65rem; border-radius:99px; white-space:nowrap; transition:background-color 1s ease,color 1s ease; }
-    .status-badge.soon { background:rgba(0,0,0,.12); color:rgba(0,0,0,.7); }
+    .status-badge.soon { background:#FEF3C7; color:#92400E; }
     .status-badge.ended { background:rgba(0,0,0,.1); color:rgba(0,0,0,.4); }
     [data-time="now"].pill-now-disabled { opacity:.35; cursor:not-allowed; pointer-events:none; }
     .neighborhood { margin-top:.2rem; font-size:.65rem; font-family:'DM Sans',sans-serif; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--sienna); }
@@ -453,7 +453,7 @@
     .tip-link { color:#6ea900; font-weight:600; text-decoration:none; }
     .tip-link:hover { text-decoration:underline; }
 
-    footer { background:#0d1a00; color:rgba(250,246,239,.6); text-align:center; padding:2rem 1.5rem 5rem; font-size:.8rem; letter-spacing:.03em; line-height:1.9; }
+    footer { background:#0d1e36; color:rgba(250,246,239,.6); text-align:center; padding:2rem 1.5rem 5rem; font-size:.8rem; letter-spacing:.03em; line-height:1.9; }
     footer a { color:var(--cream); text-decoration:none; font-weight:500; }
     footer a:hover { color:#6ea900; text-decoration:underline; }
     #footer-home { color:var(--cream); font-weight:700; font-family:'DM Sans',sans-serif; font-style:normal; text-decoration:none; }
@@ -1234,9 +1234,11 @@ function getBadgeState(v){
   return best;
 }
 function badgeColors(n){
-  if(n>25)return{bg:'rgba(0,0,0,.12)',color:'rgba(0,0,0,.65)'};
-  if(n>5)return{bg:'rgba(0,0,0,.18)',color:'rgba(0,0,0,.75)'};
-  return{bg:'rgba(0,0,0,.28)',color:'rgba(0,0,0,.85)'};
+  var G='#D6EDD0',GT='#2A6020',A='#FEF3C7',AT='#92400E',R='#FECACA',RT='#7F1D1D';
+  function lc(c1,c2,t){var h=function(s){return[parseInt(s.slice(1,3),16),parseInt(s.slice(3,5),16),parseInt(s.slice(5,7),16)];};var a=h(c1),b=h(c2);return'rgb('+Math.round(a[0]+(b[0]-a[0])*t)+','+Math.round(a[1]+(b[1]-a[1])*t)+','+Math.round(a[2]+(b[2]-a[2])*t)+')';}
+  if(n>15){var t=(25-n)/10;return{bg:lc(G,A,t),color:lc(GT,AT,t)};}
+  if(n>5){var t2=(15-n)/10;return{bg:lc(A,R,t2),color:lc(AT,RT,t2)};}
+  return{bg:R,color:RT};
 }
 function fmtMins(n){if(n<60)return n+' '+(n===1?'min':'mins');var h=Math.floor(n/60),m=n%60;return h+' '+(h===1?'hr':'hrs')+(m>0?' '+m+' '+(m===1?'min':'mins'):'');}
 function buildBadgeHTML(v){if(activeDays!=='today'&&activeDays!==todayAbbr())return'';var s=getBadgeState(v);if(s.type==='none')return'';if(s.type==='ended')return'<span class="status-badge ended">Ended today</span>';if(s.type==='soon')return'<span class="status-badge soon">Starts in '+fmtMins(s.minsLeft)+'</span>';var c=badgeColors(s.minsLeft);return'<span class="status-badge" style="background:'+c.bg+';color:'+c.color+'">Ends in '+fmtMins(s.minsLeft)+'</span>';}
