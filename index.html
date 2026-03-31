@@ -19,7 +19,7 @@
       --radius:14px; --header-accent:#D4953A; --timebar-bg:#060f1e;
       --deal-tag-bg:#FDF0E8; --deal-tag-border:#E8C4A0; --deal-tag-text:#7A3A18;
       --vibe-tag-bg:#EAF0E4; --vibe-tag-border:#B8CCA8; --vibe-tag-text:#2E4A22;
-      --bg:#060f1e; --bg-filter:#0d1e36; --bg-elevated:#122540;
+      --bg:#060f1e; --bg-filter:#142848; --bg-elevated:#1a3255;
       --filter-text:rgba(245,240,232,.82); --filter-dim:rgba(245,240,232,.62); --filter-border:rgba(245,240,232,.11);
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -362,7 +362,7 @@
     .grid { padding:0 1.5rem 5rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:1.2rem; margin-top:.5rem; }
     @media (min-width:900px) { .content-area.map-active .grid { grid-template-columns:1fr; padding:.5rem 1rem 5rem; } }
     .card { background:var(--cream); border-radius:var(--radius); border:none; overflow:hidden; box-shadow:0 2px 14px var(--shadow); transition:transform .2s ease,box-shadow .2s ease; display:flex; flex-direction:column; animation:fadeUp .35s ease both; cursor:pointer; }
-    .card-accent { height:0; flex-shrink:0; }
+    .card-accent { height:5px; flex-shrink:0; }
     .card:hover { transform:translateY(-3px); box-shadow:0 8px 28px var(--shadow); }
     .card.map-highlighted { border-color:rgba(0,0,0,.5) !important; box-shadow:0 0 0 2px rgba(0,0,0,.4),0 8px 28px var(--shadow) !important; }
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
@@ -454,7 +454,7 @@
     .tip-link { color:#6ea900; font-weight:600; text-decoration:none; }
     .tip-link:hover { text-decoration:underline; }
 
-    footer { background:#0d1e36; color:rgba(250,246,239,.6); text-align:center; padding:2rem 1.5rem 5rem; font-size:.8rem; letter-spacing:.03em; line-height:1.9; }
+    footer { background:#142848; color:rgba(250,246,239,.6); text-align:center; padding:2rem 1.5rem 5rem; font-size:.8rem; letter-spacing:.03em; line-height:1.9; }
     footer a { color:var(--cream); text-decoration:none; font-weight:500; }
     footer a:hover { color:#6ea900; text-decoration:underline; }
     #footer-home { color:var(--cream); font-weight:700; font-family:'DM Sans',sans-serif; font-style:normal; text-decoration:none; }
