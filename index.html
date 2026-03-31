@@ -234,6 +234,7 @@
     .collapsible-toggle.has-active { color:var(--sienna); }
     .collapsible-toggle.open { background:rgba(245,240,232,.10); }
     .toggle-chevron { font-size:.58rem; transition:transform .2s; display:inline-block; opacity:.55; }
+    .mobile-spot-count { display:none; }
     .collapsible-toggle.open .toggle-chevron { transform:rotate(180deg); }
     .active-badge { background:var(--sienna); color:#fff; border-radius:99px; padding:.07rem .42rem; font-size:.62rem; font-weight:700; }
     .collapsible + .collapsible .collapsible-toggle::before { content:''; position:absolute; left:0; top:28%; bottom:28%; width:1px; background:var(--filter-border); }
@@ -361,7 +362,7 @@
     .grid { padding:0 1.5rem 5rem; display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:1.2rem; margin-top:.5rem; }
     @media (min-width:900px) { .content-area.map-active .grid { grid-template-columns:1fr; padding:.5rem 1rem 5rem; } }
     .card { background:var(--cream); border-radius:var(--radius); border:none; overflow:hidden; box-shadow:0 2px 14px var(--shadow); transition:transform .2s ease,box-shadow .2s ease; display:flex; flex-direction:column; animation:fadeUp .35s ease both; cursor:pointer; }
-    .card-accent { height:5px; flex-shrink:0; }
+    .card-accent { height:0; flex-shrink:0; }
     .card:hover { transform:translateY(-3px); box-shadow:0 8px 28px var(--shadow); }
     .card.map-highlighted { border-color:rgba(0,0,0,.5) !important; box-shadow:0 0 0 2px rgba(0,0,0,.4),0 8px 28px var(--shadow) !important; }
     @keyframes fadeUp { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
@@ -542,6 +543,8 @@
         font-size: .8rem !important;
       }
       .expand-prefix { display: none; }
+      .toggle-chevron { font-size:.95rem; opacity:.7; }
+      .mobile-spot-count { display:flex; align-items:center; margin-left:auto; padding-right:1.5rem; font-size:.72rem; font-weight:600; letter-spacing:.06em; color:var(--filter-dim); white-space:nowrap; }
     }
   </style>
 </head>
@@ -627,6 +630,7 @@
       <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-area">Neighborhood <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-area" style="display:none"></span></button></div>
       <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-deals">Deals <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-deals" style="display:none"></span></button></div>
       <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-vibe">Vibe <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-vibe" style="display:none"></span></button></div>
+      <span class="mobile-spot-count" id="mobile-spot-count"></span>
     </div>
     <div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
     <div class="collapsible-panel" id="panel-deals"><div class="collapsible-panel-inner" id="deal-pills"></div></div>
@@ -1388,7 +1392,9 @@ function render(){
   var venues=filteredVenues();
   buildHeading();updateComboWarning();renderChips();updateFilterSummary();
   var rc=document.getElementById('results-count');
-if(rc)rc.textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'No spots found';
+  if(rc)rc.textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'No spots found';
+  var msc=document.getElementById('mobile-spot-count');
+  if(msc)msc.textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'0 spots';
   if(mapMode){
     updateMapMarkers(venues);
     var bounds=leafletMap&&leafletMap.getBounds();
