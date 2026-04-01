@@ -64,9 +64,16 @@ Single-page happy hour directory for Minneapolis/St. Paul. All code lives in `in
 Plain `#060f1e` (very dark navy-black). No image or texture.
 
 ### Header
-**Day (before 7pm):** Cream `#FAF6EF`. `POURS` wordmark in Bebas Neue (~7rem), color `#060f1e`. "TWIN CITIES" eyebrow in crimson `#BF2338`. Tagline: "Happy hours, hand picked." in dim dark brown.
 
-**Late night (7pm → 8pm transition, fully at 8pm):** Header background lerps from cream → very dark warm charcoal `#1a0d0a`. "POURS" text lerps from dark navy → cream. Neon glow text-shadow builds on "POURS": warm orange-white tight core, crimson mid bloom, soft crimson outer halo. "TWIN CITIES" eyebrow stays crimson but gains a subtle crimson text-shadow glow. Tagline color lerps to stay readable on dark background. Transition is driven by `applyHeaderTheme()` running on load and every 60 seconds.
+Three time-of-day states, all driven by `applyHeaderTheme()` (runs on load and every 60s). Transitions are smooth lerps over 1-hour windows. Test with URL params: `?theme=morning`, `?theme=day`, `?theme=night`.
+
+**Standard / day (7am–noon, noon–7pm):** Cream `#FAF6EF` background. `POURS` in dark navy `#060f1e`. "TWIN CITIES" eyebrow in crimson `#BF2338`. Tagline in dim dark brown. No glow.
+
+**Morning (7am–11am, transitioning in 6–7am, out 11am–noon):** Cream `#FAF6EF` background (same as day). `POURS` in dark navy `#060f1e`. Blue-dawn text-shadow glow builds behind the letters — ice white tight core, cornflower mid bloom, deeper sky blue outer wash, wide pre-dawn haze. "TWIN CITIES" gains a soft blue glow. Feels like early light through a window.
+
+**Night (fully at 8pm, transitioning in 7–8pm, out 6–7am):** Header background lerps from cream → very dark warm charcoal `#1a0d0a`. `POURS` text lerps dark navy → cream. Neon text-shadow: warm orange-white tight core, crimson mid bloom, crimson outer halo. "TWIN CITIES" gains a crimson glow. Tagline lerps to stay readable on dark bg.
+
+**Night → Morning transition (6–7am):** Both crimson (fading) and blue (rising) shadows apply simultaneously — briefly overlaps as a warm purple-violet, like a real sunrise color shift.
 
 **Dev theme toggle:** Append `?theme=night`, `?theme=morning`, or `?theme=day` to any URL to force a time-of-day state for testing.
 

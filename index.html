@@ -7,7 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" type="image/png" href="/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
   <meta name="theme-color" content="#181512" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -153,7 +154,10 @@
 
     /* Mobile map handle */
     .filter-collapse-btn {
-      text-align: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: .6rem .3rem;
       font-size: .8rem;
       font-weight: 600;
@@ -234,11 +238,11 @@
     .collapsible-toggle.has-active { color:var(--sienna); }
     .collapsible-toggle.open { background:rgba(245,240,232,.10); }
     .toggle-chevron { font-size:.58rem; transition:transform .2s; display:inline-block; opacity:.55; }
-    .mobile-spot-count { display:flex; align-items:center; margin-left:auto; padding-right:1.5rem; font-size:.72rem; font-weight:600; letter-spacing:.06em; color:var(--filter-dim); white-space:nowrap; }
+    .collapse-spot-count { position:absolute; left:1.5rem; top:50%; transform:translateY(-50%); font-size:.72rem; font-weight:600; letter-spacing:.06em; color:var(--filter-dim); white-space:nowrap; }
     .summary-spot-count { display:none; }
-    #filter-clear-btn { color:var(--sienna); cursor:pointer; font-size:.65rem; letter-spacing:.1em; margin-left:.9rem; display:inline-flex; align-items:center; gap:.28rem; vertical-align:middle; }
+    #filter-clear-btn { position:absolute; right:1.5rem; top:50%; transform:translateY(-50%); color:var(--sienna); cursor:pointer; font-size:.65rem; letter-spacing:.1em; display:inline-flex; align-items:center; gap:.28rem; }
     #filter-clear-btn:hover { opacity:.75; }
-    .clear-x { display:inline-flex; align-items:center; justify-content:center; border:1px solid currentColor; border-radius:3px; width:13px; height:13px; font-size:9px; flex-shrink:0; }
+    .clear-x { display:inline-flex; align-items:center; justify-content:center; border:1px solid currentColor; border-radius:3px; width:13px; height:13px; font-size:9px; flex-shrink:0; padding:0 0 1px 1px; }
     .collapsible-toggle.open .toggle-chevron { transform:rotate(180deg); }
     .active-badge { background:var(--sienna); color:#fff; border-radius:99px; padding:.07rem .42rem; font-size:.62rem; font-weight:700; }
     .collapsible + .collapsible .collapsible-toggle::before { content:''; position:absolute; left:0; top:28%; bottom:28%; width:1px; background:var(--filter-border); }
@@ -550,7 +554,8 @@
       }
       .expand-prefix { display: none; }
       .toggle-chevron { font-size:.95rem; opacity:.7; }
-      .mobile-spot-count { display:flex; align-items:center; margin-left:auto; padding-right:1.5rem; font-size:.72rem; font-weight:600; letter-spacing:.06em; color:var(--filter-dim); white-space:nowrap; }
+      .collapse-spot-count { left:1rem; }
+      #filter-clear-btn { right:1rem; }
     }
   </style>
 </head>
@@ -636,12 +641,11 @@
       <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-area">Neighborhood <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-area" style="display:none"></span></button></div>
       <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-deals">Deals <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-deals" style="display:none"></span></button></div>
       <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-vibe">Vibe <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-vibe" style="display:none"></span></button></div>
-      <span class="mobile-spot-count" id="mobile-spot-count"></span>
     </div>
     <div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
     <div class="collapsible-panel" id="panel-deals"><div class="collapsible-panel-inner" id="deal-pills"></div></div>
     <div class="collapsible-panel" id="panel-vibe"><div class="collapsible-panel-inner" id="vibe-pills"></div></div>
-    <div class="filter-collapse-btn" id="filter-collapse-btn"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg>Hide filters<span id="filter-clear-btn" style="display:none">Clear <span class="clear-x">&times;</span></span></div>
+    <div class="filter-collapse-btn" id="filter-collapse-btn"><span class="collapse-spot-count" id="mobile-spot-count"></span><span><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg>Hide filters</span><span id="filter-clear-btn" style="display:none">Clear <span class="clear-x">&times;</span></span></div>
   </div>
 </div>
 
@@ -1365,23 +1369,29 @@ function sliderTo24hr(val){var h=Math.floor(val),m=(val%1===0.5)?30:0;return h*1
 function updateBadge(bid,count,pid){var b=document.getElementById(bid),t=document.querySelector('[data-panel="'+pid+'"]');if(count>0){b.textContent=count;b.style.display='inline';if(t)t.classList.add('has-active');}else{b.style.display='none';if(t)t.classList.remove('has-active');}}
 
 // ── HEADER THEME ───────────────────────────────────────────
-function getTimeBlend(){var tp=new URLSearchParams(window.location.search).get('theme');if(tp==='night')return{morning:0,standard:0,evening:1};if(tp==='morning')return{morning:1,standard:0,evening:0};if(tp==='standard'||tp==='day')return{morning:0,standard:1,evening:0};var d=new Date(),mins=d.getHours()*60+d.getMinutes();var MS=360,ME=660,SS=720,SE=1140,ES=1200;if(mins<MS)return{morning:0,standard:0,evening:1};else if(mins<ME)return{morning:1,standard:0,evening:0};else if(mins<SS){var t=(mins-ME)/(SS-ME);return{morning:1-t,standard:t,evening:0};}else if(mins<SE)return{morning:0,standard:1,evening:0};else if(mins<ES){var t2=(mins-SE)/(ES-SE);return{morning:0,standard:1-t2,evening:t2};}else return{morning:0,standard:0,evening:1};}
+function getTimeBlend(){var tp=new URLSearchParams(window.location.search).get('theme');if(tp==='night')return{morning:0,standard:0,evening:1};if(tp==='morning')return{morning:1,standard:0,evening:0};if(tp==='standard'||tp==='day')return{morning:0,standard:1,evening:0};var d=new Date(),mins=d.getHours()*60+d.getMinutes();var MS=360,ME=420,SS=660,SE=720,ES=1140,EE=1200;if(mins<MS)return{morning:0,standard:0,evening:1};else if(mins<ME){var t=(mins-MS)/(ME-MS);return{morning:t,standard:0,evening:1-t};}else if(mins<SS)return{morning:1,standard:0,evening:0};else if(mins<SE){var t=(mins-SS)/(SE-SS);return{morning:1-t,standard:t,evening:0};}else if(mins<ES)return{morning:0,standard:1,evening:0};else if(mins<EE){var t=(mins-ES)/(EE-ES);return{morning:0,standard:1-t,evening:t};}else return{morning:0,standard:0,evening:1};}
 var HT={morning:{accent:'#FFE070',tbar:'#181512',d1:'#D05030',d1o:.16,d2:'#E8A820',d2o:.20},standard:{accent:'#D4953A',tbar:'#181512',d1:'#D4953A',d1o:.08,d2:'#E8C4B0',d2o:.12},evening:{accent:'#F0C070',tbar:'#181512',d1:'#7A3050',d1o:.15,d2:'#D4953A',d2o:.14}};
 function hexRgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
 function lerpHex(a,b,t){var r1=hexRgb(a),r2=hexRgb(b);return 'rgb('+Math.round(r1[0]+(r2[0]-r1[0])*t)+','+Math.round(r1[1]+(r2[1]-r1[1])*t)+','+Math.round(r1[2]+(r2[2]-r1[2])*t)+')';}
 function blendCol(cM,cS,cE,bl){if(bl.morning>0&&bl.standard>0)return lerpHex(cM,cS,bl.standard/(bl.morning+bl.standard));if(bl.standard>0&&bl.evening>0)return lerpHex(cS,cE,bl.evening/(bl.standard+bl.evening));return bl.morning>0?cM:bl.standard>0?cS:cE;}
 function applyHeaderTheme(){var bl=getTimeBlend();var mO,sO,eO;if(bl.morning>0&&bl.standard>0){mO=bl.morning;sO=1;eO=0;}else if(bl.standard>0&&bl.evening>0){mO=0;sO=bl.standard;eO=1;}else if(bl.morning===1){mO=1;sO=1;eO=0;}else if(bl.standard===1){mO=0;sO=1;eO=0;}else{mO=0;sO=0;eO=1;}document.getElementById('hbg-morning').style.opacity=mO;document.getElementById('hbg-standard').style.opacity=sO;document.getElementById('hbg-evening').style.opacity=eO;document.getElementById('hstars-morning').style.opacity=bl.morning;document.getElementById('hstars-evening').style.opacity=bl.evening;var acc=blendCol(HT.morning.accent,HT.standard.accent,HT.evening.accent,bl);var tbg=blendCol(HT.morning.tbar,HT.standard.tbar,HT.evening.tbar,bl);document.documentElement.style.setProperty('--header-accent',acc);document.documentElement.style.setProperty('--timebar-bg',tbg);var dom=bl.morning>=bl.standard&&bl.morning>=bl.evening?'morning':bl.standard>=bl.evening?'standard':'evening';var dt=HT[dom];var d1=document.getElementById('deco-1'),d2=document.getElementById('deco-2');d1.style.background=dt.d1;d1.style.opacity=dt.d1o;d2.style.background=dt.d2;d2.style.opacity=dt.d2o; document.querySelector('meta[name="theme-color"]').setAttribute('content', tbg);
-var eve=bl.evening;
+var eve=bl.evening;var mor=bl.morning;
 var hdrEl=document.querySelector('header');
 var h1El=document.querySelector('header h1');
 var tagEl=document.querySelector('header p.tagline');
 var ewEl=document.querySelector('.logo-eyebrow');
 hdrEl.style.background=lerpHex('#FAF6EF','#1a0d0a',eve);
 h1El.style.color=lerpHex('#060f1e','#FAF6EF',eve);
-if(eve<0.02){h1El.style.textShadow='';}else{h1El.style.textShadow='0 0 4px rgba(255,190,120,'+Math.min(1,eve*.9).toFixed(2)+'),0 0 15px rgba(191,35,56,'+Math.min(1,eve*.8).toFixed(2)+'),0 0 40px rgba(191,35,56,'+Math.min(1,eve*.55).toFixed(2)+'),0 0 80px rgba(191,35,56,'+Math.min(1,eve*.3).toFixed(2)+')';}
+var h1Sh='';
+if(eve>0.02)h1Sh='0 0 4px rgba(255,190,120,'+Math.min(1,eve*.9).toFixed(2)+'),0 0 15px rgba(191,35,56,'+Math.min(1,eve*.8).toFixed(2)+'),0 0 40px rgba(191,35,56,'+Math.min(1,eve*.55).toFixed(2)+'),0 0 80px rgba(191,35,56,'+Math.min(1,eve*.3).toFixed(2)+')';
+if(mor>0.02){var mSh='0 0 4px rgba(180,220,255,'+Math.min(1,mor*.80).toFixed(2)+'),0 0 25px rgba(80,150,220,'+Math.min(1,mor*.78).toFixed(2)+'),0 0 70px rgba(50,100,180,'+Math.min(1,mor*.58).toFixed(2)+'),0 0 130px rgba(30,60,140,'+Math.min(1,mor*.38).toFixed(2)+')';h1Sh=h1Sh?h1Sh+','+mSh:mSh;}
+h1El.style.textShadow=h1Sh;
 var tagR=Math.round(36+(250-36)*eve),tagG=Math.round(20+(246-20)*eve),tagB=Math.round(10+(239-10)*eve);
 if(tagEl)tagEl.style.color='rgba('+tagR+','+tagG+','+tagB+',.45)';
-if(ewEl)ewEl.style.textShadow=eve<.02?'':'0 0 10px rgba(191,35,56,'+Math.min(1,eve*.6).toFixed(2)+')';}
+var ewSh='';
+if(eve>0.02)ewSh='0 0 10px rgba(191,35,56,'+Math.min(1,eve*.6).toFixed(2)+')';
+if(mor>0.02){var ewMor='0 0 10px rgba(80,150,220,'+Math.min(1,mor*.38).toFixed(2)+')';ewSh=ewSh?ewSh+','+ewMor:ewMor;}
+if(ewEl)ewEl.style.textShadow=ewSh;}
 
 
 // ── FILTERING ──────────────────────────────────────────────
