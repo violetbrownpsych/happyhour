@@ -49,7 +49,7 @@
     .header-home-link { text-decoration:none; display:block; }
     header h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(4rem,11vw,7rem); font-weight:400; color:#060f1e; line-height:.92; letter-spacing:.05em; }
     header p.tagline { margin-top:.9rem; font-size:1rem; font-weight:300; color:rgba(36,20,10,.45); letter-spacing:.02em; }
-    .time-bar { background:var(--timebar-bg); text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:rgba(250,246,239,.7); letter-spacing:.06em; }
+    .time-bar { background:var(--bg); text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:rgba(250,246,239,.7); letter-spacing:.06em; }
     #live-time { color:#6ea900; font-weight:600; }
     .dev-banner { background:#FFF8E6; border-bottom:1.5px solid #F5C97A; text-align:center; padding:.45rem 1rem; font-size:.75rem; color:#7A4F10; }
     .dev-banner strong { font-weight:600; }
@@ -229,12 +229,16 @@
     input[type=range].slider-input:active { cursor:grabbing; }
     .collapsibles-bar { max-width:1100px; margin:0 auto; padding:.3rem 0 0; display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--filter-border); margin-top:.15rem; }
     .collapsible { position:relative; flex:0 0 auto; }
-    .collapsible-toggle { display:inline-flex; align-items:center; gap:.45rem; padding:.45rem 1.3rem .55rem 1.5rem; background:rgba(245,240,232,.05); border:1px solid transparent; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--filter-dim); transition:all .15s; }
+    .collapsible-toggle { display:inline-flex; align-items:center; gap:.45rem; padding:.45rem .75rem .55rem .9rem; background:rgba(245,240,232,.05); border:1px solid transparent; border-radius:8px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--filter-dim); transition:all .15s; }
     .collapsible-toggle:hover { color:var(--filter-text); background:rgba(245,240,232,.10); }
     .collapsible-toggle.has-active { color:var(--sienna); }
     .collapsible-toggle.open { background:rgba(245,240,232,.10); }
     .toggle-chevron { font-size:.58rem; transition:transform .2s; display:inline-block; opacity:.55; }
-    .mobile-spot-count { display:none; }
+    .mobile-spot-count { display:flex; align-items:center; margin-left:auto; padding-right:1.5rem; font-size:.72rem; font-weight:600; letter-spacing:.06em; color:var(--filter-dim); white-space:nowrap; }
+    .summary-spot-count { display:none; }
+    #filter-clear-btn { color:var(--sienna); cursor:pointer; font-size:.65rem; letter-spacing:.1em; margin-left:.9rem; display:inline-flex; align-items:center; gap:.28rem; vertical-align:middle; }
+    #filter-clear-btn:hover { opacity:.75; }
+    .clear-x { display:inline-flex; align-items:center; justify-content:center; border:1px solid currentColor; border-radius:3px; width:13px; height:13px; font-size:9px; flex-shrink:0; }
     .collapsible-toggle.open .toggle-chevron { transform:rotate(180deg); }
     .active-badge { background:var(--sienna); color:#fff; border-radius:99px; padding:.07rem .42rem; font-size:.62rem; font-weight:700; }
     .collapsible + .collapsible .collapsible-toggle::before { content:''; position:absolute; left:0; top:28%; bottom:28%; width:1px; background:var(--filter-border); }
@@ -404,7 +408,7 @@
     /* ── QUICK VIEW ─────────────────────────────────────────── */
     .qv-backdrop { display:none; position:fixed; inset:0; z-index:300; background:rgba(26,20,16,.55); backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px); }
     .qv-backdrop.open { display:block; }
-    .qv-sheet { position:fixed; z-index:301; background:var(--cream); overflow-y:auto; bottom:0; left:0; right:0; max-height:92vh; border-radius:20px 20px 0 0; box-shadow:0 -4px 40px rgba(36,61,26,.25); transform:translateY(100%); transition:transform .35s cubic-bezier(.32,.72,0,1); pointer-events:none; }
+    .qv-sheet { position:fixed; z-index:301; background:var(--cream); overflow-y:auto; bottom:0; left:0; right:0; max-height:92vh; max-height:92svh; border-radius:20px 20px 0 0; box-shadow:0 -4px 40px rgba(36,61,26,.25); transform:translateY(100%); transition:transform .35s cubic-bezier(.32,.72,0,1); pointer-events:none; }
     .qv-sheet.open { transform:translateY(0); pointer-events:auto; }
     @media (min-width:700px) {
       .qv-sheet { top:50%; left:50%; transform:translate(-50%,calc(-50% + 30px)); opacity:0; bottom:auto; right:auto; width:680px; max-width:calc(100vw - 2rem); max-height:88vh; border-radius:20px; transition:transform .3s cubic-bezier(.32,.72,0,1),opacity .3s ease; }
@@ -518,8 +522,10 @@
       .filter-summary-bar {
         display: grid;
         grid-template-columns: 1fr auto 1fr;
+        grid-template-rows: auto auto;
         align-items: center;
       }
+      .summary-spot-count { display:block; grid-column:2; grid-row:2; justify-self:center; font-size:.63rem; color:var(--filter-dim); padding-bottom:.2rem; }
       .summary-heading { display: none; }
       .summary-compact {
         display: block;
@@ -635,7 +641,7 @@
     <div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
     <div class="collapsible-panel" id="panel-deals"><div class="collapsible-panel-inner" id="deal-pills"></div></div>
     <div class="collapsible-panel" id="panel-vibe"><div class="collapsible-panel-inner" id="vibe-pills"></div></div>
-    <div class="filter-collapse-btn" id="filter-collapse-btn"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg>Hide filters</div>
+    <div class="filter-collapse-btn" id="filter-collapse-btn"><svg width="14" height="12" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg>Hide filters<span id="filter-clear-btn" style="display:none">Clear <span class="clear-x">&times;</span></span></div>
   </div>
 </div>
 
@@ -645,6 +651,7 @@
     <span class="results-count" id="results-count"></span>
   </div>
   <div class="summary-compact" id="summary-compact"></div>
+  <span class="summary-spot-count" id="summary-spot-count"></span>
   <span class="summary-expand"><svg width="16" height="14" viewBox="0 0 14 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:.3rem;opacity:.6"><line x1="0" y1="2" x2="14" y2="2" stroke="currentColor" stroke-width="1.5"/><circle cx="4" cy="2" r="1.5" fill="currentColor"/><line x1="0" y1="6" x2="14" y2="6" stroke="currentColor" stroke-width="1.5"/><circle cx="9" cy="6" r="1.5" fill="currentColor"/><line x1="0" y1="10" x2="14" y2="10" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="10" r="1.5" fill="currentColor"/></svg><span class="expand-prefix">Change </span>Filters</span>
   <span id="summary-time" style="text-align:right;font-size:.78rem;font-weight:500;color:var(--filter-dim);white-space:nowrap;"></span>
 </div>
@@ -874,14 +881,6 @@ function init(){
   }
   syncNowPill();
   updateFilterSummary();
-  var isReturning = !!localStorage.getItem('pours-visited');
-  localStorage.setItem('pours-visited', '1');
-  if(isReturning){
-    scrollCollapsed = true;
-    fw.classList.add('scroll-collapsed');
-    var sb2 = document.getElementById('filter-summary-bar');
-    if(sb2) sb2.classList.add('visible');
-  }
   render();
 }
 
@@ -972,6 +971,21 @@ function setupScrollCollapse(){
     });
   }
 
+  var clearBtn = document.getElementById('filter-clear-btn');
+  if(clearBtn){
+    clearBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      activeNeighborhoods.clear(); activeDealTags.clear(); activeVibeTags.clear();
+      syncPills(document.getElementById('area-pills'),'neighborhood',activeNeighborhoods,'all');
+      syncPills(document.getElementById('deal-pills'),'deal',activeDealTags,'all');
+      syncPills(document.getElementById('vibe-pills'),'vibe',activeVibeTags,'all');
+      updateBadge('badge-area',0,'panel-area');
+      updateBadge('badge-deals',0,'panel-deals');
+      updateBadge('badge-vibe',0,'panel-vibe');
+      activeDays='today'; setTimeMode('any'); syncDayPills();
+      render();
+    });
+  }
   var collapseBtn = document.getElementById('filter-collapse-btn');
   if(collapseBtn){
     collapseBtn.addEventListener('click', function(){
@@ -1300,8 +1314,8 @@ function buildAreaPanel(){
     render();
   });
 }
-function buildDealPanel(){var c=document.getElementById('deal-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.dealTags;}))].sort();if(!all.length)return;var ab=mkPill('All','deal','all');ab.classList.add('tag-active');c.appendChild(ab);all.forEach(function(t){c.appendChild(mkPill(t,'deal',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-deal]');if(!btn)return;var val=btn.dataset.deal;if(val==='all')activeDealTags.clear();else toggleSet(activeDealTags,val);syncPills(c,'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');render();});}
-function buildVibePanel(){var c=document.getElementById('vibe-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.vibe;}))].sort();if(!all.length)return;var ab=mkPill('All','vibe','all');ab.classList.add('tag-active');c.appendChild(ab);all.forEach(function(t){c.appendChild(mkPill(t,'vibe',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-vibe]');if(!btn)return;var val=btn.dataset.vibe;if(val==='all')activeVibeTags.clear();else toggleSet(activeVibeTags,val);syncPills(c,'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});}
+function buildDealPanel(){var c=document.getElementById('deal-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.dealTags;}))].sort();if(!all.length)return;all.forEach(function(t){c.appendChild(mkPill(t,'deal',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-deal]');if(!btn)return;toggleSet(activeDealTags,btn.dataset.deal);syncPills(c,'deal',activeDealTags,'all');updateBadge('badge-deals',activeDealTags.size,'panel-deals');render();});}
+function buildVibePanel(){var c=document.getElementById('vibe-pills');var all=[...new Set(VENUES.flatMap(function(v){return v.vibe;}))].sort();if(!all.length)return;all.forEach(function(t){c.appendChild(mkPill(t,'vibe',t));});c.addEventListener('click',function(e){var btn=e.target.closest('[data-vibe]');if(!btn)return;toggleSet(activeVibeTags,btn.dataset.vibe);syncPills(c,'vibe',activeVibeTags,'all');updateBadge('badge-vibe',activeVibeTags.size,'panel-vibe');render();});}
 function setupCollapsibles(){document.addEventListener('click',function(e){if(!e.target.closest('.collapsible-toggle')&&!e.target.closest('.collapsible-panel')&&!e.target.closest('.city-toggle')&&!e.target.closest('.qv-sheet'))closeAllPanels();});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.addEventListener('click',function(e){e.stopPropagation();var pid=t.dataset.panel,panel=document.getElementById(pid);var isOpen=panel.classList.contains('open');closeAllPanels();if(!isOpen){panel.classList.add('open');t.classList.add('open');}});});}
 function closeAllPanels(){document.querySelectorAll('.collapsible-panel').forEach(function(p){p.classList.remove('open');});document.querySelectorAll('.collapsible-toggle').forEach(function(t){t.classList.remove('open');});}
 function isActiveDayToday(){return activeDays==='today'||activeDays===todayAbbr();}
@@ -1351,7 +1365,7 @@ function sliderTo24hr(val){var h=Math.floor(val),m=(val%1===0.5)?30:0;return h*1
 function updateBadge(bid,count,pid){var b=document.getElementById(bid),t=document.querySelector('[data-panel="'+pid+'"]');if(count>0){b.textContent=count;b.style.display='inline';if(t)t.classList.add('has-active');}else{b.style.display='none';if(t)t.classList.remove('has-active');}}
 
 // ── HEADER THEME ───────────────────────────────────────────
-function getTimeBlend(){var tp=new URLSearchParams(window.location.search).get('theme');if(tp==='night')return{morning:0,standard:0,evening:1};if(tp==='morning')return{morning:1,standard:0,evening:0};if(tp==='standard'||tp==='day')return{morning:0,standard:1,evening:0};var d=new Date(),mins=d.getHours()*60+d.getMinutes();var MS=360,ME=660,SS=720,SE=1200,ES=1260;if(mins<MS)return{morning:0,standard:0,evening:1};else if(mins<ME)return{morning:1,standard:0,evening:0};else if(mins<SS){var t=(mins-ME)/(SS-ME);return{morning:1-t,standard:t,evening:0};}else if(mins<SE)return{morning:0,standard:1,evening:0};else if(mins<ES){var t2=(mins-SE)/(ES-SE);return{morning:0,standard:1-t2,evening:t2};}else return{morning:0,standard:0,evening:1};}
+function getTimeBlend(){var tp=new URLSearchParams(window.location.search).get('theme');if(tp==='night')return{morning:0,standard:0,evening:1};if(tp==='morning')return{morning:1,standard:0,evening:0};if(tp==='standard'||tp==='day')return{morning:0,standard:1,evening:0};var d=new Date(),mins=d.getHours()*60+d.getMinutes();var MS=360,ME=660,SS=720,SE=1140,ES=1200;if(mins<MS)return{morning:0,standard:0,evening:1};else if(mins<ME)return{morning:1,standard:0,evening:0};else if(mins<SS){var t=(mins-ME)/(SS-ME);return{morning:1-t,standard:t,evening:0};}else if(mins<SE)return{morning:0,standard:1,evening:0};else if(mins<ES){var t2=(mins-SE)/(ES-SE);return{morning:0,standard:1-t2,evening:t2};}else return{morning:0,standard:0,evening:1};}
 var HT={morning:{accent:'#FFE070',tbar:'#181512',d1:'#D05030',d1o:.16,d2:'#E8A820',d2o:.20},standard:{accent:'#D4953A',tbar:'#181512',d1:'#D4953A',d1o:.08,d2:'#E8C4B0',d2o:.12},evening:{accent:'#F0C070',tbar:'#181512',d1:'#7A3050',d1o:.15,d2:'#D4953A',d2o:.14}};
 function hexRgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
 function lerpHex(a,b,t){var r1=hexRgb(a),r2=hexRgb(b);return 'rgb('+Math.round(r1[0]+(r2[0]-r1[0])*t)+','+Math.round(r1[1]+(r2[1]-r1[1])*t)+','+Math.round(r1[2]+(r2[2]-r1[2])*t)+')';}
@@ -1415,6 +1429,11 @@ function render(){
   if(rc)rc.textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'No spots found';
   var msc=document.getElementById('mobile-spot-count');
   if(msc)msc.textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'0 spots';
+  var ssc=document.getElementById('summary-spot-count');
+  if(ssc)ssc.textContent=venues.length?venues.length+' spot'+(venues.length!==1?'s':''):'0 spots';
+  var fcb=document.getElementById('filter-clear-btn');
+  var hasActiveFilters=activeNeighborhoods.size||activeDealTags.size||activeVibeTags.size||activeDays!=='today'||activeTime!=='any';
+  if(fcb)fcb.style.display=hasActiveFilters?'inline-flex':'none';
   if(mapMode){
     updateMapMarkers(venues);
     var bounds=leafletMap&&leafletMap.getBounds();

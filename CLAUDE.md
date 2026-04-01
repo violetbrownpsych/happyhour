@@ -13,12 +13,13 @@ There is no build step. To deploy:
 **Service worker** (`sw.js`) uses stale-while-revalidate caching. Version string is `CACHE = 'pours-v1'` — bump this when breaking changes need to invalidate cached assets.
 
 ## Testing
-No automated tests. Test by opening `index.html` in a browser at localhost. Key things to verify manually:
+No automated tests. Test by opening `index.html` in a browser at localhost (`python3 -m http.server 8080`). Key things to verify manually:
 - Filter pills (day, time) select/deselect correctly — clicking an active pill deselects it
 - Cards render with correct badge states (Ending, Starts in, Ended today)
 - Map loads and markers sync with card list
 - Mobile layout (≤899px breakpoint) — pill rows scroll horizontally, time row swaps
 - Quick view (QV) opens on card click, swipe-to-dismiss on mobile
+- Append `?theme=night` / `?theme=morning` / `?theme=day` to test header themes
 
 ## File structure
 ```
@@ -63,7 +64,7 @@ handoff.md        — design handoff notes for current redesign session
 
 ### Fonts
 - **Bebas Neue** — `POURS` header wordmark
-- **Anton** — card `.venue-name`, QV `.qv-name` (note: not currently loaded in Google Fonts link — falls back to sans-serif; needs fixing)
+- **Anton** — card `.venue-name`, QV `.qv-name` (not currently loaded in Google Fonts link — falls back to sans-serif; needs fixing)
 - **Special Elite** — card `.deal-item`, QV `.qv-deal-item` (typewriter feel)
 - **Archivo Narrow** — `.status-badge`, `.hours-text`, `.days-text`, `.card-verified`, tags, QV hours/days
 - **DM Sans** — UI chrome, filter bar, pills, `.neighborhood`, `.card-link`, body text
@@ -71,11 +72,11 @@ handoff.md        — design handoff notes for current redesign session
 
 ### Key CSS variables (current theme)
 ```css
---bg: #060f1e              /* page background — very dark navy */
---bg-filter: #091620       /* filter bar, summary bar, footer */
---bg-elevated: #0d1d28     /* dropdown panels */
---cream: #FAF6EF           /* header bg, card bg */
---sienna: #BF2338          /* crimson — Twin Cities eyebrow, time pills, neighborhood text, card links */
+--bg: #060f1e              /* page background + time bar — very dark navy */
+--bg-filter: #091620       /* filter bar, summary bar, footer — very dark teal */
+--bg-elevated: #0d1d28     /* dropdown panels — dark teal */
+--cream: #FAF6EF           /* header bg (day), card bg */
+--sienna: #BF2338          /* crimson — Twin Cities eyebrow, time pills, neighborhood text, card links, deal dots, clear button */
 --ink: #1A1410             /* dark brown text on cream surfaces */
 --filter-text: rgba(245,240,232,.82)   /* bright text on dark filter bar */
 --filter-dim:  rgba(245,240,232,.62)   /* dim text — labels, toggles, summary bar */
@@ -98,9 +99,16 @@ name,neighborhood,city,days,startTime,endTime,deals,dealTags,vibe,website,mapsUr
 
 ### Things to be careful about
 - `init()` call order matters: time mode must be set before first `render()` — don't add premature renders.
-- `applyHeaderTheme()` runs on load and sets CSS variables dynamically via JS (`--header-accent`, `--timebar-bg`). The `hbg`/`hstars`/`.deco` elements are hidden via `display:none !important` in CSS — don't remove that.
+- `applyHeaderTheme()` runs on load and every 60s. It sets CSS variables AND sets inline styles directly on `header`, `header h1`, `header p.tagline`, and `.logo-eyebrow` for the late-night color/glow effect. Don't override those inline styles in CSS without accounting for this.
+- The `.hbg`/`.hstars`/`.deco` elements are hidden via `display:none !important` in CSS — don't remove that. They are legacy background layers kept in the JS but not rendered.
+- Time-of-day thresholds in `getTimeBlend()`: morning 6–11am, standard noon–7pm, transition 7–8pm, fully evening at 8pm. `?theme=night/morning/day` URL param overrides for testing.
+- `badgeColors(n)` interpolates badge color green→amber→red based on minutes remaining. The `t` value is clamped to `[0,1]` — without this, long sessions (e.g. 150 mins) produce negative `t` and overshoot into cyan/teal.
+- Time bar background is `var(--bg)` — always matches the page background, no time-of-day variation.
 - `self.skipWaiting()` in `sw.js` ensures the service worker activates immediately. Bump `CACHE` version string when assets change significantly.
 - Day pills: `activeDays === 'today'` OR `activeDays === todayAbbr()` both mean "today" — check both.
 - Clicking an active day or time pill deselects it (resets to `'any'`). Both desktop and mobile pill handlers have this check.
 - End times are **exclusive** (a session ending at 1700 is over at exactly 5:00 PM).
 - `venueMatchesTime()` must only test sessions that match the active day — otherwise a Mon–Fri morning session can make a venue appear on Saturday morning filter. The fix is already in place: filter by day inside `venueMatchesTime` before testing the time window.
+- Deals and Vibe collapsible panels have no "All" button — no selection = all (same as Neighborhood). Don't add one back.
+- `filter-clear-btn` appears when `activeNeighborhoods.size || activeDealTags.size || activeVibeTags.size || activeDays !== 'today' || activeTime !== 'any'`. It clears all three sets AND resets day/time. Visibility is updated in `render()`.
+- QV sheet uses `max-height: 92vh; max-height: 92svh` — the `svh` unit keeps it within the visual viewport on iOS Safari when the URL bar is visible. Don't remove the `svh` line.
