@@ -56,7 +56,7 @@
     .dev-banner strong { font-weight:600; }
     @media (max-width:899px) {
       .header-inner {
-        padding: 1.8rem 1.5rem 1.5rem;
+        padding: 1.2rem 1.5rem 1rem;
       }
       header h1 {
         font-size: 3.8rem;
@@ -482,7 +482,9 @@
     }
 
     @media (max-width:899px) {
-      .filters-wrap.map-collapsed ~ .filter-summary-bar { 
+      body.map-mode-active header,
+      body.map-mode-active .time-bar { display: none; }
+      .filters-wrap.map-collapsed ~ .filter-summary-bar {
         max-height: 110px;
         opacity: 1;
         pointer-events: auto;
@@ -685,12 +687,12 @@
 
 <footer>
   <p>Made with 🥂 in the Twin Cities &nbsp;·&nbsp; <a href="/" id="footer-home">Pours</a></p>
-  <p>Know a spot? <a href="/cdn-cgi/l/email-protection#86dfc9d3d4c3cbc7cfcac6e3fee7ebf6eae3a8e5e9eb">Send us a tip!</a></p>
+  <p>Know a spot? <a href="mailto:poursapp@gmail.com">Send us a tip!</a></p>
   <p>© 2026 Pours. All rights reserved.</p>
   <a href="/tos">Terms of Service</a>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 var CSV_URL   = 'happyhours.csv';
 var TILE_URL  = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 var TILE_ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>';
@@ -750,7 +752,7 @@ var FALLBACK = [
 ];
 
 var TIME_DEFS = {
-  morning:{label:'in the Morning',test:function(s,e){return overlaps(s,e,700,1059);}},
+  morning:{label:'in the Morning',test:function(s,e){return overlaps(s,e,700,1100);}},
   lunch:  {label:'over Lunch',    test:function(s,e){return overlaps(s,e,1100,1400);}},
   late:   {label:', Late Night',  test:function(s,e){return overlapsLateNight(s,e);}},
   now:    {label:', Happening Now',test:function(s,e){return isOpenNowRange(s,e);}},
@@ -1294,7 +1296,7 @@ function todayFull(){
 }
 function formatTime(t){var h=Math.floor(t/100),m=t%100;var ampm=h>=12?'PM':'AM',h12=h>12?h-12:h===0?12:h;return h12+(m?':'+String(m).padStart(2,'0'):'')+'  '+ampm;}
 function isOpenNowRange(s,e){var now=nowMinutes();if(e===0)return now>=s;if(e<s)return now>=s||now<e;return now>=s&&now<e;}
-function overlaps(vS,vE,wS,wE){return vS<=wE&&vE>=wS;}
+function overlaps(vS,vE,wS,wE){return vS<wE&&vE>wS;}
 function overlapsLateNight(vS,vE){return vS>=2000||vE<600||vE<vS;}
 
 // ── PANELS ─────────────────────────────────────────────────
@@ -1459,8 +1461,8 @@ function renderCards(venues){
   if(!venues.length){
     var isToday=activeDays==='today'||activeDays===todayAbbr();
     var allEnded=isToday&&VENUES.filter(venueMatchesDay).every(function(v){return getBadgeState(v).type==='ended';});
-    if(allEnded){grid.innerHTML='<div class="empty"><div class="empty-icon">&#127867;</div><h3>Happy hours have wrapped up for the day</h3><p>Check back tomorrow — or try a different day or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';}
-    else{grid.innerHTML='<div class="empty"><div class="empty-icon">&#127378;</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:YOUREMAIL@example.com">Send us a tip!</a></p></div>';}
+    if(allEnded){grid.innerHTML='<div class="empty"><div class="empty-icon">&#127867;</div><h3>Happy hours have wrapped up for the day</h3><p>Check back tomorrow — or try a different day or filter.<br>Know a spot? <a class="tip-link" href="mailto:poursapp@gmail.com">Send us a tip!</a></p></div>';}
+    else{grid.innerHTML='<div class="empty"><div class="empty-icon">&#127378;</div><h3>Nothing here yet</h3><p>Try a different day, time, or filter.<br>Know a spot? <a class="tip-link" href="mailto:poursapp@gmail.com">Send us a tip!</a></p></div>';}
     return;
   }
   var sorted=[...venues].sort(function(a,b){var sa=getBadgeState(a),sb=getBadgeState(b);var rank=function(s){return s.type==='ending'?0:s.type==='soon'?1:s.type==='ended'?3:2;};if(rank(sa)!==rank(sb))return rank(sa)-rank(sb);if(sa.type==='ending'&&sb.type==='ending')return sb.minsLeft-sa.minsLeft;if(sa.type==='soon'&&sb.type==='soon')return sa.minsLeft-sb.minsLeft;return 0;});

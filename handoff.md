@@ -1,11 +1,11 @@
 # Pours — Handoff Notes
-_Last updated: 2026-03-31_
+_Last updated: 2026-04-01_
 
 ## What this project is
 Single-page happy hour directory for Minneapolis/St. Paul. All code lives in `index.html` (CSS + HTML + JS). Data is in `happyhours.csv`. No build step, no framework.
 
 ## Current branch
-`newvibe` — visual redesign in progress. Not yet merged to main.
+`main` — redesign complete and merged.
 
 ---
 
@@ -127,8 +127,14 @@ Text in `--cream`. "Send us a tip!" link in lime `#6ea900`.
 - **Anton font not loaded** — `.venue-name` and `.qv-name` use `font-family:'Anton'` but Anton is missing from the Google Fonts `<link>`. Falls back to sans-serif. Fix: add Anton back or switch to Bebas Neue.
 - **CSS variables** — the new color palette is mostly hardcoded hex values. A future cleanup pass should define them as `:root` variables.
 - **`manifest.json`** still has old `theme_color: "#3A5C28"` — should be updated to `#060f1e`.
-- **`YOUREMAIL@example.com`** placeholder in empty state JS needs a real address.
 - **Mobile card cutoff (partial)** — QV sheet `92svh` fix applied. A separate issue where card tops can be clipped on mobile at scroll position 0 has not been fully diagnosed.
+
+## Bug fixes (2026-04-01)
+- **Time filter boundary bug** — `overlaps()` used inclusive `<=`/`>=`, so a session starting exactly at 8 PM matched the Happy Hour filter (`[1400, 2000]`). Fixed to strict `<`/`>` so boundaries are exclusive. Happy Hour is now cleanly `[1400, 2000)`, Lunch `[1100, 1400)`, Morning `[700, 1100)`.
+- **Morning window stale bound** — was `overlaps(s,e,700,1059)` (a workaround for the old inclusive logic). Updated to `1100` to match where Lunch starts.
+- **Mobile map mode layout** — header and time bar now hidden on mobile when in map mode (`body.map-mode-active header, body.map-mode-active .time-bar { display:none }`), so the map fills the screen properly.
+- **Email links** — footer and empty-state `mailto:` links set to `poursapp@gmail.com`. Cloudflare Email Obfuscation turned off in dashboard (was breaking on iOS Safari with Advanced Privacy Protections). Cloudflare decode script removed from HTML.
+- **Mobile header padding** — reduced slightly: top `1.8rem → 1.2rem`, bottom `1.5rem → 1rem`.
 
 ## Design direction
 - **Vibe:** Upscale bar. Elevated and welcoming. Navy/teal darkness as the "room," cream cards as the menu, crimson and lime as the energy. At night the header shifts to a dim bar atmosphere with neon glow on the POURS wordmark.
@@ -138,6 +144,6 @@ Text in `--cream`. "Send us a tip!" link in lime `#6ea900`.
 - Edit `index.html` (and `happyhours.csv` for venue data)
 - Test locally via `python3 -m http.server 8080` → `http://localhost:8080`
 - Append `?theme=night` / `?theme=morning` / `?theme=day` to test header themes without waiting
-- Git: commit to `newvibe` → merge to `main` → Cloudflare auto-deploys (`violetbrownpsych/pours`)
+- Git: commit and push to `main` → Cloudflare auto-deploys (`violetbrownpsych/pours`)
 - After deploy: purge Cloudflare cache manually
 - Service worker (`sw.js`) uses stale-while-revalidate — bump `CACHE` version string for breaking asset changes
