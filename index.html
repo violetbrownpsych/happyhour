@@ -917,11 +917,22 @@ function checkScrollCollapse(){
   lastScrollY = scrolled;
 
   if(scrollingDown && scrolled > threshold && !scrollCollapsed){
-    forcedOpen = false; 
+    forcedOpen = false;
     scrollCollapsed = true;
     lastToggleTime = Date.now();
-    fw.classList.add('scroll-collapsed');
+    var fe = document.getElementById('filter-expandable');
     var sb = document.getElementById('filter-summary-bar');
+    if(fe){
+      var h = fe.offsetHeight;
+      fe.style.overflow = 'hidden';
+      fe.style.maxHeight = h + 'px';
+      fe.getBoundingClientRect(); // force reflow so browser locks in starting value
+      fe.style.transition = 'max-height .3s ease, opacity .25s ease';
+      fe.style.maxHeight = '0';
+      fe.style.opacity = '0';
+      setTimeout(function(){ fe.style.maxHeight=''; fe.style.opacity=''; fe.style.overflow=''; fe.style.transition=''; }, 350);
+    }
+    fw.classList.add('scroll-collapsed');
     if(sb) sb.classList.add('visible');
     closeAllPanels(); // close any open dropdown when filter bar collapses
   }
