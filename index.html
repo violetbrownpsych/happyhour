@@ -929,9 +929,9 @@ function checkScrollCollapse(){
 
   if(progress <= 0){
     // Scrolled back above the stick point — reset any in-progress styles
-    if(fw.style.overflow){ fw.style.overflow=''; fw.style.height=''; }
+    if(fw.style.overflow){ fw.style.overflow=''; fw.style.height=''; fw.style.zIndex=''; }
     if(fe.style.transform){ fe.style.transform=''; fe.style.transition=''; }
-    if(sb && sb.style.maxHeight){ sb.style.transition=''; sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
+    if(sb){ sb.style.transition=''; sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
     return;
   }
 
@@ -942,15 +942,14 @@ function checkScrollCollapse(){
     forcedOpen = false;
     scrollCollapsed = true;
     lastToggleTime = now;
-    // Pin height=0 before clearing transform so content doesn't flash back
     fe.style.transition = 'none';
     fe.style.maxHeight = '0';
     fe.style.opacity = '0';
     fe.style.transform = '';
     fw.style.overflow = '';
     fw.style.height = '';
+    fw.style.zIndex = '';
     if(sb){ sb.style.transition=''; sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
-    // After one frame, hand off to CSS class (which also has max-height:0)
     setTimeout(function(){ fe.style.maxHeight=''; fe.style.opacity=''; fe.style.transition=''; }, 50);
     fw.classList.add('scroll-collapsed');
     if(sb) sb.classList.add('visible');
@@ -959,8 +958,9 @@ function checkScrollCollapse(){
   }
 
   // ── Scroll-driven animation zone (0 < progress < 1) ──────
-  // Shrink the wrapper height so the summary bar below rises up.
-  // Translate the content upward so it clips away from the top (slide-up feel).
+  // filters-wrap paints above summary-bar so the summary bar is revealed
+  // cleanly from underneath as the filter bar slides up — no opacity fade.
+  fw.style.zIndex = '101';
   fw.style.overflow = 'hidden';
   fw.style.height = (feH * (1 - progress)) + 'px';
   fe.style.transition = 'none';
@@ -968,7 +968,7 @@ function checkScrollCollapse(){
   if(sb){
     sb.style.transition = 'none';
     sb.style.maxHeight = '100px';
-    sb.style.opacity = String(progress);
+    sb.style.opacity = '1';
     sb.style.pointerEvents = 'none';
     sb.style.padding = '.5rem 1.5rem';
   }
@@ -1021,6 +1021,7 @@ function setupScrollCollapse(){
         if(fe3){ fe3.style.transform=''; fe3.style.transition=''; fe3.style.maxHeight=''; fe3.style.opacity=''; }
         fw.style.overflow = '';
         fw.style.height = '';
+        fw.style.zIndex = '';
         fw.classList.remove('scroll-collapsed');
         bar.classList.remove('visible');
         feH = 0; // re-measure on next scroll
