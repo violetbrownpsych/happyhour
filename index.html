@@ -768,7 +768,6 @@ var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
 var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0, lastScrollY=0;
 var scrollRaf = null;
 var scrollStickPoint=0, feH=0;
-var touchStartY=0, touchScrollAtStart=0;
 var mapReady=false;
 
 var VIBE_COLORS = {
@@ -867,21 +866,11 @@ function init(){
     if(!scrollCollapsed && feEl2) feH = feEl2.offsetHeight;
   });
   window.addEventListener('scroll', function(){
-    if(window.innerWidth < 900) return; // mobile uses touchmove instead
     if(scrollRaf) return;
     scrollRaf = requestAnimationFrame(function(){
       scrollRaf = null;
       checkScrollCollapse(window.scrollY || window.pageYOffset || 0);
     });
-  }, {passive:true});
-  window.addEventListener('touchstart', function(e){
-    touchStartY = e.touches[0].clientY;
-    touchScrollAtStart = window.scrollY || window.pageYOffset || 0;
-  }, {passive:true});
-  window.addEventListener('touchmove', function(e){
-    if(scrollCollapsed) return;
-    var dy = touchStartY - e.touches[0].clientY;
-    checkScrollCollapse(touchScrollAtStart + dy);
   }, {passive:true});
   var lp=document.getElementById('list-panel');
   if(lp) lp.addEventListener('scroll',throttle(function(){ checkScrollCollapse(); },50),{passive:true});
@@ -927,8 +916,8 @@ function checkScrollCollapse(scrolled){
 
   if(scrolled === undefined){
     if(mapMode && window.innerWidth >= 900){
-      var lp = document.getElementById('list-panel');
-      scrolled = lp ? lp.scrollTop : 0;
+      var lp2 = document.getElementById('list-panel');
+      scrolled = lp2 ? lp2.scrollTop : 0;
     } else {
       scrolled = window.scrollY || window.pageYOffset || 0;
     }
@@ -939,71 +928,88 @@ function checkScrollCollapse(scrolled){
   var extra = scrolled - scrollStickPoint;
   var progress = feH > 0 ? Math.max(0, Math.min(1, extra / feH)) : 0;
 
-  if(progress <= 0){
-    fw.style.position = '';
-    fw.style.top = '';
-    fw.style.left = '';
-    fw.style.right = '';
-    fw.style.transform = '';
-    fw.style.zIndex = '';
-    if(sb){ sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
+  // ── Mobile: CSS transition at threshold (scroll events are async on iOS,
+  //    so scroll-linked JS animation always jitters — let the compositor do it)
+  if(window.innerWidth < 900){
+    if(progress >= 0.5) lockCollapsed(fw, fe, sb);
     return;
   }
 
+  // ── Desktop: scroll-linked animation ─────────────────────
+  if(progress <= 0){
+    desktopResetFW(fw, fe, sb);
+    return;
+  }
   if(progress >= 1){
-    var now = Date.now();
-    if(now - lastToggleTime < 300) return;
-    forcedOpen = false;
-    scrollCollapsed = true;
-    lastToggleTime = now;
+    lockCollapsed(fw, fe, sb);
+    return;
+  }
+  // Scrub zone: switch to fixed + insert spacer so content doesn't jump
+  if(!fw._spacer){
+    var sp = document.createElement('div');
+    sp.style.height = fw.offsetHeight + 'px';
+    fw.parentNode.insertBefore(sp, fw);
+    fw._spacer = sp;
+    fw.style.position = 'fixed';
+    fw.style.top = '0';
+    fw.style.left = '0';
+    fw.style.right = '0';
+    fw.style.zIndex = '101';
+  }
+  fw.style.transform = 'translateY(-' + (feH * progress) + 'px)';
+  if(sb){ sb.style.maxHeight='0'; sb.style.opacity='0'; sb.style.pointerEvents='none'; sb.style.padding='0'; }
+}
 
-    // Collapse expandable instantly (no transition) while fw is still off-screen
+function desktopResetFW(fw, fe, sb){
+  if(fw._spacer){ fw._spacer.parentNode.removeChild(fw._spacer); fw._spacer=null; }
+  fw.style.position=''; fw.style.top=''; fw.style.left=''; fw.style.right='';
+  fw.style.transform=''; fw.style.zIndex='';
+  if(sb){ sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
+}
+
+function lockCollapsed(fw, fe, sb){
+  var now = Date.now();
+  if(now - lastToggleTime < 300) return;
+  forcedOpen = false; scrollCollapsed = true; lastToggleTime = now;
+
+  if(window.innerWidth < 900){
+    // Mobile: CSS transition on the expandable — compositor-driven, no jitter
+    fe.style.overflow = 'hidden';
+    fe.style.maxHeight = feH + 'px';
+    fe.getBoundingClientRect(); // force reflow to lock in start value
+    fe.style.transition = 'max-height .32s ease, opacity .25s ease';
+    fe.style.maxHeight = '0';
+    fe.style.opacity = '0';
+    fw.classList.add('scroll-collapsed');
+    closeAllPanels();
+    setTimeout(function(){
+      fe.style.maxHeight=''; fe.style.opacity=''; fe.style.overflow=''; fe.style.transition='';
+      slideSummaryIn(sb);
+    }, 340);
+  } else {
+    // Desktop: was fixed+translated — collapse expandable while off-screen, then snap back
+    if(fw._spacer){ fw._spacer.parentNode.removeChild(fw._spacer); fw._spacer=null; }
     fe.style.transition = 'none';
     fw.classList.add('scroll-collapsed');
     closeAllPanels();
-
-    // Clear fw overrides on next frame — expandable is already height:0, no flash
     requestAnimationFrame(function(){
-      fw.style.position = '';
-      fw.style.top = '';
-      fw.style.left = '';
-      fw.style.right = '';
-      fw.style.transform = '';
-      fw.style.zIndex = '';
-      fe.style.transition = '';
+      fw.style.position=''; fw.style.top=''; fw.style.left=''; fw.style.right='';
+      fw.style.transform=''; fw.style.zIndex='';
+      fe.style.transition='';
+      slideSummaryIn(sb);
     });
-
-    // Slide summary bar in from above
-    if(sb){
-      sb.style.transition = 'none';
-      sb.style.transform = 'translateY(-100%)';
-      sb.style.maxHeight = '';
-      sb.style.opacity = '';
-      sb.style.padding = '';
-      sb.style.pointerEvents = '';
-      sb.getBoundingClientRect(); // force reflow
-      sb.classList.add('visible');
-      sb.style.transition = 'transform .3s cubic-bezier(.32,.72,0,1)';
-      sb.style.transform = 'translateY(0)';
-      setTimeout(function(){ sb.style.transition = ''; sb.style.transform = ''; }, 350);
-    }
-    return;
   }
+}
 
-  // ── Scroll-driven animation zone (0 < progress < 1) ──────
-  // Switch to fixed positioning so sticky recalculation doesn't fight translateY.
-  fw.style.position = 'fixed';
-  fw.style.top = '0';
-  fw.style.left = '0';
-  fw.style.right = '0';
-  fw.style.zIndex = '101';
-  fw.style.transform = 'translateY(-' + (feH * progress) + 'px)';
-  if(sb){
-    sb.style.maxHeight = '0';
-    sb.style.opacity = '0';
-    sb.style.pointerEvents = 'none';
-    sb.style.padding = '0';
-  }
+function slideSummaryIn(sb){
+  if(!sb) return;
+  sb.style.transition='none'; sb.style.transform='translateY(-100%)';
+  sb.style.maxHeight=''; sb.style.opacity=''; sb.style.padding=''; sb.style.pointerEvents='';
+  sb.getBoundingClientRect();
+  sb.classList.add('visible');
+  sb.style.transition='transform .3s cubic-bezier(.32,.72,0,1)';
+  sb.style.transform='translateY(0)';
+  setTimeout(function(){ sb.style.transition=''; sb.style.transform=''; }, 350);
 }
 
 function updateFilterSummary(){
@@ -1049,16 +1055,12 @@ function setupScrollCollapse(){
         forcedOpen = true;
         scrollCollapsed = false;
         lastToggleTime = Date.now();
-        fw.style.position = '';
-        fw.style.top = '';
-        fw.style.left = '';
-        fw.style.right = '';
-        fw.style.transform = '';
-        fw.style.zIndex = '';
+        if(fw._spacer){ fw._spacer.parentNode.removeChild(fw._spacer); fw._spacer=null; }
+        fw.style.position=''; fw.style.top=''; fw.style.left=''; fw.style.right='';
+        fw.style.transform=''; fw.style.zIndex='';
         fw.classList.remove('scroll-collapsed');
         bar.classList.remove('visible');
-        bar.style.transform = '';
-        bar.style.transition = '';
+        bar.style.transform=''; bar.style.transition='';
         feH = 0; // re-measure on next scroll
         updateContentHeight();
       }
