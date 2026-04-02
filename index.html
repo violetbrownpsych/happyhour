@@ -950,15 +950,15 @@ function checkScrollCollapse(){
   }
 
   // ── Scroll-driven animation zone (0 < progress < 1) ──────
-  // Slide the entire filter bar up as a unit so it exits cleanly off the top.
-  // Summary bar sits at top:0 underneath and is revealed as the filter bar leaves.
+  // Slide the entire filter bar up as a unit. Summary bar stays hidden until
+  // fully locked — it's a separate sticky element so it can't sit "underneath".
   fw.style.zIndex = '101';
   fw.style.transform = 'translateY(-' + (feH * progress) + 'px)';
   if(sb){
-    sb.style.maxHeight = '100px';
-    sb.style.opacity = '1';
+    sb.style.maxHeight = '0';
+    sb.style.opacity = '0';
     sb.style.pointerEvents = 'none';
-    sb.style.padding = '.5rem 1.5rem';
+    sb.style.padding = '0';
   }
 }
 
