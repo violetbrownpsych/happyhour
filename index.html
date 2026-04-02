@@ -767,6 +767,7 @@ var mapMode=false, mapInitialized=false, filterCollapsed=false;
 var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
 var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0, lastScrollY=0;
 var scrollRaf = null;
+var touchVelocityY = 0;
 var scrollStickPoint=0, feH=0;
 var mapReady=false;
 
@@ -931,7 +932,7 @@ function checkScrollCollapse(scrolled){
   // ── Mobile: CSS transition at threshold (scroll events are async on iOS,
   //    so scroll-linked JS animation always jitters — let the compositor do it)
   if(window.innerWidth < 900){
-    if(progress >= 0.5) lockCollapsed(fw, fe, sb);
+    if(progress >= 0.3) lockCollapsed(fw, fe, sb);
     return;
   }
 
@@ -973,19 +974,67 @@ function lockCollapsed(fw, fe, sb){
   forcedOpen = false; scrollCollapsed = true; lastToggleTime = now;
 
   if(window.innerWidth < 900){
-    // Mobile: CSS transition on the expandable — compositor-driven, no jitter
-    fe.style.overflow = 'hidden';
-    fe.style.maxHeight = feH + 'px';
-    fe.getBoundingClientRect(); // force reflow to lock in start value
-    fe.style.transition = 'max-height .32s ease, opacity .25s ease';
-    fe.style.maxHeight = '0';
-    fe.style.opacity = '0';
-    fw.classList.add('scroll-collapsed');
+    // Mobile: slide filter bar off top and summary bar in from top simultaneously
+    var vel = Math.max(0, touchVelocityY || 0); // px/ms, positive = scrolling down
+    var dur = vel > 0.2 ? Math.max(0.12, 0.18 / vel) : 0.22;
+    dur = Math.min(dur, 0.32);
+    var ease = 'cubic-bezier(.32,.72,0,1)';
+    var durMs = Math.round(dur * 1000);
+    var fwH = fw.offsetHeight;
+
+    // Insert spacer to hold layout while fw is fixed
+    if(!fw._spacer){
+      var spM = document.createElement('div');
+      spM.style.height = fwH + 'px';
+      fw.parentNode.insertBefore(spM, fw);
+      fw._spacer = spM;
+    }
+
+    // Switch fw to fixed (lower z so sb slides in visibly above it)
+    fw.style.position='fixed'; fw.style.top='0'; fw.style.left='0';
+    fw.style.right='0'; fw.style.zIndex='101';
+
+    // Measure summary bar real height, place it just above the viewport
+    var sbH = 52;
+    if(sb){
+      sb.style.transition='none';
+      sb.style.maxHeight='200px'; sb.style.padding='.5rem 1.5rem'; sb.style.overflow='visible';
+      sbH = sb.offsetHeight || 52;
+      sb.style.overflow=''; sb.style.maxHeight='0'; sb.style.padding='';
+      sb.style.transform='translateY(-'+sbH+'px)';
+      sb.style.maxHeight='100px'; sb.style.padding='.5rem 1.5rem';
+      sb.style.opacity='1'; sb.style.pointerEvents='none'; sb.style.zIndex='102';
+    }
+
+    fw.getBoundingClientRect(); // force reflow before transition
+
+    // Animate: filter bar slides up off screen, summary bar slides down into view
+    fw.style.transition='transform '+dur+'s '+ease;
+    fw.style.transform='translateY(-'+fwH+'px)';
+    if(sb){
+      sb.style.transition='transform '+dur+'s '+ease;
+      sb.style.transform='translateY(0)';
+    }
+
     closeAllPanels();
+
     setTimeout(function(){
-      fe.style.maxHeight=''; fe.style.opacity=''; fe.style.overflow=''; fe.style.transition='';
-      slideSummaryIn(sb);
-    }, 340);
+      if(fw._spacer){ fw._spacer.parentNode.removeChild(fw._spacer); fw._spacer=null; }
+      fe.style.transition='none';
+      fw.style.position=''; fw.style.top=''; fw.style.left=''; fw.style.right='';
+      fw.style.transform=''; fw.style.transition=''; fw.style.zIndex='';
+      fw.classList.add('scroll-collapsed');
+      if(sb){
+        sb.style.transition='none'; sb.style.opacity='1';
+        sb.style.transform=''; sb.style.maxHeight=''; sb.style.padding='';
+        sb.style.pointerEvents=''; sb.style.zIndex='';
+        sb.classList.add('visible');
+      }
+      requestAnimationFrame(function(){
+        fe.style.transition='';
+        if(sb){ sb.style.transition=''; sb.style.opacity=''; }
+      });
+    }, durMs + 30);
   } else {
     // Desktop: was fixed+translated — collapse expandable while off-screen, then snap back
     if(fw._spacer){ fw._spacer.parentNode.removeChild(fw._spacer); fw._spacer=null; }
@@ -1060,7 +1109,8 @@ function setupScrollCollapse(){
         fw.style.transform=''; fw.style.zIndex='';
         fw.classList.remove('scroll-collapsed');
         bar.classList.remove('visible');
-        bar.style.transform=''; bar.style.transition='';
+        bar.style.transform=''; bar.style.transition=''; bar.style.opacity='';
+        bar.style.maxHeight=''; bar.style.padding=''; bar.style.zIndex=''; bar.style.pointerEvents='';
         feH = 0; // re-measure on next scroll
         updateContentHeight();
       }
@@ -1093,6 +1143,16 @@ function setupScrollCollapse(){
       if(sb) sb.classList.add('visible');
     });
   }
+
+  // Track swipe velocity for velocity-matched collapse animation
+  var _tvY = 0, _tvT = 0;
+  document.addEventListener('touchstart', function(e){
+    _tvY = e.touches[0].clientY; _tvT = Date.now(); touchVelocityY = 0;
+  }, {passive:true});
+  document.addEventListener('touchmove', function(e){
+    var y = e.touches[0].clientY, t = Date.now(), dt = t - _tvT;
+    if(dt > 8){ touchVelocityY = (_tvY - y) / dt; _tvY = y; _tvT = t; }
+  }, {passive:true});
 }
 
 // ── QV SWIPE-TO-DISMISS (mobile only) ─────────────────────
