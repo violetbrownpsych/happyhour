@@ -768,6 +768,7 @@ var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
 var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0, lastScrollY=0;
 var scrollRaf = null;
 var scrollStickPoint=0, feH=0;
+var touchStartY=0, touchScrollAtStart=0;
 var mapReady=false;
 
 var VIBE_COLORS = {
@@ -866,14 +867,24 @@ function init(){
     if(!scrollCollapsed && feEl2) feH = feEl2.offsetHeight;
   });
   window.addEventListener('scroll', function(){
+    if(window.innerWidth < 900) return; // mobile uses touchmove instead
     if(scrollRaf) return;
     scrollRaf = requestAnimationFrame(function(){
       scrollRaf = null;
-      checkScrollCollapse();
+      checkScrollCollapse(window.scrollY || window.pageYOffset || 0);
     });
   }, {passive:true});
+  window.addEventListener('touchstart', function(e){
+    touchStartY = e.touches[0].clientY;
+    touchScrollAtStart = window.scrollY || window.pageYOffset || 0;
+  }, {passive:true});
+  window.addEventListener('touchmove', function(e){
+    if(scrollCollapsed) return;
+    var dy = touchStartY - e.touches[0].clientY;
+    checkScrollCollapse(touchScrollAtStart + dy);
+  }, {passive:true});
   var lp=document.getElementById('list-panel');
-  if(lp) lp.addEventListener('scroll',throttle(checkScrollCollapse,50),{passive:true});
+  if(lp) lp.addEventListener('scroll',throttle(function(){ checkScrollCollapse(); },50),{passive:true});
   new ResizeObserver(function(){updateContentHeight();}).observe(document.getElementById('filters-wrap'));
   setInterval(updateAllBadges,60000);
   setInterval(applyHeaderTheme,60000);
@@ -907,19 +918,20 @@ function init(){
 // naturally scroll off screen). Expands once scroll comes back
 // above that same height.
 
-function checkScrollCollapse(){
+function checkScrollCollapse(scrolled){
   var fw = document.getElementById('filters-wrap');
   var fe = document.getElementById('filter-expandable');
   var sb = document.getElementById('filter-summary-bar');
   if(!fw || !fe) return;
   if(scrollCollapsed) return;
 
-  var scrolled;
-  if(mapMode && window.innerWidth >= 900){
-    var lp = document.getElementById('list-panel');
-    scrolled = lp ? lp.scrollTop : 0;
-  } else {
-    scrolled = window.scrollY || window.pageYOffset || 0;
+  if(scrolled === undefined){
+    if(mapMode && window.innerWidth >= 900){
+      var lp = document.getElementById('list-panel');
+      scrolled = lp ? lp.scrollTop : 0;
+    } else {
+      scrolled = window.scrollY || window.pageYOffset || 0;
+    }
   }
   lastScrollY = scrolled;
 
