@@ -940,12 +940,33 @@ function checkScrollCollapse(){
     forcedOpen = false;
     scrollCollapsed = true;
     lastToggleTime = now;
-    fw.style.transform = '';
-    fw.style.zIndex = '';
-    if(sb){ sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
+
+    // Collapse expandable instantly (no transition) while fw is still off-screen
+    fe.style.transition = 'none';
     fw.classList.add('scroll-collapsed');
-    if(sb) sb.classList.add('visible');
     closeAllPanels();
+
+    // Clear fw transform on next frame — expandable is already height:0, no flash
+    requestAnimationFrame(function(){
+      fw.style.transform = '';
+      fw.style.zIndex = '';
+      fe.style.transition = '';
+    });
+
+    // Slide summary bar in from above
+    if(sb){
+      sb.style.transition = 'none';
+      sb.style.transform = 'translateY(-100%)';
+      sb.style.maxHeight = '';
+      sb.style.opacity = '';
+      sb.style.padding = '';
+      sb.style.pointerEvents = '';
+      sb.getBoundingClientRect(); // force reflow
+      sb.classList.add('visible');
+      sb.style.transition = 'transform .3s cubic-bezier(.32,.72,0,1)';
+      sb.style.transform = 'translateY(0)';
+      setTimeout(function(){ sb.style.transition = ''; sb.style.transform = ''; }, 350);
+    }
     return;
   }
 
@@ -1009,6 +1030,8 @@ function setupScrollCollapse(){
         fw.style.zIndex = '';
         fw.classList.remove('scroll-collapsed');
         bar.classList.remove('visible');
+        bar.style.transform = '';
+        bar.style.transition = '';
         feH = 0; // re-measure on next scroll
         updateContentHeight();
       }
