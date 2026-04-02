@@ -767,6 +767,7 @@ var mapMode=false, mapInitialized=false, filterCollapsed=false;
 var leafletMap=null, markers={}, highlightedVenue=null, qvMap=null;
 var scrollCollapsed=false, forcedOpen=false, filterBarFullHeight=0, lastToggleTime=0, lastScrollY=0;
 var scrollRaf = null;
+var scrollStickPoint=0, feH=0;
 var mapReady=false;
 
 var VIBE_COLORS = {
@@ -856,7 +857,14 @@ function init(){
   setupCollapsibles(); setupDayFilters(); setupTimePills(); setupSlider();
   setupFAB(); setupQV();
   setupScrollCollapse(); setupQVSwipe();
-  window.addEventListener('resize',function(){updateContentHeight();});
+  window.addEventListener('resize',function(){
+    updateContentHeight();
+    var hdr = document.querySelector('header');
+    var tbr = document.querySelector('.time-bar');
+    scrollStickPoint = (hdr ? hdr.offsetHeight : 0) + (tbr ? tbr.offsetHeight : 0);
+    var feEl2 = document.getElementById('filter-expandable');
+    if(!scrollCollapsed && feEl2) feH = feEl2.offsetHeight;
+  });
   window.addEventListener('scroll', function(){
     if(scrollRaf) return;
     scrollRaf = requestAnimationFrame(function(){
@@ -875,6 +883,9 @@ function init(){
   filterBarFullHeight = (header ? header.offsetHeight : 0) +
                         (timebar ? timebar.offsetHeight : 0) +
                         (fw ? fw.offsetHeight : 0);
+  scrollStickPoint = (header ? header.offsetHeight : 0) + (timebar ? timebar.offsetHeight : 0);
+  var feEl = document.getElementById('filter-expandable');
+  feH = feEl ? feEl.offsetHeight : 0;
   var isOpenNow = VENUES.some(function(v){
     return v.sessions.some(function(s){return isOpenNowRange(s.startTime, s.endTime);});
   });
@@ -897,44 +908,69 @@ function init(){
 // above that same height.
 
 function checkScrollCollapse(){
-  var now = Date.now();
-  if(now - lastToggleTime < 500) return;
-
   var fw = document.getElementById('filters-wrap');
-  var lp = document.getElementById('list-panel');
-  if(!fw) return;
+  var fe = document.getElementById('filter-expandable');
+  var sb = document.getElementById('filter-summary-bar');
+  if(!fw || !fe) return;
+  if(scrollCollapsed) return; // locked — nothing to animate
 
   var scrolled;
   if(mapMode && window.innerWidth >= 900){
+    var lp = document.getElementById('list-panel');
     scrolled = lp ? lp.scrollTop : 0;
   } else {
     scrolled = window.scrollY || window.pageYOffset || 0;
   }
-
-  var threshold = filterBarFullHeight;
-
-  var scrollingDown = scrolled > lastScrollY;
   lastScrollY = scrolled;
 
-  if(scrollingDown && scrolled > threshold && !scrollCollapsed){
+  if(!feH) feH = fe.offsetHeight;
+  var extra = scrolled - scrollStickPoint;
+  var progress = feH > 0 ? Math.max(0, Math.min(1, extra / feH)) : 0;
+
+  if(progress <= 0){
+    // Scrolled back above the stick point — reset any in-progress styles
+    if(fw.style.overflow){ fw.style.overflow=''; fw.style.height=''; }
+    if(fe.style.transform){ fe.style.transform=''; fe.style.transition=''; }
+    if(sb && sb.style.maxHeight){ sb.style.transition=''; sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
+    return;
+  }
+
+  if(progress >= 1){
+    // Fully scrolled past — lock into collapsed state
+    var now = Date.now();
+    if(now - lastToggleTime < 300) return;
     forcedOpen = false;
     scrollCollapsed = true;
-    lastToggleTime = Date.now();
-    var fe = document.getElementById('filter-expandable');
-    var sb = document.getElementById('filter-summary-bar');
-    if(fe){
-      var h = fe.offsetHeight;
-      fe.style.overflow = 'hidden';
-      fe.style.maxHeight = h + 'px';
-      fe.getBoundingClientRect(); // force reflow so browser locks in starting value
-      fe.style.transition = 'max-height .3s ease, opacity .25s ease';
-      fe.style.maxHeight = '0';
-      fe.style.opacity = '0';
-      setTimeout(function(){ fe.style.maxHeight=''; fe.style.opacity=''; fe.style.overflow=''; fe.style.transition=''; }, 350);
-    }
+    lastToggleTime = now;
+    // Pin height=0 before clearing transform so content doesn't flash back
+    fe.style.transition = 'none';
+    fe.style.maxHeight = '0';
+    fe.style.opacity = '0';
+    fe.style.transform = '';
+    fw.style.overflow = '';
+    fw.style.height = '';
+    if(sb){ sb.style.transition=''; sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
+    // After one frame, hand off to CSS class (which also has max-height:0)
+    setTimeout(function(){ fe.style.maxHeight=''; fe.style.opacity=''; fe.style.transition=''; }, 50);
     fw.classList.add('scroll-collapsed');
     if(sb) sb.classList.add('visible');
-    closeAllPanels(); // close any open dropdown when filter bar collapses
+    closeAllPanels();
+    return;
+  }
+
+  // ── Scroll-driven animation zone (0 < progress < 1) ──────
+  // Shrink the wrapper height so the summary bar below rises up.
+  // Translate the content upward so it clips away from the top (slide-up feel).
+  fw.style.overflow = 'hidden';
+  fw.style.height = (feH * (1 - progress)) + 'px';
+  fe.style.transition = 'none';
+  fe.style.transform = 'translateY(-' + (feH * progress) + 'px)';
+  if(sb){
+    sb.style.transition = 'none';
+    sb.style.maxHeight = '100px';
+    sb.style.opacity = String(progress);
+    sb.style.pointerEvents = 'none';
+    sb.style.padding = '.5rem 1.5rem';
   }
 }
 
@@ -981,8 +1017,13 @@ function setupScrollCollapse(){
         forcedOpen = true;
         scrollCollapsed = false;
         lastToggleTime = Date.now();
+        var fe3 = document.getElementById('filter-expandable');
+        if(fe3){ fe3.style.transform=''; fe3.style.transition=''; fe3.style.maxHeight=''; fe3.style.opacity=''; }
+        fw.style.overflow = '';
+        fw.style.height = '';
         fw.classList.remove('scroll-collapsed');
         bar.classList.remove('visible');
+        feH = 0; // re-measure on next scroll
         updateContentHeight();
       }
     });
