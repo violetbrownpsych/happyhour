@@ -930,7 +930,7 @@ function checkScrollCollapse(){
   if(progress <= 0){
     // Scrolled back above the stick point — reset any in-progress styles
     if(fw.style.overflow){ fw.style.overflow=''; fw.style.height=''; fw.style.zIndex=''; }
-    if(fe.style.transform){ fe.style.transform=''; fe.style.transition=''; }
+    if(fe.style.transform){ fe.style.transform=''; fe.style.transition=''; fe.style.opacity=''; }
     if(sb){ sb.style.transition=''; sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
     return;
   }
@@ -950,7 +950,7 @@ function checkScrollCollapse(){
     fw.style.height = '';
     fw.style.zIndex = '';
     if(sb){ sb.style.transition=''; sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
-    setTimeout(function(){ fe.style.maxHeight=''; fe.style.opacity=''; fe.style.transition=''; }, 50);
+    setTimeout(function(){ fe.style.maxHeight=''; fe.style.opacity=''; fe.style.transition=''; fe.style.transform=''; }, 50);
     fw.classList.add('scroll-collapsed');
     if(sb) sb.classList.add('visible');
     closeAllPanels();
@@ -958,19 +958,20 @@ function checkScrollCollapse(){
   }
 
   // ── Scroll-driven animation zone (0 < progress < 1) ──────
-  // filters-wrap paints above summary-bar so the summary bar is revealed
-  // cleanly from underneath as the filter bar slides up — no opacity fade.
+  // Slide filter content up + fade it out. Summary bar stays hidden until
+  // fully locked — avoids the ghost layer of two sticky elements overlapping.
   fw.style.zIndex = '101';
   fw.style.overflow = 'hidden';
   fw.style.height = (feH * (1 - progress)) + 'px';
   fe.style.transition = 'none';
   fe.style.transform = 'translateY(-' + (feH * progress) + 'px)';
+  fe.style.opacity = String(1 - progress);
   if(sb){
     sb.style.transition = 'none';
-    sb.style.maxHeight = '100px';
-    sb.style.opacity = '1';
+    sb.style.maxHeight = '0';
+    sb.style.opacity = '0';
     sb.style.pointerEvents = 'none';
-    sb.style.padding = '.5rem 1.5rem';
+    sb.style.padding = '0';
   }
 }
 
