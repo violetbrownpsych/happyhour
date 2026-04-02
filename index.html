@@ -928,6 +928,10 @@ function checkScrollCollapse(){
   var progress = feH > 0 ? Math.max(0, Math.min(1, extra / feH)) : 0;
 
   if(progress <= 0){
+    fw.style.position = '';
+    fw.style.top = '';
+    fw.style.left = '';
+    fw.style.right = '';
     fw.style.transform = '';
     fw.style.zIndex = '';
     if(sb){ sb.style.maxHeight=''; sb.style.opacity=''; sb.style.pointerEvents=''; sb.style.padding=''; }
@@ -946,8 +950,12 @@ function checkScrollCollapse(){
     fw.classList.add('scroll-collapsed');
     closeAllPanels();
 
-    // Clear fw transform on next frame — expandable is already height:0, no flash
+    // Clear fw overrides on next frame — expandable is already height:0, no flash
     requestAnimationFrame(function(){
+      fw.style.position = '';
+      fw.style.top = '';
+      fw.style.left = '';
+      fw.style.right = '';
       fw.style.transform = '';
       fw.style.zIndex = '';
       fe.style.transition = '';
@@ -971,8 +979,11 @@ function checkScrollCollapse(){
   }
 
   // ── Scroll-driven animation zone (0 < progress < 1) ──────
-  // Slide the entire filter bar up as a unit. Summary bar stays hidden until
-  // fully locked — it's a separate sticky element so it can't sit "underneath".
+  // Switch to fixed positioning so sticky recalculation doesn't fight translateY.
+  fw.style.position = 'fixed';
+  fw.style.top = '0';
+  fw.style.left = '0';
+  fw.style.right = '0';
   fw.style.zIndex = '101';
   fw.style.transform = 'translateY(-' + (feH * progress) + 'px)';
   if(sb){
@@ -1026,6 +1037,10 @@ function setupScrollCollapse(){
         forcedOpen = true;
         scrollCollapsed = false;
         lastToggleTime = Date.now();
+        fw.style.position = '';
+        fw.style.top = '';
+        fw.style.left = '';
+        fw.style.right = '';
         fw.style.transform = '';
         fw.style.zIndex = '';
         fw.classList.remove('scroll-collapsed');
