@@ -482,6 +482,9 @@
     }
 
     @media (max-width:899px) {
+      /* Let filter bar scroll off naturally — no sticky on mobile */
+      #filters-wrap { position: relative; }
+
       body.map-mode-active header,
       body.map-mode-active .time-bar { display: none; }
       .filters-wrap.map-collapsed ~ .filter-summary-bar {
@@ -931,10 +934,7 @@ function checkScrollCollapse(scrolled){
 
   // ── Mobile: CSS transition at threshold (scroll events are async on iOS,
   //    so scroll-linked JS animation always jitters — let the compositor do it)
-  if(window.innerWidth < 900){
-    if(progress >= 0.3) lockCollapsed(fw, fe, sb);
-    return;
-  }
+  if(window.innerWidth < 900) return; // natural scroll handles it via IntersectionObserver
 
   // ── Desktop: scroll-linked animation ─────────────────────
   if(progress <= 0){
@@ -1113,6 +1113,7 @@ function setupScrollCollapse(){
         bar.style.maxHeight=''; bar.style.padding=''; bar.style.zIndex=''; bar.style.pointerEvents='';
         feH = 0; // re-measure on next scroll
         updateContentHeight();
+        if(window.innerWidth < 900) window.scrollTo({top: 0, behavior: 'smooth'});
       }
     });
   }
@@ -1144,15 +1145,41 @@ function setupScrollCollapse(){
     });
   }
 
-  // Track swipe velocity for velocity-matched collapse animation
-  var _tvY = 0, _tvT = 0;
-  document.addEventListener('touchstart', function(e){
-    _tvY = e.touches[0].clientY; _tvT = Date.now(); touchVelocityY = 0;
-  }, {passive:true});
-  document.addEventListener('touchmove', function(e){
-    var y = e.touches[0].clientY, t = Date.now(), dt = t - _tvT;
-    if(dt > 8){ touchVelocityY = (_tvY - y) / dt; _tvY = y; _tvT = t; }
-  }, {passive:true});
+  // Mobile: IntersectionObserver detects when filter bar fully exits above viewport,
+  // then slides the summary bar in from the top (no JS scroll-linking needed — natural scroll is jitter-free)
+  if(window.innerWidth < 900){
+    var ioFW = new IntersectionObserver(function(entries){
+      var e = entries[0];
+      if(!e.isIntersecting && e.boundingClientRect.top < 0){
+        // Filter bar fully scrolled off the top
+        forcedOpen = false;
+        if(scrollCollapsed) return;
+        var now2 = Date.now();
+        if(now2 - lastToggleTime < 300) return;
+        scrollCollapsed = true; lastToggleTime = now2;
+        var fw2 = document.getElementById('filters-wrap');
+        var sb2 = document.getElementById('filter-summary-bar');
+        fw2.classList.add('scroll-collapsed');
+        closeAllPanels();
+        slideSummaryIn(sb2);
+      } else if(e.isIntersecting && !forcedOpen && scrollCollapsed){
+        // Filter bar scrolled back into view (user scrolled up)
+        scrollCollapsed = false;
+        var fw2 = document.getElementById('filters-wrap');
+        var sb2 = document.getElementById('filter-summary-bar');
+        fw2.classList.remove('scroll-collapsed');
+        if(sb2){
+          sb2.classList.remove('visible');
+          sb2.style.transition = 'none'; sb2.style.transform = '';
+          sb2.style.opacity = ''; sb2.style.maxHeight = ''; sb2.style.padding = '';
+          requestAnimationFrame(function(){ if(sb2) sb2.style.transition = ''; });
+        }
+        feH = 0;
+      }
+    }, {threshold: 0});
+    var fwIO = document.getElementById('filters-wrap');
+    if(fwIO) ioFW.observe(fwIO);
+  }
 }
 
 // ── QV SWIPE-TO-DISMISS (mobile only) ─────────────────────
