@@ -1164,15 +1164,24 @@ function setupScrollCollapse(){
         var fw2 = document.getElementById('filters-wrap');
         var sb2 = document.getElementById('filter-summary-bar');
 
-        // Remove from flow and compensate scroll in same execution — single paint, no visible shift
-        var h = fw2.offsetHeight;
-        fw2.style.display = 'none';
-        document.documentElement.style.scrollBehavior = 'auto';
-        window.scrollBy(0, -h);
-        document.documentElement.style.scrollBehavior = '';
         fw2.classList.add('scroll-collapsed');
         closeAllPanels();
         slideSummaryIn(sb2);
+        // Wait for scroll momentum to fully stop before removing filter bar from flow,
+        // so scrollBy doesn't interrupt iOS inertia scroll
+        var doHide = function(){
+          var h = fw2.offsetHeight;
+          fw2.style.display = 'none';
+          document.documentElement.style.scrollBehavior = 'auto';
+          window.scrollBy(0, -h);
+          document.documentElement.style.scrollBehavior = '';
+        };
+        if('onscrollend' in window){
+          window.addEventListener('scrollend', doHide, {once: true});
+        } else {
+          // Fallback for older iOS: wait 600ms for momentum to decay
+          setTimeout(doHide, 600);
+        }
       }
     }, {threshold: 0});
     var fwIO = document.getElementById('filters-wrap');
