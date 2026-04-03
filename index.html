@@ -1162,19 +1162,6 @@ function setupScrollCollapse(){
         fw2.classList.add('scroll-collapsed');
         closeAllPanels();
         slideSummaryIn(sb2);
-      } else if(e.isIntersecting && !forcedOpen && scrollCollapsed){
-        // Filter bar scrolled back into view (user scrolled up)
-        scrollCollapsed = false;
-        var fw2 = document.getElementById('filters-wrap');
-        var sb2 = document.getElementById('filter-summary-bar');
-        fw2.classList.remove('scroll-collapsed');
-        if(sb2){
-          sb2.classList.remove('visible');
-          sb2.style.transition = 'none'; sb2.style.transform = '';
-          sb2.style.opacity = ''; sb2.style.maxHeight = ''; sb2.style.padding = '';
-          requestAnimationFrame(function(){ if(sb2) sb2.style.transition = ''; });
-        }
-        feH = 0;
       }
     }, {threshold: 0});
     var fwIO = document.getElementById('filters-wrap');
