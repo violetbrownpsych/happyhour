@@ -1145,9 +1145,16 @@ function setupScrollCollapse(){
       scrollCollapsed = true;
       lastToggleTime = Date.now();
       var fw = document.getElementById('filters-wrap');
-      fw.classList.add('scroll-collapsed');
       var sb = document.getElementById('filter-summary-bar');
-      if(sb) sb.classList.add('visible');
+      if(window.innerWidth < 900){
+        fw.style.display = 'none';
+        fw.classList.add('scroll-collapsed');
+        closeAllPanels();
+        slideSummaryIn(sb);
+      } else {
+        fw.classList.add('scroll-collapsed');
+        if(sb) sb.classList.add('visible');
+      }
     });
   }
 
