@@ -1158,9 +1158,22 @@ function setupScrollCollapse(){
         if(now2 - lastToggleTime < 300) return;
         scrollCollapsed = true; lastToggleTime = now2;
         var fw2 = document.getElementById('filters-wrap');
+        var fe2 = document.getElementById('filter-expandable');
         var sb2 = document.getElementById('filter-summary-bar');
+
+        // Insert spacer equal to current filter bar height so collapsing it doesn't shift layout
+        var fwH2 = fw2.offsetHeight;
+        var sp2 = document.createElement('div');
+        sp2.style.height = fwH2 + 'px';
+        fw2.parentNode.insertBefore(sp2, fw2);
+
+        // Collapse the filter bar (it's off-screen, purely for DOM tidiness)
         fw2.classList.add('scroll-collapsed');
         closeAllPanels();
+
+        // Remove spacer after collapse transition completes — filter bar is off-screen so no visible jump
+        setTimeout(function(){ if(sp2 && sp2.parentNode) sp2.parentNode.removeChild(sp2); }, 300);
+
         slideSummaryIn(sb2);
       }
     }, {threshold: 0});
