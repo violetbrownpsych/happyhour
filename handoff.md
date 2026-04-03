@@ -1,5 +1,5 @@
 # Pours — Handoff Notes
-_Last updated: 2026-04-01_
+_Last updated: 2026-04-03_
 
 ## What this project is
 Single-page happy hour directory for Minneapolis/St. Paul. All code lives in `index.html` (CSS + HTML + JS). Data is in `happyhours.csv`. No build step, no framework.
@@ -132,9 +132,24 @@ Text in `--cream`. "Send us a tip!" link in lime `#6ea900`.
 ## Bug fixes (2026-04-01)
 - **Time filter boundary bug** — `overlaps()` used inclusive `<=`/`>=`, so a session starting exactly at 8 PM matched the Happy Hour filter (`[1400, 2000]`). Fixed to strict `<`/`>` so boundaries are exclusive. Happy Hour is now cleanly `[1400, 2000)`, Lunch `[1100, 1400)`, Morning `[700, 1100)`.
 - **Morning window stale bound** — was `overlaps(s,e,700,1059)` (a workaround for the old inclusive logic). Updated to `1100` to match where Lunch starts.
-- **Mobile map mode layout** — header and time bar now hidden on mobile when in map mode (`body.map-mode-active header, body.map-mode-active .time-bar { display:none }`), so the map fills the screen properly.
 - **Email links** — footer and empty-state `mailto:` links set to `poursapp@gmail.com`. Cloudflare Email Obfuscation turned off in dashboard (was breaking on iOS Safari with Advanced Privacy Protections). Cloudflare decode script removed from HTML.
 - **Mobile header padding** — reduced slightly: top `1.8rem → 1.2rem`, bottom `1.5rem → 1rem`.
+
+## Changes (2026-04-03)
+
+### Mobile scroll-collapse behavior (scroll_fix branch → main)
+The filter bar on mobile now scrolls off the top naturally (no sticky) — entirely compositor-driven, no JS scroll-linking, so no jitter. Key implementation details:
+
+- `#filters-wrap` is `position: relative` on mobile (not sticky).
+- An `IntersectionObserver` watches the filter bar. When it fully exits above the viewport, `scroll-collapsed` is added (`visibility: hidden` — holds layout space, no shift), then `display: none` + synchronous `scrollBy(0, -h)` (with `scroll-behavior: auto` temporarily applied) removes the height from the flow without a visible jump.
+- The summary bar slides in via `slideSummaryIn()` simultaneously — `translateY(-100%) → translateY(0)` with a spring easing.
+- The summary bar is sticky at top and stays visible until tapped. Tapping calls `window.scrollTo({top:0})` and restores the filter bar.
+- "Hide Filters" button on mobile: sets `display: none` immediately (no scroll compensation needed — user is at top) then slides summary bar in.
+- Desktop scroll behavior unchanged — scroll-linked `translateY` animation with spacer, as before.
+
+### Mobile map mode header (restore-header branch → main)
+- Header was previously hidden in mobile map mode (`display: none`). Now restored with compact padding (`padding-top: 1.1rem; padding-bottom: .9rem`) via `body.map-mode-active .header-inner` override — narrower than list mode but still present.
+- Time bar remains hidden in mobile map mode.
 
 ## Design direction
 - **Vibe:** Upscale bar. Elevated and welcoming. Navy/teal darkness as the "room," cream cards as the menu, crimson and lime as the energy. At night the header shifts to a dim bar atmosphere with neon glow on the POURS wordmark.
