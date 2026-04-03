@@ -1168,8 +1168,6 @@ function setupScrollCollapse(){
         fw2.classList.add('scroll-collapsed');
         closeAllPanels();
         slideSummaryIn(sb2);
-        // After summary bar is in, hide filter bar from flow entirely so scrolling back up is clean
-        setTimeout(function(){ fw2.style.display='none'; }, 350);
       }
     }, {threshold: 0});
     var fwIO = document.getElementById('filters-wrap');
