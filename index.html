@@ -1167,7 +1167,9 @@ function setupScrollCollapse(){
         // Remove from flow and compensate scroll in same execution — single paint, no visible shift
         var h = fw2.offsetHeight;
         fw2.style.display = 'none';
+        document.documentElement.style.scrollBehavior = 'auto';
         window.scrollBy(0, -h);
+        document.documentElement.style.scrollBehavior = '';
         fw2.classList.add('scroll-collapsed');
         closeAllPanels();
         slideSummaryIn(sb2);
