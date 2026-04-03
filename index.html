@@ -1168,6 +1168,11 @@ function setupScrollCollapse(){
         fw2.classList.add('scroll-collapsed');
         closeAllPanels();
         slideSummaryIn(sb2);
+        setTimeout(function(){
+          var h = fw2.offsetHeight;
+          fw2.style.display = 'none';
+          window.scrollBy(0, -h);
+        }, 350);
       }
     }, {threshold: 0});
     var fwIO = document.getElementById('filters-wrap');
