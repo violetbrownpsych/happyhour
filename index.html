@@ -1108,6 +1108,7 @@ function setupScrollCollapse(){
         scrollCollapsed = false;
         lastToggleTime = Date.now();
         if(fw._spacer){ fw._spacer.parentNode.removeChild(fw._spacer); fw._spacer=null; }
+        fw.style.display='';
         fw.style.position=''; fw.style.top=''; fw.style.left=''; fw.style.right='';
         fw.style.transform=''; fw.style.zIndex='';
         fw.classList.remove('scroll-collapsed');
@@ -1163,10 +1164,12 @@ function setupScrollCollapse(){
         var fw2 = document.getElementById('filters-wrap');
         var sb2 = document.getElementById('filter-summary-bar');
 
-        // visibility:hidden keeps its height intact — no layout shift, no flash
+        // visibility:hidden keeps its height intact during the transition — no layout shift, no flash
         fw2.classList.add('scroll-collapsed');
         closeAllPanels();
         slideSummaryIn(sb2);
+        // After summary bar is in, hide filter bar from flow entirely so scrolling back up is clean
+        setTimeout(function(){ fw2.style.display='none'; }, 350);
       }
     }, {threshold: 0});
     var fwIO = document.getElementById('filters-wrap');
