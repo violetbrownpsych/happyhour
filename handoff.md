@@ -1,5 +1,5 @@
 # Pours — Handoff Notes
-_Last updated: 2026-04-03_
+_Last updated: 2026-04-05_
 
 ## What this project is
 Single-page happy hour directory for Minneapolis/St. Paul. All code lives in `index.html` (CSS + HTML + JS). Data is in `happyhours.csv`. No build step, no framework.
@@ -124,9 +124,6 @@ Text in `--cream`. "Send us a tip!" link in lime `#6ea900`.
 ---
 
 ## Known issues / to revisit
-- **Anton font not loaded** — `.venue-name` and `.qv-name` use `font-family:'Anton'` but Anton is missing from the Google Fonts `<link>`. Falls back to sans-serif. Fix: add Anton back or switch to Bebas Neue.
-- **CSS variables** — the new color palette is mostly hardcoded hex values. A future cleanup pass should define them as `:root` variables.
-- **`manifest.json`** still has old `theme_color: "#3A5C28"` — should be updated to `#060f1e`.
 - **Mobile card cutoff (partial)** — QV sheet `92svh` fix applied. A separate issue where card tops can be clipped on mobile at scroll position 0 has not been fully diagnosed.
 
 ## Bug fixes (2026-04-01)
@@ -134,6 +131,28 @@ Text in `--cream`. "Send us a tip!" link in lime `#6ea900`.
 - **Morning window stale bound** — was `overlaps(s,e,700,1059)` (a workaround for the old inclusive logic). Updated to `1100` to match where Lunch starts.
 - **Email links** — footer and empty-state `mailto:` links set to `poursapp@gmail.com`. Cloudflare Email Obfuscation turned off in dashboard (was breaking on iOS Safari with Advanced Privacy Protections). Cloudflare decode script removed from HTML.
 - **Mobile header padding** — reduced slightly: top `1.8rem → 1.2rem`, bottom `1.5rem → 1rem`.
+
+## Changes (2026-04-05)
+
+### CSS variable cleanup + color consistency pass
+All palette colors that were hardcoded in the stylesheet have been moved to `:root` variables. New variables added:
+- `--lime: #6ea900` — live time, day/today pills, vibe active pill, slider, verified text, FAB, footer links
+- `--lime-dk: #5a8800` — day/today pill active border, vibe active border
+- `--lime-dkst: #2e4800` — FAB background
+- `--lime-hover: #3a5a00` — FAB hover background
+- `--lime-tint-bg: rgba(110,169,0,.1)` — verified badge background (QV)
+- `--lime-tint-border: rgba(110,169,0,.25)` — verified badge border (QV)
+- `--crimson-dk: #9a1c2c` — time pill active border
+- `--crimson-dkst: #8b1a27` — deal tag text, card link hover
+- `--navy-mid: #1a5fa0` — neighborhood pill active
+
+Also: `header { background }` now uses `var(--cream)` and `header h1 { color }` now uses `var(--bg)`. No visual change.
+
+Removed 10 unused `:root` variables that were legacy from earlier design iterations: `--green-lt`, `--amber`, `--berry`, `--blush`, `--card`, `--header-accent`, `--timebar-bg`, `--deal-tag-bg/border/text`, `--vibe-tag-bg/border/text`.
+
+### Verified badge + vibe tag color unification
+- `.popup-verified` (map popup) and `.qv-verified` (Quick View sheet) now use lime to match `.card-verified`. QV badge background/border use new `--lime-tint-bg`/`--lime-tint-border` variables.
+- Active vibe tags (`.tag-vibe.tag-active`) now use `--lime`/`--lime-dk` instead of the old forest green `--green-lt`, consistent with day pills and other lime UI elements.
 
 ## Changes (2026-04-03)
 

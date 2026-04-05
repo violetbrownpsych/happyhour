@@ -54,7 +54,7 @@ handoff.md        — design handoff notes for current redesign session
 - Midnight-crossing sessions: `endTime < startTime` (e.g., `startTime: 2130, endTime: 0`).
 
 ### CSS
-- CSS custom properties (variables) defined in `:root` — prefer variables for colors when they exist, but many new palette colors are currently hardcoded hex values (see handoff.md for the full color system).
+- CSS custom properties (variables) defined in `:root` — prefer variables for colors when they exist. The full palette is now variabilized (see Key CSS variables below).
 - Mobile breakpoint: `@media (max-width:899px)` — this block is at the **end** of the stylesheet.
 - Small-screen override: `@media (max-width:600px)` for padding adjustments.
 - Desktop map layout: `@media (min-width:900px)`.
@@ -64,29 +64,43 @@ handoff.md        — design handoff notes for current redesign session
 
 ### Fonts
 - **Bebas Neue** — `POURS` header wordmark
-- **Anton** — card `.venue-name`, QV `.qv-name` (not currently loaded in Google Fonts link — falls back to sans-serif; needs fixing)
-- **Special Elite** — card `.deal-item`, QV `.qv-deal-item` (typewriter feel)
-- **Archivo Narrow** — `.status-badge`, `.hours-text`, `.days-text`, `.card-verified`, tags, QV hours/days
+- **Anton** — card `.venue-name`, QV `.qv-name`
 - **DM Sans** — UI chrome, filter bar, pills, `.neighborhood`, `.card-link`, body text
 - **Playfair Display** — results heading
 
+All four are loaded via the Google Fonts `<link>` in `<head>`. Special Elite and Archivo Narrow were planned early on but are not used in the current CSS.
+
 ### Key CSS variables (current theme)
 ```css
---bg: #060f1e              /* page background + time bar — very dark navy */
+--bg: #060f1e              /* page background — very dark navy */
 --bg-filter: #091620       /* filter bar, summary bar, footer — very dark teal */
 --bg-elevated: #0d1d28     /* dropdown panels — dark teal */
 --cream: #FAF6EF           /* header bg (day), card bg */
---sienna: #BF2338          /* crimson — Twin Cities eyebrow, time pills, neighborhood text, card links, deal dots, clear button */
+--cream-dk: #EDE5D8        /* QV handle bar, close button, map placeholder */
+--green: #243D1A           /* active filter chip background */
+--sienna: #BF2338          /* crimson — eyebrow, time pills, neighborhood, card links, deal dots */
 --ink: #1A1410             /* dark brown text on cream surfaces */
+--ink-lt: #5A4A3A          /* secondary text on cream surfaces */
+--shadow: rgba(0,0,0,.35)  /* card drop shadow */
+--radius: 14px             /* card border radius */
 --filter-text: rgba(245,240,232,.82)   /* bright text on dark filter bar */
 --filter-dim:  rgba(245,240,232,.62)   /* dim text — labels, toggles, summary bar */
 --filter-border: rgba(245,240,232,.11) /* borders on dark filter bar */
+--lime: #6ea900            /* live time, day pills, vibe active, slider, verified, FAB, footer links */
+--lime-dk: #5a8800         /* day/today pill border, vibe active border */
+--lime-dkst: #2e4800       /* FAB background */
+--lime-hover: #3a5a00      /* FAB hover */
+--lime-tint-bg: rgba(110,169,0,.1)    /* verified badge background (QV) */
+--lime-tint-border: rgba(110,169,0,.25) /* verified badge border (QV) */
+--crimson-dk: #9a1c2c      /* time pill active border */
+--crimson-dkst: #8b1a27    /* deal tag text, card link hover */
+--navy-mid: #1a5fa0        /* neighborhood pill active */
 ```
 
-See handoff.md for the full color system including all hardcoded palette values.
+See handoff.md for the full color system.
 
 ### Body background
-Plain `#060f1e` (very dark navy). No image/texture currently.
+Plain `#060f1e` (very dark navy) with a very subtle SVG fractal noise texture via `body::before` (fixed, pointer-events none, ~2% visible opacity). Adds slight grain to the dark background.
 
 ### CSV data format
 ```
