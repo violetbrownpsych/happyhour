@@ -1,4 +1,4 @@
-var CACHE = 'pours-20260405'; // Update this date every time you deploy
+var CACHE = 'pours-20260430'; // Update this date every time you deploy
 var ASSETS = ['/', '/index.html', '/happyhours.csv'];
 
 // These files always fetch fresh from network first

@@ -8,15 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png" />
+  <link rel="apple-touch-icon" href="/images/icon-192.png" />
   <meta name="theme-color" content="#181512" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <style>
     @font-face {
       font-family: 'Herbus';
-      src: url('herbus-regular.ttf') format('truetype');
+      src: url('fonts/herbus-regular.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
     }
@@ -33,7 +33,7 @@
     }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
     html { scroll-behavior:smooth; }
-    body { font-family:'DM Sans',sans-serif; background-color:var(--bg); background-image:url('background_dark_paper.png'); background-repeat:repeat; background-size:800px; color:var(--ink); min-height:100vh; }
+    body { font-family:'DM Sans',sans-serif; background-color:var(--bg); background-image:url('images/background_dark_paper.png'); background-repeat:repeat; background-size:800px; color:var(--ink); min-height:100vh; }
     body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.5;
       background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); }
     body::after { content:''; position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.04;
@@ -43,7 +43,7 @@
     header {
       position: relative;
       background-color: var(--cream);
-      background-image: url('background_cream_paper.png');
+      background-image: url('images/background_cream_paper.png');
       background-repeat: repeat;
       background-size: 400px;
       border-bottom: 1px solid rgba(36,20,10,.08);
@@ -69,7 +69,7 @@
     header h1 { font-family:'Herbus',serif; font-size:clamp(4rem,11vw,7rem); font-weight:400; color:var(--ink); line-height:.92; letter-spacing:.02em; }
     .happy-scrawl { font-family:'Permanent Marker',cursive; font-size:2.5rem; color:var(--pink); position:absolute; left:50%; top:55%; transform:translate(-50%,-50%) rotate(-5deg); z-index:2; white-space:nowrap; pointer-events:none; transition:color 1s ease; }
     header p.tagline { font-family:'Permanent Marker',cursive; font-size:1.2rem; font-weight:400; color:#888; letter-spacing:normal; margin-top:.7rem; }
-    .time-bar { background-color:var(--cream); background-image:url('background_cream_paper.png'); background-repeat:repeat; background-size:400px; text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:var(--pink); letter-spacing:.06em; }
+    .time-bar { background-color:var(--cream); background-image:url('images/background_cream_paper.png'); background-repeat:repeat; background-size:400px; text-align:center; padding:.55rem 1rem; font-size:.78rem; font-weight:500; color:var(--pink); letter-spacing:.06em; }
     #live-time { color:rgba(25,18,10,.5); font-weight:500; }
     .dev-banner { background:#FFF8E6; border-bottom:1.5px solid #F5C97A; text-align:center; padding:.45rem 1rem; font-size:.75rem; color:#7A4F10; }
     .dev-banner strong { font-weight:600; }
@@ -87,6 +87,9 @@
       .happy-scrawl {
         font-size: 2rem;
       }
+      #deco-lipstick { left:5%; width:68px; }
+      #deco-coffee { width:72px; }
+      #deco-x { width:65px; }
     }
 
     /* ── STICKY FILTERS ─────────────────────────────────────── */
@@ -95,7 +98,7 @@
       top: 0;
       z-index: 100;
       background-color: rgba(239,235,220,0.6);
-      background-image: linear-gradient(rgba(0,0,0,0.07),rgba(0,0,0,0.07)), url('background_cream_paper.png');
+      background-image: linear-gradient(rgba(0,0,0,0.07),rgba(0,0,0,0.07)), url('images/background_cream_paper.png');
       background-repeat: repeat;
       background-size: auto, 400px;
       background-blend-mode: normal, lighten;
@@ -113,7 +116,7 @@
       padding: 0;
       cursor: pointer;
       background-color: rgba(239,235,220,0.6);
-      background-image: linear-gradient(rgba(0,0,0,0.07),rgba(0,0,0,0.07)), url('background_cream_paper.png');
+      background-image: linear-gradient(rgba(0,0,0,0.07),rgba(0,0,0,0.07)), url('images/background_cream_paper.png');
       background-repeat: repeat;
       background-size: auto, 400px;
       background-blend-mode: normal, lighten;
@@ -245,17 +248,17 @@
       justify-content: center;
     }
     /* Collapsible panel pills — deal (pink), vibe (blue), neighborhood (purple) */
-    #deal-pills .pill { background:rgba(217,107,162,.06); border-color:rgba(217,107,162,.38); color:var(--pink); }
-    #deal-pills .pill:hover { background:rgba(217,107,162,.13); border-color:rgba(217,107,162,.6); }
+    #deal-pills .pill { background:rgba(230,130,182,.06); border-color:rgba(230,130,182,.38); color:#E682B6; }
+    #deal-pills .pill:hover { background:rgba(230,130,182,.13); border-color:rgba(230,130,182,.6); }
     #deal-pills .pill.tag-active { background:var(--pink); border-color:var(--pink-dk); color:#fff; box-shadow:0 1px 3px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.15); }
-    #vibe-pills .pill { background:rgba(69,146,210,.07); border-color:rgba(69,146,210,.38); color:var(--blue); }
-    #vibe-pills .pill:hover { background:rgba(69,146,210,.14); border-color:rgba(69,146,210,.6); }
+    #vibe-pills .pill { background:rgba(90,171,223,.07); border-color:rgba(90,171,223,.38); color:#5AABDF; }
+    #vibe-pills .pill:hover { background:rgba(90,171,223,.14); border-color:rgba(90,171,223,.6); }
     #vibe-pills .pill.tag-active { background:var(--blue); border-color:#3378b0; color:#fff; box-shadow:0 1px 3px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.15); }
-    #area-pills .pill { background:rgba(128,112,170,.07); border-color:rgba(128,112,170,.38); color:#8070AA; }
-    #area-pills .pill:hover { background:rgba(128,112,170,.14); border-color:rgba(128,112,170,.6); }
-    #area-pills .pill.tag-active { background:#8070AA; border-color:#6a5a94; color:#fff; box-shadow:0 1px 3px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.15); }
+    #area-pills .pill { background:rgba(77,184,154,.07); border-color:rgba(77,184,154,.38); color:#4DB89A; }
+    #area-pills .pill:hover { background:rgba(77,184,154,.14); border-color:rgba(77,184,154,.6); }
+    #area-pills .pill.tag-active { background:#3A826E; border-color:#2D6556; color:#fff; box-shadow:0 1px 3px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.15); }
     [data-panel="panel-vibe"] .active-badge { background:var(--blue); }
-    [data-panel="panel-area"] .active-badge { background:#8070AA; }
+    [data-panel="panel-area"] .active-badge { background:#3A826E; }
     .slider-row { max-width:1100px; margin:0 auto; padding:.55rem 1.5rem .7rem; }
     .slider-outer { padding:0 10px; }
     .track-container { position:relative; padding:26px 0 26px; }
@@ -285,10 +288,10 @@
     [data-panel="panel-vibe"].collapsible-toggle:hover { background:rgba(69,146,210,.14); border-color:rgba(69,146,210,.6); }
     [data-panel="panel-vibe"].collapsible-toggle.open { background:var(--blue); border-color:#3378b0; color:#fff; }
     [data-panel="panel-vibe"].collapsible-toggle.has-active { background:rgba(69,146,210,.14); border-color:rgba(69,146,210,.6); color:var(--blue); }
-    [data-panel="panel-area"].collapsible-toggle { background:rgba(128,112,170,.07); border:1.5px solid rgba(128,112,170,.38); color:#8070AA; }
-    [data-panel="panel-area"].collapsible-toggle:hover { background:rgba(128,112,170,.14); border-color:rgba(128,112,170,.6); }
-    [data-panel="panel-area"].collapsible-toggle.open { background:#8070AA; border-color:#6a5a94; color:#fff; }
-    [data-panel="panel-area"].collapsible-toggle.has-active { background:rgba(128,112,170,.14); border-color:rgba(128,112,170,.6); color:#8070AA; }
+    [data-panel="panel-area"].collapsible-toggle { background:rgba(107,175,154,.07); border:1.5px solid rgba(107,175,154,.38); color:#6BAF9A; }
+    [data-panel="panel-area"].collapsible-toggle:hover { background:rgba(107,175,154,.14); border-color:rgba(107,175,154,.6); }
+    [data-panel="panel-area"].collapsible-toggle.open { background:#3A826E; border-color:#2D6556; color:#fff; }
+    [data-panel="panel-area"].collapsible-toggle.has-active { background:rgba(107,175,154,.14); border-color:rgba(107,175,154,.6); color:#6BAF9A; }
     .collapse-spot-count { position:absolute; left:1.5rem; top:50%; transform:translateY(-50%); font-size:.72rem; font-weight:600; letter-spacing:.06em; color:var(--filter-dim); white-space:nowrap; }
     .summary-spot-count { display:none; }
     #filter-clear-btn { position:absolute; right:1.5rem; top:50%; transform:translateY(-50%); color:var(--pink); cursor:pointer; font-family:'Permanent Marker',cursive; font-size:.8rem; font-weight:400; letter-spacing:normal; display:inline-flex; align-items:center; gap:.28rem; }
@@ -322,7 +325,7 @@
     .combo-inner { display:inline-flex; align-items:center; gap:.4rem; background:#FEF3E2; border:1px solid #F5C97A; border-radius:0; padding:.32rem .75rem; font-size:.78rem; color:#7A4F10; }
     .active-chips { max-width:1100px; margin:.45rem auto .65rem; padding:0 1.5rem; display:flex; flex-wrap:wrap; gap:.3rem; min-height:.5rem; }
     .chip { display:inline-flex; align-items:center; gap:.28rem; padding:.18rem .6rem; border-radius:2px; background:var(--purple); color:var(--cream); font-size:.7rem; font-weight:600; }
-    .chip-neighborhood { background:#8070AA; }
+    .chip-neighborhood { background:#3A826E; }
     .chip-deal { background:var(--pink); }
     .chip-vibe { background:var(--blue); }
     .chip-x { cursor:pointer; opacity:.6; font-size:.85rem; line-height:1; }
@@ -443,7 +446,7 @@
     .status-badge.soon { background:#FEF3C7; color:#92400E; }
     .status-badge.ended { background:rgba(0,0,0,.1); color:rgba(0,0,0,.4); }
     [data-time="now"].pill-now-disabled { opacity:.35; cursor:not-allowed; pointer-events:none; }
-    .neighborhood { margin-top:.2rem; font-size:.65rem; font-family:'DM Sans',sans-serif; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#8070AA; }
+    .neighborhood { margin-top:.2rem; font-size:.65rem; font-family:'DM Sans',sans-serif; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:#6BAF9A; }
     .hours-row { margin-top:.8rem; display:flex; align-items:baseline; gap:.45rem; flex-wrap:wrap; }
     .hours-text { font-size:.8rem; font-weight:500; }
     .days-text  { font-size:.73rem; color:rgba(0,0,0,.5); }
@@ -481,7 +484,7 @@
     .qv-close:hover { background:rgba(217,107,162,.12); }
     .qv-body { padding:.75rem 1.5rem 1.5rem; }
     .qv-name { font-family:'Anton',sans-serif; font-size:1.9rem; font-weight:400; color:var(--ink); line-height:1.05; letter-spacing:.02em; margin-bottom:.2rem; padding-right:2rem; }
-    .qv-neighborhood { font-size:.65rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#8070AA; margin-bottom:.85rem; }
+    .qv-neighborhood { font-size:.65rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#6BAF9A; margin-bottom:.85rem; }
     .qv-hours-row { display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; margin-bottom:.9rem; }
     .qv-hours { font-size:.9rem; font-weight:600; }
     .qv-days  { font-size:.78rem; color:var(--ink-lt); }
@@ -517,7 +520,7 @@
     .tip-link { color:var(--pink); font-weight:600; text-decoration:none; }
     .tip-link:hover { text-decoration:underline; }
 
-    footer { background-color:var(--cream); background-image:url('background_cream_paper.png'); background-repeat:repeat; background-size:400px; color:rgba(25,18,10,.55); text-align:center; padding:2rem 1.5rem 5rem; font-size:.8rem; letter-spacing:.03em; line-height:1.9; }
+    footer { background-color:var(--cream); background-image:url('images/background_cream_paper.png'); background-repeat:repeat; background-size:400px; color:rgba(25,18,10,.55); text-align:center; padding:2rem 1.5rem 5rem; font-size:.8rem; letter-spacing:.03em; line-height:1.9; }
     footer a { color:var(--pink); text-decoration:none; font-weight:500; }
     footer a:hover { color:var(--ink); text-decoration:underline; }
     #footer-home { color:var(--pink); font-weight:700; font-family:'DM Sans',sans-serif; font-style:normal; text-decoration:none; }
@@ -644,9 +647,9 @@
       </div>
       <p class="tagline">hand picked.</p>
     </div>
-    <img class="hdr-deco" id="deco-lipstick" src="lipstick.png" alt="">
-    <img class="hdr-deco" id="deco-coffee" src="coffee_stain.png" alt="">
-    <img class="hdr-deco" id="deco-x" src="black_x.png" alt="">
+    <img class="hdr-deco" id="deco-lipstick" src="images/lipstick.png" alt="">
+    <img class="hdr-deco" id="deco-coffee" src="images/coffee_stain.png" alt="">
+    <img class="hdr-deco" id="deco-x" src="images/black_x.png" alt="">
   </a>
 </header>
 
@@ -710,9 +713,9 @@
       </div></div></div>
     </div>
     <div class="collapsibles-bar">
-      <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-area">Neighborhood <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-area" style="display:none"></span></button></div>
       <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-deals">Deals <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-deals" style="display:none"></span></button></div>
       <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-vibe">Vibe <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-vibe" style="display:none"></span></button></div>
+      <div class="collapsible"><button class="collapsible-toggle" data-panel="panel-area">Neighborhood <span class="toggle-chevron">▾</span><span class="active-badge" id="badge-area" style="display:none"></span></button></div>
     </div>
     <div class="collapsible-panel" id="panel-area"><div class="collapsible-panel-inner" id="area-pills"></div></div>
     <div class="collapsible-panel" id="panel-deals"><div class="collapsible-panel-inner" id="deal-pills"></div></div>
@@ -845,8 +848,8 @@ var VIBE_COLORS = {
   'Restaurant':      '#D96BA2',
   'Restuarant':      '#D96BA2',
   'American':        '#4592d2',
-  'Pub/Dive':        '#8070AA',
-  'Cocktail Bar':    '#7265A0',
+  'Pub/Dive':        '#6BAF9A',
+  'Cocktail Bar':    '#6BAF9A',
   'Pizza':           '#7A7A9A',
   'Japanese':        '#888098',
   'Asian Fusion':    '#8A8494',
@@ -865,8 +868,8 @@ var CARD_PALETTE = {
   'Restaurant':      {bg:'#F5DCEA', text:'#5A1E38', border:'#B05878'},
   'Restuarant':      {bg:'#F5DCEA', text:'#5A1E38', border:'#B05878'},
   'American':        {bg:'#D8E8F5', text:'#1A3050', border:'#4878A8'},
-  'Pub/Dive':        {bg:'#E5DDEF', text:'#352858', border:'#6050A0'},
-  'Cocktail Bar':    {bg:'#E0DCF0', text:'#302558', border:'#6050A0'},
+  'Pub/Dive':        {bg:'#C8E8DE', text:'#1A3530', border:'#4A9480'},
+  'Cocktail Bar':    {bg:'#C8E8DE', text:'#1A3530', border:'#4A9480'},
   'Wine Bar':        {bg:'#F2DDE5', text:'#581E30', border:'#B05878'},
   'Natural Wine':    {bg:'#F5E5D5', text:'#4A2A18', border:'#8C6830'},
   'Brewery/Taproom': {bg:'#F0E8D0', text:'#3D2E10', border:'#8C6830'},
